@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>V03 – Python Praxis: Datentypen & Typumwandlung | DHBW Stuttgart</title>
+  <link rel="stylesheet" href="../../src/dhbw-base.css">
+  <style>
+    .concept-grid { display:grid; grid-template-columns:1fr; gap:var(--sp-6); margin-top:var(--sp-5); }
+    .concept-card { background:var(--surface); border:1px solid var(--border); border-top:4px solid var(--red); border-radius:var(--r-card); padding:var(--sp-5) var(--sp-6); box-shadow:var(--shadow-card); }
+    .concept-card__name { font-family:var(--dhbw-font-mono); font-size:var(--fs-lg); font-weight:var(--dhbw-fw-bold); color:var(--red); margin-bottom:var(--sp-2); }
+    .dhbw-code { background:var(--code-bg); color:var(--code-text); font-family:var(--dhbw-font-mono); font-size:0.9rem; line-height:var(--lh-code); padding:var(--sp-4) var(--sp-5); border-radius:var(--r-base); overflow-x:auto; margin:var(--sp-3) 0; white-space:pre; }
+    .kw  { color:#F97316; font-weight:600; }
+    .str { color:#22C55E; }
+    .num { color:#A78BFA; }
+    .cmt { color:#7A9CB3; font-style:italic; }
+    .fn  { color:#60A5FA; }
+    .var { color:#E8EFF5; }
+    .fsl { color:#F0C060; }
+    .syntax-box { background:var(--code-bg-in); border-left:3px solid var(--red); border-radius:0 var(--r-base) var(--r-base) 0; padding:var(--sp-3) var(--sp-4); margin:var(--sp-3) 0; font-family:var(--dhbw-font-mono); font-size:0.95rem; color:var(--text); }
+    .syntax-box strong { color:var(--red); }
+    .game-box { background:#0F1E2B; border:2px solid #2A4A6B; border-radius:var(--r-card); padding:var(--sp-5) var(--sp-6); margin-top:var(--sp-6); }
+    .game-box__header { display:flex; align-items:center; gap:var(--sp-3); margin-bottom:var(--sp-4); }
+    .game-box__icon { font-size:1.5rem; }
+    .game-box__title { font-size:var(--fs-md); font-weight:var(--dhbw-fw-bold); color:#60A5FA; margin:0; }
+    .game-box__subtitle { font-size:var(--fs-sm); color:#7A9CB3; margin-top:var(--sp-1); }
+    .quick-ref { width:100%; border-collapse:collapse; margin-top:var(--sp-4); font-size:var(--fs-sm); }
+    .quick-ref th { background:var(--red); color:#fff; padding:var(--sp-2) var(--sp-4); text-align:left; }
+    .quick-ref td { padding:var(--sp-2) var(--sp-4); border-bottom:1px solid var(--border); vertical-align:top; }
+    .quick-ref tr:nth-child(even) td { background:var(--canvas); }
+    .quick-ref code { font-family:var(--dhbw-font-mono); font-size:0.85rem; background:var(--code-bg-in); padding:1px 5px; border-radius:var(--r-sm); color:var(--red); }
+    .type-badge { display:inline-block; font-family:var(--dhbw-font-mono); font-size:var(--fs-sm); font-weight:700; padding:2px 10px; border-radius:var(--r-sm); margin-right:var(--sp-2); }
+    .badge-int   { background:#2D1F4E; color:#A78BFA; border:1px solid #A78BFA; }
+    .badge-float { background:#1B3A4B; color:#60A5FA; border:1px solid #60A5FA; }
+    .badge-str   { background:#1A3B2B; color:#22C55E; border:1px solid #22C55E; }
+    .badge-bool  { background:#3B1F1F; color:#F97316; border:1px solid #F97316; }
+    .mt-4 { margin-top:var(--sp-4); } .mt-5 { margin-top:var(--sp-5); } .mt-6 { margin-top:var(--sp-6); }
+    .dhbw-footer { background:var(--text); color:#9CA3AF; text-align:center; padding:var(--sp-5) var(--gutter); font-size:var(--fs-sm); }
+    @media print {
+      @page { size:A4; margin:15mm 18mm; }
+      .dhbw-header,.dhbw-footer { display:none; }
+      .dhbw-hero,.dhbw-slide,.dhbw-code,.dhbw-callout,.concept-card,.game-box { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+      .dhbw-hero { padding:12mm 0 10mm; } .dhbw-slide { padding:8mm 0; }
+      .concept-card,.game-box { break-inside:avoid; }
+      .dhbw-code { font-size:0.78rem; }
+      .page-break { page-break-before:always; }
+    }
+  </style>
+</head>
+<body>
+  <header class="dhbw-header">
+    <div class="dhbw-header__inner">
+      <a href="#" class="dhbw-header__logo"><span class="dhbw-header__logo-text">DHBW Stuttgart</span></a>
+      <nav class="dhbw-header__nav">
+        <a href="V03-Boolsche-Algebra-Teil1_skript.html" class="dhbw-header__nav-link">Theorie</a>
+        <a href="#" class="dhbw-header__nav-link dhbw-header__nav-link--active">Python Praxis</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="dhbw-hero">
+    <div class="dhbw-hero__inner">
+      <p class="dhbw-hero__label">Vorlesung 03 · Python Praxis · Maschinenbau</p>
+      <h1 class="dhbw-hero__title">Datentypen &amp; Typumwandlung</h1>
+      <p class="dhbw-hero__subtitle">int, float, str, bool – die vier Grundbausteine für Messdaten und Steuerlogik</p>
+      <p class="dhbw-hero__meta">WS 2025/26 &nbsp;·&nbsp; DHBW Stuttgart &nbsp;·&nbsp; Nachschlagewerk Python-Praxis</p>
+    </div>
+  </section>
+
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">01</span>
+        <h2 class="dhbw-slide__title">Das kannst du danach</h2>
+      </div>
+      <div class="dhbw-goals">
+        <p class="dhbw-goals__title">📌 Nach dieser Einheit kannst du …</p>
+        <ul>
+          <li>die vier Grunddatentypen <strong>int, float, str, bool</strong> erkennen und bewusst einsetzen.</li>
+          <li>mit <code class="dhbw-inline">type()</code> den Typ einer Variable abfragen.</li>
+          <li>Typen mit <code class="dhbw-inline">int()</code>, <code class="dhbw-inline">float()</code>, <code class="dhbw-inline">str()</code> und <code class="dhbw-inline">bool()</code> umwandeln.</li>
+          <li>Typfehler erkennen und vermeiden – z.&nbsp;B. warum man Text nicht mit Zahlen addieren kann.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ÜBERBLICK SVG -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">02</span>
+        <h2 class="dhbw-slide__title">Die vier Grunddatentypen</h2>
+      </div>
+
+      <p>Python hat vier Grundtypen, die im Maschinenbau ständig vorkommen. Jeder Typ hat eine bestimmte Verwendung:</p>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:var(--sp-4); margin-top:var(--sp-5);">
+        <div style="background:var(--surface); border-left:4px solid #A78BFA; border-radius:var(--r-card); padding:var(--sp-4);">
+          <span class="type-badge badge-int">int</span>
+          <strong>Ganzzahl</strong>
+          <p style="margin-top:var(--sp-2); font-size:var(--fs-sm);">Messung-Nummern, Anzahl Teile, Schleifenzähler</p>
+          <code style="font-family:var(--dhbw-font-mono); color:#A78BFA;">messung_nr = 42</code>
+        </div>
+        <div style="background:var(--surface); border-left:4px solid #60A5FA; border-radius:var(--r-card); padding:var(--sp-4);">
+          <span class="type-badge badge-float">float</span>
+          <strong>Dezimalzahl</strong>
+          <p style="margin-top:var(--sp-2); font-size:var(--fs-sm);">Temperaturen, Drücke, Drehzahlen, Koordinaten</p>
+          <code style="font-family:var(--dhbw-font-mono); color:#60A5FA;">temperatur = 23.5</code>
+        </div>
+        <div style="background:var(--surface); border-left:4px solid #22C55E; border-radius:var(--r-card); padding:var(--sp-4);">
+          <span class="type-badge badge-str">str</span>
+          <strong>Text</strong>
+          <p style="margin-top:var(--sp-2); font-size:var(--fs-sm);">Sensor-Namen, Einheiten, Benutzereingaben</p>
+          <code style="font-family:var(--dhbw-font-mono); color:#22C55E;">einheit = "°C"</code>
+        </div>
+        <div style="background:var(--surface); border-left:4px solid #F97316; border-radius:var(--r-card); padding:var(--sp-4);">
+          <span class="type-badge badge-bool">bool</span>
+          <strong>Wahrheitswert</strong>
+          <p style="margin-top:var(--sp-2); font-size:var(--fs-sm);">Schaltzustände, Bedingungen, Alarmflags</p>
+          <code style="font-family:var(--dhbw-font-mono); color:#F97316;">alarm = True</code>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- KONZEPTKARTEN -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">03</span>
+        <h2 class="dhbw-slide__title">Funktionen im Detail</h2>
+      </div>
+
+      <div class="concept-grid">
+
+        <div class="concept-card">
+          <div class="concept-card__name">type() &nbsp;–&nbsp; Typ abfragen</div>
+          <p>Gibt den Datentyp einer Variable zurück. Nützlich zum Debuggen, wenn unerwartete Typen auftauchen.</p>
+          <div class="dhbw-code"><span class="var">temperatur</span>   = <span class="num">23.5</span>
+<span class="var">messung_nr</span>   = <span class="num">7</span>
+<span class="var">sensor_name</span>  = <span class="str">"K-Typ"</span>
+<span class="var">sensor_aktiv</span> = <span class="kw">True</span>
+
+<span class="fn">print</span>(<span class="fn">type</span>(<span class="var">temperatur</span>))    <span class="cmt"># → &lt;class 'float'&gt;</span>
+<span class="fn">print</span>(<span class="fn">type</span>(<span class="var">messung_nr</span>))    <span class="cmt"># → &lt;class 'int'&gt;</span>
+<span class="fn">print</span>(<span class="fn">type</span>(<span class="var">sensor_name</span>))   <span class="cmt"># → &lt;class 'str'&gt;</span>
+<span class="fn">print</span>(<span class="fn">type</span>(<span class="var">sensor_aktiv</span>))  <span class="cmt"># → &lt;class 'bool'&gt;</span>
+
+<span class="cmt"># input() liefert IMMER einen str!</span>
+<span class="var">eingabe</span> = <span class="fn">input</span>(<span class="str">"Wert: "</span>)
+<span class="fn">print</span>(<span class="fn">type</span>(<span class="var">eingabe</span>))       <span class="cmt"># → &lt;class 'str'&gt;</span></div>
+        </div>
+
+        <div class="concept-card">
+          <div class="concept-card__name">int() &nbsp;·&nbsp; float() &nbsp;·&nbsp; str() &nbsp;–&nbsp; Umwandeln</div>
+          <p>Umwandlungsfunktionen konvertieren Werte von einem Typ in einen anderen. Das ist besonders wichtig, da <code class="dhbw-inline">input()</code> immer Text zurückgibt.</p>
+          <div class="syntax-box">
+            <strong>int(</strong>wert<strong>)</strong> &nbsp;·&nbsp; <strong>float(</strong>wert<strong>)</strong> &nbsp;·&nbsp; <strong>str(</strong>wert<strong>)</strong>
+          </div>
+          <div class="dhbw-code"><span class="cmt"># str → int / float (für Berechnungen)</span>
+<span class="var">eingabe</span>    = <span class="str">"42"</span>
+<span class="var">als_int</span>    = <span class="fn">int</span>(<span class="var">eingabe</span>)      <span class="cmt"># → 42    (Ganzzahl)</span>
+<span class="var">als_float</span>  = <span class="fn">float</span>(<span class="var">eingabe</span>)    <span class="cmt"># → 42.0  (Dezimalzahl)</span>
+
+<span class="cmt"># float → int (Nachkommastellen werden abgeschnitten!)</span>
+<span class="var">temp</span> = <span class="num">23.9</span>
+<span class="fn">print</span>(<span class="fn">int</span>(<span class="var">temp</span>))               <span class="cmt"># → 23  (NICHT gerundet!)</span>
+
+<span class="cmt"># int / float → str (für Textausgaben)</span>
+<span class="var">rpm</span>     = <span class="num">1450</span>
+<span class="var">als_str</span> = <span class="fn">str</span>(<span class="var">rpm</span>)             <span class="cmt"># → "1450"</span>
+<span class="fn">print</span>(<span class="str">"Drehzahl: "</span> + <span class="var">als_str</span> + <span class="str">" RPM"</span>)
+
+<span class="cmt"># Typisches Muster: input → float → Berechnung</span>
+<span class="var">wert</span> = <span class="fn">float</span>(<span class="fn">input</span>(<span class="str">"Temperatur: "</span>))
+<span class="fn">print</span>(<span class="fsl">f</span><span class="str">"In Kelvin: <span class="fsl">{wert + 273.15:.2f}</span> K"</span>)</div>
+
+          <div class="dhbw-callout dhbw-callout--merksatz mt-4">
+            <span class="dhbw-callout__label">⚠ Häufiger Fehler: TypeError</span>
+            <p>Du kannst einen String nicht mit einer Zahl addieren. <code class="dhbw-inline">"23.5" + 10</code> ergibt einen Fehler. Lösung: erst umwandeln mit <code class="dhbw-inline">float("23.5") + 10</code>.</p>
+          </div>
+        </div>
+
+        <div class="concept-card">
+          <div class="concept-card__name">bool() &nbsp;–&nbsp; Wahrheitswert</div>
+          <p>Boolesche Werte (<code class="dhbw-inline">True</code> / <code class="dhbw-inline">False</code>) repräsentieren Schaltzustände. In Maschinensystemen: Ventil offen/zu, Sensor aktiv/inaktiv, Grenzwert überschritten/nicht überschritten.</p>
+          <div class="dhbw-code"><span class="var">motor_aktiv</span>   = <span class="kw">True</span>
+<span class="var">alarm_aktiv</span>   = <span class="kw">False</span>
+<span class="var">notaus</span>        = <span class="kw">False</span>
+
+<span class="fn">print</span>(<span class="fn">type</span>(<span class="var">motor_aktiv</span>))   <span class="cmt"># → &lt;class 'bool'&gt;</span>
+
+<span class="cmt"># Umwandlung von Zahlen in bool</span>
+<span class="fn">print</span>(<span class="fn">bool</span>(<span class="num">0</span>))     <span class="cmt"># → False  (Null ist immer False)</span>
+<span class="fn">print</span>(<span class="fn">bool</span>(<span class="num">1</span>))     <span class="cmt"># → True</span>
+<span class="fn">print</span>(<span class="fn">bool</span>(<span class="num">-5</span>))    <span class="cmt"># → True   (alle Zahlen ≠ 0 sind True)</span>
+<span class="fn">print</span>(<span class="fn">bool</span>(<span class="str">""</span>))    <span class="cmt"># → False  (leerer String ist False)</span>
+<span class="fn">print</span>(<span class="fn">bool</span>(<span class="str">"Hallo"</span>)) <span class="cmt"># → True</span></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- SCHIFFEVERSENKEN -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">04</span>
+        <h2 class="dhbw-slide__title">Im Schiffe-Versenken-Spiel</h2>
+      </div>
+      <p>Der wichtigste Anwendungsfall: die Benutzereingabe <code class="dhbw-inline">"A3"</code> muss in Koordinaten umgewandelt werden.</p>
+      <div class="game-box">
+        <div class="game-box__header">
+          <span class="game-box__icon">🚢</span>
+          <div>
+            <h3 class="game-box__title">Koordinaten-Umwandlung</h3>
+            <p class="game-box__subtitle">str → int für Zeilenindex</p>
+          </div>
+        </div>
+        <div class="dhbw-code"><span class="var">eingabe</span> = <span class="fn">input</span>(<span class="str">"Schuss (z.B. A3): "</span>)  <span class="cmt"># Typ: str</span>
+
+<span class="cmt"># Buchstabe → Spalten-Index (0-4)</span>
+<span class="var">spalte</span> = <span class="str">"ABCDE"</span>.<span class="fn">index</span>(<span class="var">eingabe</span>[<span class="num">0</span>])     <span class="cmt"># "A" → 0</span>
+
+<span class="cmt"># Ziffernzeichen → Zeilen-Index (0-4)</span>
+<span class="var">zeile</span>  = <span class="fn">int</span>(<span class="var">eingabe</span>[<span class="num">1</span>]) - <span class="num">1</span>           <span class="cmt"># "3" → 2</span>
+
+<span class="fn">print</span>(<span class="fn">type</span>(<span class="var">eingabe</span>[<span class="num">1</span>]))  <span class="cmt"># → &lt;class 'str'&gt;  (Zeichen, keine Zahl!)</span>
+<span class="fn">print</span>(<span class="fn">type</span>(<span class="var">zeile</span>))       <span class="cmt"># → &lt;class 'int'&gt;  (nach Umwandlung)</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUICK-REFERENCE -->
+  <section class="dhbw-slide page-break">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">05</span>
+        <h2 class="dhbw-slide__title">Quick-Reference</h2>
+      </div>
+      <table class="quick-ref">
+        <thead><tr><th style="width:15%">Typ</th><th style="width:25%">Beispielwert</th><th style="width:25%">Umwandlung nach</th><th>Typischer Einsatz</th></tr></thead>
+        <tbody>
+          <tr><td><code>int</code></td><td><code>42</code></td><td><code>float(42)</code> → 42.0<br><code>str(42)</code> → "42"</td><td>Zähler, Nummern, Indizes</td></tr>
+          <tr><td><code>float</code></td><td><code>23.5</code></td><td><code>int(23.5)</code> → 23<br><code>str(23.5)</code> → "23.5"</td><td>Messwerte, physik. Größen</td></tr>
+          <tr><td><code>str</code></td><td><code>"A3"</code></td><td><code>int("42")</code> → 42<br><code>float("3.14")</code> → 3.14</td><td>Eingaben, Texte, Bezeichner</td></tr>
+          <tr><td><code>bool</code></td><td><code>True</code></td><td><code>bool(0)</code> → False<br><code>bool(1)</code> → True</td><td>Schalter, Flags, Bedingungen</td></tr>
+          <tr><td><code>type(x)</code></td><td><code>type(42)</code></td><td>→ <code>&lt;class 'int'&gt;</code></td><td>Typ einer Variable prüfen</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer class="dhbw-footer">DHBW Stuttgart · Maschinenbau · Informatik-Grundlagen · WS 2025/26 · Python Praxis Nachschlagewerk</footer>
+</body>
+</html>

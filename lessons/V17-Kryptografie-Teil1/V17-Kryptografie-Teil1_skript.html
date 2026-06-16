@@ -1,0 +1,435 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>V17 – Kryptografie Teil 1 | DHBW Stuttgart</title>
+  <link rel="stylesheet" href="../../src/dhbw-base.css">
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════════════════════
+       1. HEADER
+  ══════════════════════════════════════════════════════════ -->
+  <header class="dhbw-header">
+    <div class="dhbw-header__inner">
+      <a href="#" class="dhbw-header__logo">
+        <span class="dhbw-header__logo-text">DHBW Stuttgart</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════════════════════════════
+       2. HERO
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-hero">
+    <div class="dhbw-hero__inner">
+      <p class="dhbw-hero__label">Vorlesung 17 · Informatik-Grundlagen · Maschinenbau</p>
+      <h1 class="dhbw-hero__title">Kryptografie Teil 1</h1>
+      <p class="dhbw-hero__subtitle">CIA-Triade, Caesar-Chiffre, AES und RSA – wie schützt man Daten vor neugierigen Augen?</p>
+      <p class="dhbw-hero__meta">WS 2025/26 &nbsp;·&nbsp; DHBW Stuttgart</p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       3. LERNZIELE
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">01</span>
+        <h2 class="dhbw-slide__title">Lernziele</h2>
+      </div>
+
+      <div class="dhbw-goals">
+        <p class="dhbw-goals__title">📌 Nach dieser Vorlesung kannst du …</p>
+        <ul>
+          <li>die drei Schutzziele der <strong>CIA-Triade</strong> (Vertraulichkeit, Integrität, Authentizität) benennen und mit Alltagsbeispielen erklären.</li>
+          <li>die Grundbegriffe <strong>Klartext</strong>, <strong>Geheimtext</strong>, <strong>Schlüssel</strong> sowie die Alice/Bob/Eve-Notation verwenden.</li>
+          <li>das <strong>Kerckhoffs-Prinzip</strong> in einem Satz erklären und begründen.</li>
+          <li>die <strong>Caesar-Chiffre</strong> anwenden und erklären, warum sie unsicher ist.</li>
+          <li>den Unterschied zwischen <strong>symmetrischer</strong> und <strong>asymmetrischer</strong> Verschlüsselung erklären.</li>
+          <li><strong>HTTPS</strong> als Hybrid-Verfahren einordnen.</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       4. CIA-TRIADE
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">02</span>
+        <h2 class="dhbw-slide__title">CIA-Triade – die drei Schutzziele</h2>
+      </div>
+
+      <p>Informationssicherheit lässt sich auf drei Grundziele reduzieren, die unter dem Begriff <strong>CIA-Triade</strong> zusammengefasst werden. Jedes Sicherheitssystem, jedes Protokoll und jede Sicherheitsmaßnahme lässt sich einem oder mehreren dieser Ziele zuordnen.</p>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title" style="color: #E2001A;">C – Confidentiality (Vertraulichkeit)</p>
+            <p>Informationen dürfen nur von berechtigten Personen gelesen werden. Das WhatsApp-Gespräch zwischen dir und einem Freund soll nur euch beiden zugänglich sein – nicht dem Netzwerkanbieter, nicht dem WLAN-Betreiber, nicht dem Hersteller des Smartphones.</p>
+        </div>
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title" style="color: #E2001A;">I – Integrity (Integrität)</p>
+            <p>Informationen dürfen nicht unbemerkt verändert werden. Wenn du eine Bankanweisung für 100 € abschickst, muss sichergestellt sein, dass beim Empfänger nicht 10.000 € ankommen. Eine Manipulation auf dem Übertragungsweg muss erkennbar sein.</p>
+        </div>
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title" style="color: #E2001A;">A – Authenticity (Authentizität)</p>
+            <p>Die Identität des Kommunikationspartners muss verifizierbar sein. Wenn du dich bei deiner Bank einloggst, musst du sicher sein, dass du wirklich mit der echten Bank-Website kommunizierst – und nicht mit einer gefälschten Kopie (Phishing).</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       5. GRUNDBEGRIFFE
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">03</span>
+        <h2 class="dhbw-slide__title">Grundbegriffe der Kryptografie</h2>
+      </div>
+
+      <p>Kryptografie hat eine eigene präzise Fachsprache. Die folgenden Begriffe sind die Grundlage für alle weiteren Konzepte.</p>
+
+      <div class="dhbw-table-wrap mt-5">
+        <table class="dhbw-table">
+          <thead>
+            <tr><th>Begriff</th><th>Definition</th><th>Beispiel</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Klartext</strong></td>
+              <td>Die ursprüngliche, lesbare Nachricht vor der Verschlüsselung</td>
+              <td>„Treffen um 15 Uhr"</td>
+            </tr>
+            <tr>
+              <td><strong>Geheimtext (Chiffrat)</strong></td>
+              <td>Die verschlüsselte, unlesbare Ausgabe des Verschlüsselungsverfahrens</td>
+              <td>„Wuhiihq xp 15 Xku"</td>
+            </tr>
+            <tr>
+              <td><strong>Schlüssel</strong></td>
+              <td>Der geheime Parameter, der die Verschlüsselung steuert; ohne ihn kann nicht entschlüsselt werden</td>
+              <td>K = 3 (bei Caesar-Chiffre)</td>
+            </tr>
+            <tr>
+              <td><strong>Verschlüsselung</strong></td>
+              <td>Transformation von Klartext → Geheimtext mit Hilfe des Schlüssels</td>
+              <td>Enc(K, Klartext) = Geheimtext</td>
+            </tr>
+            <tr>
+              <td><strong>Entschlüsselung</strong></td>
+              <td>Umkehrtransformation von Geheimtext → Klartext mit Hilfe des Schlüssels</td>
+              <td>Dec(K, Geheimtext) = Klartext</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--tip mt-5">
+        <span class="dhbw-callout__label">Alice, Bob und Eve – die klassische Notation</span>
+        <p>In der Kryptografie werden Kommunikationspartner traditionell mit den Namen <strong>Alice</strong> (Sender), <strong>Bob</strong> (Empfänger) und <strong>Eve</strong> (Angreiferin, vom englischen „eavesdropper" = Lauscherin) bezeichnet. Diese Konvention macht Beschreibungen von Protokollen leichter lesbar als abstrakte Bezeichnungen wie „Partei A" und „Partei B".</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       6. KERCKHOFFS-PRINZIP
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">04</span>
+        <h2 class="dhbw-slide__title">Kerckhoffs-Prinzip (1883)</h2>
+      </div>
+
+      <p>Der niederländische Kryptograf Auguste Kerckhoffs formulierte 1883 eines der wichtigsten Prinzipien der modernen Kryptografie: <strong>Die Sicherheit eines Verschlüsselungsverfahrens darf nicht davon abhängen, dass der Algorithmus geheim ist – sie muss allein auf der Geheimhaltung des Schlüssels beruhen.</strong></p>
+
+      <p class="mt-5">In anderen Worten: Ein Angreifer darf den gesamten Algorithmus kennen. Das System muss trotzdem sicher sein, solange er den Schlüssel nicht kennt. Dieses Prinzip klingt kontraintuitiv, hat aber einen entscheidenden Grund.</p>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">Warum nicht „Security through Obscurity"?</p>
+            <p>Wenn die Sicherheit davon abhängt, dass der Algorithmus geheim bleibt, ist das System gebrochen, sobald jemand den Algorithmus herausfindet – durch Reverse Engineering, einen verräterischen Mitarbeiter oder einen Datenleak. Algorithmen lassen sich auf Dauer nicht geheim halten.</p>
+        </div>
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">Praxis: Offene Algorithmen</p>
+            <p>Moderne Verschlüsselungsstandards wie AES und RSA sind vollständig veröffentlicht und von der weltweiten Forschungsgemeinschaft jahrelang analysiert worden. Trotzdem – oder gerade deshalb – gelten sie als sicher. Nur der Schlüssel muss geheim bleiben.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       7. CAESAR-CHIFFRE + SVG
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">05</span>
+        <h2 class="dhbw-slide__title">Caesar-Chiffre – einfach und unsicher</h2>
+      </div>
+
+      <p>Die <strong>Caesar-Chiffre</strong> ist eine der ältesten bekannten Verschlüsselungen. Das Verfahren ist denkbar einfach: Jeder Buchstabe des Klartexts wird um einen festen Wert K im Alphabet nach rechts verschoben. Julius Caesar soll diese Methode mit K=3 verwendet haben, um militärische Nachrichten zu schützen.</p>
+
+      <!-- SVG: Caesar-Verschiebung K=3 -->
+      <div style="display:flex; justify-content:center; margin-top: 2rem;">
+        <svg viewBox="0 0 680 140" xmlns="http://www.w3.org/2000/svg" style="max-width:660px; width:100%;" aria-label="Caesar-Chiffre Visualisierung: Verschiebung um K=3">
+
+          <!-- Titel links -->
+          <text x="10" y="38" fill="#1A1A1A" font-family="sans-serif" font-size="12" font-weight="bold">Klartext:</text>
+          <text x="10" y="100" fill="#E2001A"  font-family="sans-serif" font-size="12" font-weight="bold">Chiffre:</text>
+
+          <!-- Buchstaben-Boxen Klartext -->
+          <rect x="75" y="20" width="24" height="26" rx="4" fill="#F5F5F5" stroke="#D1D5DB"/>
+          <text x="87" y="38" text-anchor="middle" fill="#1A1A1A" font-family="monospace" font-size="13" font-weight="bold">A</text>
+
+          <rect x="101" y="20" width="24" height="26" rx="4" fill="#F5F5F5" stroke="#D1D5DB"/>
+          <text x="113" y="38" text-anchor="middle" fill="#1A1A1A" font-family="monospace" font-size="13" font-weight="bold">B</text>
+
+          <rect x="127" y="20" width="24" height="26" rx="4" fill="#F5F5F5" stroke="#D1D5DB"/>
+          <text x="139" y="38" text-anchor="middle" fill="#1A1A1A" font-family="monospace" font-size="13" font-weight="bold">C</text>
+
+          <rect x="153" y="20" width="24" height="26" rx="4" fill="#FAE5E8" stroke="#E2001A"/>
+          <text x="165" y="38" text-anchor="middle" fill="#E2001A" font-family="monospace" font-size="13" font-weight="bold">D</text>
+
+          <rect x="179" y="20" width="24" height="26" rx="4" fill="#FAE5E8" stroke="#E2001A"/>
+          <text x="191" y="38" text-anchor="middle" fill="#E2001A" font-family="monospace" font-size="13" font-weight="bold">E</text>
+
+          <rect x="205" y="20" width="24" height="26" rx="4" fill="#F5F5F5" stroke="#D1D5DB"/>
+          <text x="217" y="38" text-anchor="middle" fill="#1A1A1A" font-family="monospace" font-size="13" font-weight="bold">F</text>
+
+          <rect x="231" y="20" width="24" height="26" rx="4" fill="#F5F5F5" stroke="#D1D5DB"/>
+          <text x="243" y="38" text-anchor="middle" fill="#1A1A1A" font-family="monospace" font-size="13" font-weight="bold">G</text>
+
+          <rect x="257" y="20" width="24" height="26" rx="4" fill="#F5F5F5" stroke="#D1D5DB"/>
+          <text x="269" y="38" text-anchor="middle" fill="#1A1A1A" font-family="monospace" font-size="13" font-weight="bold">H</text>
+
+          <rect x="283" y="20" width="24" height="26" rx="4" fill="#F5F5F5" stroke="#D1D5DB"/>
+          <text x="295" y="38" text-anchor="middle" fill="#1A1A1A" font-family="monospace" font-size="13" font-weight="bold">I</text>
+
+          <rect x="309" y="20" width="24" height="26" rx="4" fill="#F5F5F5" stroke="#D1D5DB"/>
+          <text x="321" y="38" text-anchor="middle" fill="#1A1A1A" font-family="monospace" font-size="13" font-weight="bold">J</text>
+
+          <rect x="335" y="20" width="24" height="26" rx="4" fill="#F5F5F5" stroke="#D1D5DB"/>
+          <text x="347" y="38" text-anchor="middle" fill="#1A1A1A" font-family="monospace" font-size="13" font-weight="bold">K</text>
+
+          <rect x="361" y="20" width="24" height="26" rx="4" fill="#F5F5F5" stroke="#D1D5DB"/>
+          <text x="373" y="38" text-anchor="middle" fill="#1A1A1A" font-family="monospace" font-size="13" font-weight="bold">L</text>
+
+          <rect x="387" y="20" width="24" height="26" rx="4" fill="#F5F5F5" stroke="#D1D5DB"/>
+          <text x="399" y="38" text-anchor="middle" fill="#1A1A1A" font-family="monospace" font-size="13" font-weight="bold">M</text>
+
+          <!-- Pfeil K=3 -->
+          <text x="340" y="65" text-anchor="middle" fill="#E2001A" font-family="sans-serif" font-size="13" font-weight="bold">K = 3</text>
+          <line x1="320" y1="58" x2="320" y2="78" stroke="#E2001A" stroke-width="2"/>
+          <polygon points="316,78 320,86 324,78" fill="#E2001A"/>
+
+          <!-- Buchstaben-Boxen Chiffre (um 3 verschoben) -->
+          <rect x="75" y="88" width="24" height="26" rx="4" fill="#FAE5E8" stroke="#E2001A"/>
+          <text x="87" y="106" text-anchor="middle" fill="#E2001A" font-family="monospace" font-size="13" font-weight="bold">D</text>
+
+          <rect x="101" y="88" width="24" height="26" rx="4" fill="#FAE5E8" stroke="#E2001A"/>
+          <text x="113" y="106" text-anchor="middle" fill="#E2001A" font-family="monospace" font-size="13" font-weight="bold">E</text>
+
+          <rect x="127" y="88" width="24" height="26" rx="4" fill="#FAE5E8" stroke="#E2001A"/>
+          <text x="139" y="106" text-anchor="middle" fill="#E2001A" font-family="monospace" font-size="13" font-weight="bold">F</text>
+
+          <rect x="153" y="88" width="24" height="26" rx="4" fill="#FAE5E8" stroke="#E2001A"/>
+          <text x="165" y="106" text-anchor="middle" fill="#E2001A" font-family="monospace" font-size="13" font-weight="bold">G</text>
+
+          <rect x="179" y="88" width="24" height="26" rx="4" fill="#FAE5E8" stroke="#E2001A"/>
+          <text x="191" y="106" text-anchor="middle" fill="#E2001A" font-family="monospace" font-size="13" font-weight="bold">H</text>
+
+          <rect x="205" y="88" width="24" height="26" rx="4" fill="#FAE5E8" stroke="#E2001A"/>
+          <text x="217" y="106" text-anchor="middle" fill="#E2001A" font-family="monospace" font-size="13" font-weight="bold">I</text>
+
+          <rect x="231" y="88" width="24" height="26" rx="4" fill="#FAE5E8" stroke="#E2001A"/>
+          <text x="243" y="106" text-anchor="middle" fill="#E2001A" font-family="monospace" font-size="13" font-weight="bold">J</text>
+
+          <rect x="257" y="88" width="24" height="26" rx="4" fill="#FAE5E8" stroke="#E2001A"/>
+          <text x="269" y="106" text-anchor="middle" fill="#E2001A" font-family="monospace" font-size="13" font-weight="bold">K</text>
+
+          <rect x="283" y="88" width="24" height="26" rx="4" fill="#FAE5E8" stroke="#E2001A"/>
+          <text x="295" y="106" text-anchor="middle" fill="#E2001A" font-family="monospace" font-size="13" font-weight="bold">L</text>
+
+          <rect x="309" y="88" width="24" height="26" rx="4" fill="#FAE5E8" stroke="#E2001A"/>
+          <text x="321" y="106" text-anchor="middle" fill="#E2001A" font-family="monospace" font-size="13" font-weight="bold">M</text>
+
+          <rect x="335" y="88" width="24" height="26" rx="4" fill="#FAE5E8" stroke="#E2001A"/>
+          <text x="347" y="106" text-anchor="middle" fill="#E2001A" font-family="monospace" font-size="13" font-weight="bold">N</text>
+
+          <rect x="361" y="88" width="24" height="26" rx="4" fill="#FAE5E8" stroke="#E2001A"/>
+          <text x="373" y="106" text-anchor="middle" fill="#E2001A" font-family="monospace" font-size="13" font-weight="bold">O</text>
+
+          <rect x="387" y="88" width="24" height="26" rx="4" fill="#FAE5E8" stroke="#E2001A"/>
+          <text x="399" y="106" text-anchor="middle" fill="#E2001A" font-family="monospace" font-size="13" font-weight="bold">P</text>
+
+          <!-- Legende rechts -->
+          <text x="430" y="35"  fill="#1A1A1A" font-family="sans-serif" font-size="11">A → D</text>
+          <text x="430" y="50"  fill="#1A1A1A" font-family="sans-serif" font-size="11">B → E</text>
+          <text x="430" y="65"  fill="#1A1A1A" font-family="sans-serif" font-size="11">C → F</text>
+          <text x="430" y="80"  fill="#1A1A1A" font-family="sans-serif" font-size="11">… → …</text>
+
+          <text x="500" y="35"  fill="#1A1A1A" font-family="sans-serif" font-size="11">X → A (Wrap)</text>
+          <text x="500" y="50"  fill="#1A1A1A" font-family="sans-serif" font-size="11">Y → B</text>
+          <text x="500" y="65"  fill="#1A1A1A" font-family="sans-serif" font-size="11">Z → C</text>
+
+          <!-- Beispiel -->
+          <text x="430" y="100" fill="#E2001A" font-family="sans-serif" font-size="11" font-weight="bold">„HALLO" → „KDOOR"</text>
+
+        </svg>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--tip mt-5">
+        <span class="dhbw-callout__label">Brute-Force-Angriff: Warum Caesar unsicher ist</span>
+        <p>Das Alphabet hat nur 25 mögliche Verschiebungen (K=1 bis K=25). Ein Angreifer kann alle 25 Möglichkeiten in Sekunden per Hand ausprobieren – heute natürlich in Microsekunden per Computer. Der <strong>Brute-Force-Angriff</strong> (Durchprobieren aller Schlüssel) ist bei so kleinem Schlüsselraum trivial. Ein sicheres Verfahren braucht einen astronomisch großen Schlüsselraum.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       8. SYMMETRISCHE VERSCHLÜSSELUNG
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">06</span>
+        <h2 class="dhbw-slide__title">Symmetrische Verschlüsselung – ein Schlüssel für beide</h2>
+      </div>
+
+      <p>Bei der <strong>symmetrischen Verschlüsselung</strong> verwenden Sender und Empfänger denselben Schlüssel – sowohl zum Verschlüsseln als auch zum Entschlüsseln. Das Verfahren ist wie ein Tresor mit einem einzigen Schlüssel: Wer den Schlüssel hat, kann öffnen und schließen.</p>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">AES – der heutige Standard</p>
+            <p><strong>AES</strong> (Advanced Encryption Standard) ist der weltweit am häufigsten eingesetzte symmetrische Verschlüsselungsalgorithmus. Er wurde 2001 vom US-amerikanischen NIST standardisiert und gilt bei korrekter Anwendung als sicher. AES wird in WLAN-Verschlüsselung, Festplattenverschlüsselung und VPNs eingesetzt.</p>
+        </div>
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">Das Schlüsselaustausch-Problem</p>
+            <p>Symmetrische Verfahren haben ein grundlegendes Problem: Wie einigen sich Alice und Bob auf den gemeinsamen Schlüssel, ohne dass Eve ihn abhört? Wenn sie den Schlüssel über das unsichere Netzwerk schicken, kann Eve ihn abfangen. Dieses Problem löst die asymmetrische Kryptografie.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       9. ASYMMETRISCHE VERSCHLÜSSELUNG
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">07</span>
+        <h2 class="dhbw-slide__title">Asymmetrische Verschlüsselung – öffentlich und privat</h2>
+      </div>
+
+      <p>Bei der <strong>asymmetrischen Verschlüsselung</strong> gibt es zwei mathematisch verknüpfte Schlüssel: einen <strong>Public Key</strong> (öffentlicher Schlüssel) und einen <strong>Private Key</strong> (privater Schlüssel). Was mit dem einen verschlüsselt wird, kann nur mit dem anderen entschlüsselt werden – und umgekehrt.</p>
+
+      <div class="dhbw-callout dhbw-callout--example mt-5">
+        <span class="dhbw-callout__label">Analogie: Der offene Briefkasten</span>
+        <p>Stell dir vor, Bob stellt einen offenen Briefkasten auf die Straße – jeder kann Briefe einwerfen (= Public Key). Nur Bob hat den Schlüssel, den Briefkasten zu öffnen (= Private Key). Alice kann ihren Brief einwerfen, ohne sich um Schlüsselaustausch kümmern zu müssen. Eve sieht den Briefkasten auch, kann ihn aber nicht öffnen. Der Public Key darf öffentlich bekannt sein – er ist nicht geheim.</p>
+      </div>
+
+      <figure class="mt-5" style="text-align:center;">
+        <img src="graphics/image.png"
+             alt="Alice sendet eine verschlüsselte Nachricht mit Bobs Public Key; Eve kann nichts lesen; Bob öffnet mit seinem Private Key"
+             style="max-width:100%;display:block;margin:0 auto;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+        <figcaption style="font-size:0.875rem;color:#6B7280;margin-top:8px;">Abb. 1 – Asymmetrische Verschlüsselung: Alice verschlüsselt mit Bobs Public Key, nur Bob kann mit seinem Private Key entschlüsseln</figcaption>
+      </figure>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">RSA – das bekannteste Verfahren</p>
+            <p><strong>RSA</strong> (Rivest, Shamir, Adleman, 1977) basiert auf der mathematischen Schwierigkeit, das Produkt zweier sehr großer Primzahlen zu faktorisieren. RSA wird für den Schlüsselaustausch und digitale Signaturen eingesetzt. Schlüssellängen von 2048 oder 4096 Bit gelten heute als sicher.</p>
+        </div>
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">Vorteil: Kein Schlüsselaustausch-Problem</p>
+            <p>Der Public Key kann öffentlich verteilt werden – er enthält kein Geheimnis. Nur der Private Key muss geheim bleiben, und der verlässt nie das System seines Besitzers. Das Schlüsselaustausch-Problem der symmetrischen Kryptografie entfällt vollständig.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       10. HTTPS
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">08</span>
+        <h2 class="dhbw-slide__title">HTTPS – das Hybrid-Verfahren in der Praxis</h2>
+      </div>
+
+      <p><strong>HTTPS</strong> (HyperText Transfer Protocol Secure) ist das Protokoll hinter dem Schlosssymbol im Browser. Es kombiniert symmetrische und asymmetrische Verschlüsselung zu einem <strong>Hybrid-Verfahren</strong>, das das Beste beider Welten vereint.</p>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">Schritt 1: Asymmetrisch (Handshake)</p>
+            <p>Beim Verbindungsaufbau nutzt der Browser den Public Key der Website, um sich sicher auf einen gemeinsamen symmetrischen Sitzungsschlüssel zu einigen. Dieser Handshake ist asymmetrisch abgesichert – kein Schlüsselaustausch-Problem.</p>
+        </div>
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">Schritt 2: Symmetrisch (Datenübertragung)</p>
+            <p>Alle tatsächlichen Daten werden mit dem ausgehandelten symmetrischen Schlüssel (typisch AES) verschlüsselt. Symmetrische Verschlüsselung ist viel schneller als asymmetrische – ideal für große Datenmengen wie Video-Streams.</p>
+        </div>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--merksatz mt-5">
+        <span class="dhbw-callout__label">Merksatz</span>
+        <p><strong>HTTPS</strong> = Asymmetrisch für den sicheren Schlüsselaustausch + Symmetrisch für die schnelle Datenverschlüsselung. Das Schlosssymbol im Browser bedeutet: Die Verbindung ist verschlüsselt – aber noch nicht, dass die Website vertrauenswürdig ist.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       11. ZUSAMMENFASSUNG
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">09</span>
+        <h2 class="dhbw-slide__title">Zusammenfassung: Kryptografie Teil 1</h2>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--merksatz">
+        <span class="dhbw-callout__label">Merksatz</span>
+        <p>Die <strong>CIA-Triade</strong> definiert die drei Schutzziele: Vertraulichkeit, Integrität, Authentizität. Das <strong>Kerckhoffs-Prinzip</strong> besagt: Sicherheit beruht auf dem Schlüssel, nicht auf dem Algorithmus. Die <strong>Caesar-Chiffre</strong> ist historisch interessant, aber durch Brute Force trivial knackbar. <strong>AES</strong> (symmetrisch, ein Schlüssel) ist schnell; <strong>RSA</strong> (asymmetrisch, Public/Private Key) löst das Schlüsselaustausch-Problem. <strong>HTTPS</strong> kombiniert beide Ansätze als Hybrid-Verfahren.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════════════════════════ -->
+  <footer class="dhbw-footer">
+    <div class="dhbw-footer__inner">
+      <span class="dhbw-footer__brand">DHBW Stuttgart</span>
+      <span>Informatik-Grundlagen für Maschinenbau &nbsp;·&nbsp; WS&nbsp;2025/26</span>
+      <span>V17 – Kryptografie Teil 1</span>
+    </div>
+  </footer>
+
+</body>
+</html>

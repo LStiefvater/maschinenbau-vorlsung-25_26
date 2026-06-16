@@ -1,8 +1,0 @@
-flowchart TD
-    Start(["Start: importiere_produkte(cursor, csv_pfad)"]) --> Open["Datei mit DictReader oeffnen"]
-    Open --> Loop{{"fuer jede Zeile in reader"}}
-    Loop --> Extract["Werte auslesen + Typen konvertieren"]
-    Extract --> Insert["cursor.execute('INSERT ...', (...))"]
-    Insert --> Loop
-    Loop -- "fertig" --> Commit["conn.commit()"]
-    Commit --> End(["Ende"])

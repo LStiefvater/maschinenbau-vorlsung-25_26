@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>V14 – Python Praxis: Dateien & os-Modul | DHBW Stuttgart</title>
+  <link rel="stylesheet" href="../../src/dhbw-base.css">
+  <style>
+    .concept-grid { display:grid; grid-template-columns:1fr; gap:var(--sp-6); margin-top:var(--sp-5); }
+    .concept-card { background:var(--surface); border:1px solid var(--border); border-top:4px solid var(--red); border-radius:var(--r-card); padding:var(--sp-5) var(--sp-6); box-shadow:var(--shadow-card); }
+    .concept-card__name { font-family:var(--dhbw-font-mono); font-size:var(--fs-lg); font-weight:var(--dhbw-fw-bold); color:var(--red); margin-bottom:var(--sp-2); }
+    .dhbw-code { background:var(--code-bg); color:var(--code-text); font-family:var(--dhbw-font-mono); font-size:0.9rem; line-height:var(--lh-code); padding:var(--sp-4) var(--sp-5); border-radius:var(--r-base); overflow-x:auto; margin:var(--sp-3) 0; white-space:pre; }
+    .kw  { color:#F97316; font-weight:600; }
+    .str { color:#22C55E; }
+    .num { color:#A78BFA; }
+    .cmt { color:#7A9CB3; font-style:italic; }
+    .fn  { color:#60A5FA; }
+    .var { color:#E8EFF5; }
+    .fsl { color:#F0C060; }
+    .game-box { background:#0F1E2B; border:2px solid #2A4A6B; border-radius:var(--r-card); padding:var(--sp-5) var(--sp-6); margin-top:var(--sp-6); }
+    .game-box__header { display:flex; align-items:center; gap:var(--sp-3); margin-bottom:var(--sp-4); }
+    .game-box__icon { font-size:1.5rem; }
+    .game-box__title { font-size:var(--fs-md); font-weight:var(--dhbw-fw-bold); color:#60A5FA; margin:0; }
+    .game-box__subtitle { font-size:var(--fs-sm); color:#7A9CB3; margin-top:var(--sp-1); }
+    .quick-ref { width:100%; border-collapse:collapse; margin-top:var(--sp-4); font-size:var(--fs-sm); }
+    .quick-ref th { background:var(--red); color:#fff; padding:var(--sp-2) var(--sp-4); text-align:left; }
+    .quick-ref td { padding:var(--sp-2) var(--sp-4); border-bottom:1px solid var(--border); vertical-align:top; }
+    .quick-ref tr:nth-child(even) td { background:var(--canvas); }
+    .quick-ref code { font-family:var(--dhbw-font-mono); font-size:0.85rem; background:var(--code-bg-in); padding:1px 5px; border-radius:var(--r-sm); color:var(--red); }
+    .mt-4 { margin-top:var(--sp-4); } .mt-5 { margin-top:var(--sp-5); }
+    .dhbw-footer { background:var(--text); color:#9CA3AF; text-align:center; padding:var(--sp-5) var(--gutter); font-size:var(--fs-sm); }
+    @media print {
+      @page { size:A4; margin:15mm 18mm; }
+      .dhbw-header,.dhbw-footer { display:none; }
+      .dhbw-hero,.dhbw-slide,.dhbw-code,.dhbw-callout,.concept-card,.game-box { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+      .dhbw-hero { padding:12mm 0 10mm; } .dhbw-slide { padding:8mm 0; }
+      .concept-card,.game-box { break-inside:avoid; }
+      .dhbw-code { font-size:0.78rem; }
+      .page-break { page-break-before:always; }
+    }
+  </style>
+</head>
+<body>
+  <header class="dhbw-header">
+    <div class="dhbw-header__inner">
+      <a href="#" class="dhbw-header__logo"><span class="dhbw-header__logo-text">DHBW Stuttgart</span></a>
+      <nav class="dhbw-header__nav">
+        <a href="V14-Betriebssysteme-Rechnerarchitektur-Teil2_skript.html" class="dhbw-header__nav-link">Theorie</a>
+        <a href="#" class="dhbw-header__nav-link dhbw-header__nav-link--active">Python Praxis</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="dhbw-hero">
+    <div class="dhbw-hero__inner">
+      <p class="dhbw-hero__label">Vorlesung 14 · Python Praxis · Maschinenbau</p>
+      <h1 class="dhbw-hero__title">Dateien &amp; os-Modul</h1>
+      <p class="dhbw-hero__subtitle">Messdaten speichern und laden, Dateipfade verwalten</p>
+      <p class="dhbw-hero__meta">WS 2025/26 &nbsp;·&nbsp; DHBW Stuttgart &nbsp;·&nbsp; Nachschlagewerk Python-Praxis</p>
+    </div>
+  </section>
+
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">01</span><h2 class="dhbw-slide__title">Das kannst du danach</h2></div>
+      <div class="dhbw-goals">
+        <p class="dhbw-goals__title">📌 Nach dieser Einheit kannst du …</p>
+        <ul>
+          <li>Textdateien mit <strong>open()</strong> lesen und schreiben.</li>
+          <li>mit <strong>with</strong>-Blöcken sicher mit Dateien arbeiten (automatisches Schließen).</li>
+          <li>mit <strong>os.path</strong> Dateipfade plattformunabhängig zusammenbauen.</li>
+          <li>prüfen ob eine Datei existiert, bevor du sie öffnest.</li>
+          <li>Messdaten als CSV-Datei speichern und einlesen.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- SVG: Ordner-Baum -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">02</span><h2 class="dhbw-slide__title">Dateipfade verstehen</h2></div>
+
+      <!-- SVG Ordner-Baum -->
+      <svg viewBox="0 0 380 160" width="100%" style="max-width:380px; display:block; margin:var(--sp-4) auto;"
+           role="img" aria-label="Ordnerstruktur: Projekt-Ordner mit Unterordnern daten und logs, und Dateien messung.py und daten/sensor_log.csv">
+        <!-- Root -->
+        <rect x="10" y="10" width="120" height="28" rx="4" fill="#E2001A"/>
+        <text x="70" y="28" text-anchor="middle" font-family="'Fira Code', monospace" font-size="13" font-weight="700" fill="#fff">📁 projekt/</text>
+        <!-- Verbindungslinien -->
+        <line x1="70" y1="38" x2="70" y2="58" stroke="#D1D5DB" stroke-width="1.5" stroke-dasharray="4,2"/>
+        <line x1="70" y1="58" x2="30" y2="78" stroke="#D1D5DB" stroke-width="1.5"/>
+        <line x1="70" y1="58" x2="110" y2="78" stroke="#D1D5DB" stroke-width="1.5"/>
+        <line x1="70" y1="58" x2="190" y2="78" stroke="#D1D5DB" stroke-width="1.5"/>
+        <!-- messung.py -->
+        <rect x="5" y="78" width="100" height="24" rx="3" fill="#1E2936" stroke="#60A5FA" stroke-width="1.5"/>
+        <text x="55" y="93" text-anchor="middle" font-family="'Fira Code', monospace" font-size="12" fill="#60A5FA">messung.py</text>
+        <!-- daten/ -->
+        <rect x="80" y="78" width="80" height="24" rx="3" fill="#1E2936" stroke="#22C55E" stroke-width="1.5"/>
+        <text x="120" y="93" text-anchor="middle" font-family="'Fira Code', monospace" font-size="12" fill="#22C55E">📁 daten/</text>
+        <!-- logs/ -->
+        <rect x="160" y="78" width="80" height="24" rx="3" fill="#1E2936" stroke="#22C55E" stroke-width="1.5"/>
+        <text x="200" y="93" text-anchor="middle" font-family="'Fira Code', monospace" font-size="12" fill="#22C55E">📁 logs/</text>
+        <!-- Dateien unter daten/ -->
+        <line x1="120" y1="102" x2="100" y2="122" stroke="#D1D5DB" stroke-width="1.5"/>
+        <line x1="120" y1="102" x2="150" y2="122" stroke="#D1D5DB" stroke-width="1.5"/>
+        <rect x="60" y="122" width="120" height="24" rx="3" fill="#1E2936" stroke="#7A9CB3" stroke-width="1"/>
+        <text x="120" y="137" text-anchor="middle" font-family="'Fira Code', monospace" font-size="11" fill="#7A9CB3">sensor_log.csv</text>
+        <!-- Pfad-Hinweis -->
+        <text x="10" y="160" font-family="'Source Sans 3', Arial, sans-serif" font-size="10" fill="#6B7280">Pfad: projekt/daten/sensor_log.csv</text>
+      </svg>
+    </div>
+  </section>
+
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">03</span><h2 class="dhbw-slide__title">Dateioperationen im Detail</h2></div>
+
+      <div class="concept-grid">
+
+        <div class="concept-card">
+          <div class="concept-card__name">open() + with – Datei lesen</div>
+          <p>Der <code class="dhbw-inline">with</code>-Block stellt sicher, dass die Datei automatisch geschlossen wird – auch wenn ein Fehler auftritt.</p>
+          <div class="dhbw-code"><span class="cmt"># Datei lesen</span>
+<span class="kw">with</span> <span class="fn">open</span>(<span class="str">"messung.txt"</span>, <span class="str">"r"</span>, encoding=<span class="str">"utf-8"</span>) <span class="kw">as</span> <span class="var">datei</span>:
+    <span class="var">inhalt</span> = <span class="var">datei</span>.<span class="fn">read</span>()   <span class="cmt"># Alles auf einmal</span>
+    <span class="fn">print</span>(<span class="var">inhalt</span>)
+
+<span class="cmt"># Zeilenweise lesen (für große Dateien empfohlen)</span>
+<span class="kw">with</span> <span class="fn">open</span>(<span class="str">"messung.txt"</span>, <span class="str">"r"</span>, encoding=<span class="str">"utf-8"</span>) <span class="kw">as</span> <span class="var">datei</span>:
+    <span class="kw">for</span> <span class="var">zeile</span> <span class="kw">in</span> <span class="var">datei</span>:
+        <span class="fn">print</span>(<span class="var">zeile</span>.<span class="fn">strip</span>())   <span class="cmt"># .strip() entfernt \n</span></div>
+        </div>
+
+        <div class="concept-card">
+          <div class="concept-card__name">open() – Datei schreiben</div>
+          <div class="dhbw-code"><span class="cmt"># Neue Datei schreiben (überschreibt vorhandene!)</span>
+<span class="kw">with</span> <span class="fn">open</span>(<span class="str">"bericht.txt"</span>, <span class="str">"w"</span>, encoding=<span class="str">"utf-8"</span>) <span class="kw">as</span> <span class="var">datei</span>:
+    <span class="var">datei</span>.<span class="fn">write</span>(<span class="str">"Messbericht\n"</span>)
+    <span class="var">datei</span>.<span class="fn">write</span>(<span class="fsl">f</span><span class="str">"Temperatur: <span class="fsl">{23.5:.2f}</span> °C\n"</span>)
+
+<span class="cmt"># An Datei anhängen (existierende Inhalte bleiben erhalten)</span>
+<span class="kw">with</span> <span class="fn">open</span>(<span class="str">"log.txt"</span>, <span class="str">"a"</span>, encoding=<span class="str">"utf-8"</span>) <span class="kw">as</span> <span class="var">datei</span>:
+    <span class="var">datei</span>.<span class="fn">write</span>(<span class="str">"Neue Messung hinzugefügt\n"</span>)
+
+<span class="cmt"># Modi:
+# "r" – lesen (read)
+# "w" – schreiben (write) – löscht Inhalt!
+# "a" – anhängen (append)</span></div>
+        </div>
+
+        <div class="concept-card">
+          <div class="concept-card__name">os.path – Dateipfade</div>
+          <div class="dhbw-code"><span class="kw">import</span> <span class="fn">os</span>
+
+<span class="cmt"># Pfade zusammenbauen (funktioniert auf Windows + Linux)</span>
+<span class="var">ordner</span>    = <span class="str">"daten"</span>
+<span class="var">dateiname</span> = <span class="str">"sensor_log.csv"</span>
+<span class="var">pfad</span>      = <span class="fn">os.path.join</span>(<span class="var">ordner</span>, <span class="var">dateiname</span>)
+<span class="fn">print</span>(<span class="var">pfad</span>)     <span class="cmt"># → daten/sensor_log.csv (Linux)
+                 # → daten\sensor_log.csv (Windows)</span>
+
+<span class="cmt"># Prüfen ob Datei existiert</span>
+<span class="kw">if</span> <span class="fn">os.path.exists</span>(<span class="var">pfad</span>):
+    <span class="fn">print</span>(<span class="str">"Datei gefunden!"</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">"Datei nicht gefunden."</span>)
+
+<span class="cmt"># Ordner anlegen (wenn nicht vorhanden)</span>
+<span class="fn">os.makedirs</span>(<span class="str">"daten"</span>, exist_ok=<span class="kw">True</span>)</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- SCHIFFEVERSENKEN -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">04</span><h2 class="dhbw-slide__title">Im Schiffe-Versenken-Spiel</h2></div>
+      <div class="game-box">
+        <div class="game-box__header">
+          <span class="game-box__icon">🚢</span>
+          <div>
+            <h3 class="game-box__title">Spielstand speichern &amp; laden</h3>
+            <p class="game-box__subtitle">spielstand.csv lesen und schreiben</p>
+          </div>
+        </div>
+        <div class="dhbw-code"><span class="kw">import</span> <span class="fn">os</span>
+
+<span class="kw">def</span> <span class="fn">spielstand_speichern</span>(<span class="var">schüsse</span>, <span class="var">treffer</span>):
+    <span class="kw">with</span> <span class="fn">open</span>(<span class="str">"spielstand.csv"</span>, <span class="str">"w"</span>, encoding=<span class="str">"utf-8"</span>) <span class="kw">as</span> <span class="var">f</span>:
+        <span class="var">f</span>.<span class="fn">write</span>(<span class="fsl">f</span><span class="str">"schuesse,treffer\n<span class="fsl">{schüsse}</span>,<span class="fsl">{treffer}</span>\n"</span>)
+
+<span class="kw">def</span> <span class="fn">spielstand_laden</span>():
+    <span class="kw">if</span> <span class="kw">not</span> <span class="fn">os.path.exists</span>(<span class="str">"spielstand.csv"</span>):
+        <span class="kw">return</span> <span class="num">0</span>, <span class="num">0</span>   <span class="cmt"># Standardwerte</span>
+    <span class="kw">with</span> <span class="fn">open</span>(<span class="str">"spielstand.csv"</span>, <span class="str">"r"</span>, encoding=<span class="str">"utf-8"</span>) <span class="kw">as</span> <span class="var">f</span>:
+        <span class="var">zeilen</span> = <span class="var">f</span>.<span class="fn">readlines</span>()
+        <span class="var">daten</span>  = <span class="var">zeilen</span>[<span class="num">1</span>].<span class="fn">strip</span>().<span class="fn">split</span>(<span class="str">","</span>)
+        <span class="kw">return</span> <span class="fn">int</span>(<span class="var">daten</span>[<span class="num">0</span>]), <span class="fn">int</span>(<span class="var">daten</span>[<span class="num">1</span>])</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="dhbw-slide page-break">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">05</span><h2 class="dhbw-slide__title">Quick-Reference</h2></div>
+      <table class="quick-ref">
+        <thead><tr><th style="width:30%">Syntax</th><th>Bedeutung</th></tr></thead>
+        <tbody>
+          <tr><td><code>open("f", "r")</code></td><td>Datei zum Lesen öffnen</td></tr>
+          <tr><td><code>open("f", "w")</code></td><td>Datei zum Schreiben (löscht Inhalt!)</td></tr>
+          <tr><td><code>open("f", "a")</code></td><td>Datei zum Anhängen</td></tr>
+          <tr><td><code>with open(...) as f:</code></td><td>Datei sicher öffnen – automatisch schließen</td></tr>
+          <tr><td><code>f.read()</code></td><td>Gesamten Inhalt einlesen</td></tr>
+          <tr><td><code>f.readlines()</code></td><td>Alle Zeilen als Liste</td></tr>
+          <tr><td><code>for zeile in f:</code></td><td>Zeilenweise iterieren</td></tr>
+          <tr><td><code>f.write("text")</code></td><td>Text schreiben</td></tr>
+          <tr><td><code>os.path.join(a, b)</code></td><td>Pfade plattformunabhängig verbinden</td></tr>
+          <tr><td><code>os.path.exists("p")</code></td><td>Prüft ob Datei/Ordner existiert</td></tr>
+          <tr><td><code>os.makedirs("p", exist_ok=True)</code></td><td>Ordner anlegen (kein Fehler wenn vorhanden)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer class="dhbw-footer">DHBW Stuttgart · Maschinenbau · Informatik-Grundlagen · WS 2025/26 · Python Praxis Nachschlagewerk</footer>
+</body>
+</html>

@@ -1,7 +1,0 @@
-flowchart TD
-    Start(["Start: firmware_valide(pfad, erwarteter_hash)"]) --> O["Datei binaer oeffnen<br/>with open(pfad, 'rb') as f"]
-    O --> R["daten = f.read()"]
-    R --> H["tatsaechlich = sha256(daten).hexdigest()"]
-    H --> V{"tatsaechlich == erwarteter_hash?"}
-    V -- "Ja" --> T(["return True"])
-    V -- "Nein" --> N(["return False"])

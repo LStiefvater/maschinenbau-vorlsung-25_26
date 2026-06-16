@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>V07 – Python Praxis: break, continue & Codeprinzipien | DHBW Stuttgart</title>
+  <link rel="stylesheet" href="../../src/dhbw-base.css">
+  <style>
+    .concept-grid { display:grid; grid-template-columns:1fr; gap:var(--sp-6); margin-top:var(--sp-5); }
+    .concept-card { background:var(--surface); border:1px solid var(--border); border-top:4px solid var(--red); border-radius:var(--r-card); padding:var(--sp-5) var(--sp-6); box-shadow:var(--shadow-card); }
+    .concept-card__name { font-family:var(--dhbw-font-mono); font-size:var(--fs-lg); font-weight:var(--dhbw-fw-bold); color:var(--red); margin-bottom:var(--sp-2); }
+    .dhbw-code { background:var(--code-bg); color:var(--code-text); font-family:var(--dhbw-font-mono); font-size:0.9rem; line-height:var(--lh-code); padding:var(--sp-4) var(--sp-5); border-radius:var(--r-base); overflow-x:auto; margin:var(--sp-3) 0; white-space:pre; }
+    .kw  { color:#F97316; font-weight:600; }
+    .str { color:#22C55E; }
+    .num { color:#A78BFA; }
+    .cmt { color:#7A9CB3; font-style:italic; }
+    .fn  { color:#60A5FA; }
+    .var { color:#E8EFF5; }
+    .fsl { color:#F0C060; }
+    .syntax-box { background:var(--code-bg-in); border-left:3px solid var(--red); border-radius:0 var(--r-base) var(--r-base) 0; padding:var(--sp-3) var(--sp-4); margin:var(--sp-3) 0; font-family:var(--dhbw-font-mono); font-size:0.92rem; color:var(--text); }
+    .syntax-box strong { color:var(--red); }
+    .game-box { background:#0F1E2B; border:2px solid #2A4A6B; border-radius:var(--r-card); padding:var(--sp-5) var(--sp-6); margin-top:var(--sp-6); }
+    .game-box__header { display:flex; align-items:center; gap:var(--sp-3); margin-bottom:var(--sp-4); }
+    .game-box__icon { font-size:1.5rem; }
+    .game-box__title { font-size:var(--fs-md); font-weight:var(--dhbw-fw-bold); color:#60A5FA; margin:0; }
+    .game-box__subtitle { font-size:var(--fs-sm); color:#7A9CB3; margin-top:var(--sp-1); }
+    .quick-ref { width:100%; border-collapse:collapse; margin-top:var(--sp-4); font-size:var(--fs-sm); }
+    .quick-ref th { background:var(--red); color:#fff; padding:var(--sp-2) var(--sp-4); text-align:left; }
+    .quick-ref td { padding:var(--sp-2) var(--sp-4); border-bottom:1px solid var(--border); vertical-align:top; }
+    .quick-ref tr:nth-child(even) td { background:var(--canvas); }
+    .quick-ref code { font-family:var(--dhbw-font-mono); font-size:0.85rem; background:var(--code-bg-in); padding:1px 5px; border-radius:var(--r-sm); color:var(--red); }
+    .principle-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:var(--sp-4); margin-top:var(--sp-5); }
+    .principle-card { background:var(--canvas); border:1px solid var(--border); border-radius:var(--r-card); padding:var(--sp-4); }
+    .principle-badge { display:inline-block; font-family:var(--dhbw-font-mono); font-size:var(--fs-lg); font-weight:700; color:var(--red); margin-bottom:var(--sp-2); }
+    .mt-4 { margin-top:var(--sp-4); } .mt-5 { margin-top:var(--sp-5); } .mt-6 { margin-top:var(--sp-6); }
+    .dhbw-footer { background:var(--text); color:#9CA3AF; text-align:center; padding:var(--sp-5) var(--gutter); font-size:var(--fs-sm); }
+    @media print {
+      @page { size:A4; margin:15mm 18mm; }
+      .dhbw-header,.dhbw-footer { display:none; }
+      .dhbw-hero,.dhbw-slide,.dhbw-code,.dhbw-callout,.concept-card,.game-box { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+      .dhbw-hero { padding:12mm 0 10mm; } .dhbw-slide { padding:8mm 0; }
+      .concept-card,.game-box { break-inside:avoid; }
+      .dhbw-code { font-size:0.78rem; }
+      .page-break { page-break-before:always; }
+    }
+  </style>
+</head>
+<body>
+  <header class="dhbw-header">
+    <div class="dhbw-header__inner">
+      <a href="#" class="dhbw-header__logo"><span class="dhbw-header__logo-text">DHBW Stuttgart</span></a>
+      <nav class="dhbw-header__nav">
+        <a href="V07-Software-Engineering-KISS-DRY-SRP_skript.html" class="dhbw-header__nav-link">Theorie</a>
+        <a href="#" class="dhbw-header__nav-link dhbw-header__nav-link--active">Python Praxis</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="dhbw-hero">
+    <div class="dhbw-hero__inner">
+      <p class="dhbw-hero__label">Vorlesung 07 · Python Praxis · Maschinenbau</p>
+      <h1 class="dhbw-hero__title">break, continue &amp; guter Code</h1>
+      <p class="dhbw-hero__subtitle">Schleifen sauber steuern · KISS · DRY · SRP</p>
+      <p class="dhbw-hero__meta">WS 2025/26 &nbsp;·&nbsp; DHBW Stuttgart &nbsp;·&nbsp; Nachschlagewerk Python-Praxis</p>
+    </div>
+  </section>
+
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">01</span><h2 class="dhbw-slide__title">Das kannst du danach</h2></div>
+      <div class="dhbw-goals">
+        <p class="dhbw-goals__title">📌 Nach dieser Einheit kannst du …</p>
+        <ul>
+          <li>mit <strong>break</strong> eine Schleife sofort beenden, wenn eine Bedingung eintritt.</li>
+          <li>mit <strong>continue</strong> den Rest eines Schleifendurchlaufs überspringen.</li>
+          <li>die drei Codeprinzipien KISS, DRY und SRP erkennen und anwenden.</li>
+          <li>schlechten Code erkennen und refaktorieren.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- KONZEPTKARTEN: break / continue -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">02</span><h2 class="dhbw-slide__title">Schleifensteuerung</h2></div>
+
+      <div class="concept-grid">
+
+        <div class="concept-card">
+          <div class="concept-card__name">break – Schleife sofort beenden</div>
+          <p><code class="dhbw-inline">break</code> verlässt die Schleife sofort – egal ob die Schleifenbedingung noch <code class="dhbw-inline">True</code> wäre. Der Code nach der Schleife wird normal weiter ausgeführt.</p>
+          <div class="dhbw-code"><span class="var">messwerte</span> = [<span class="num">22.1</span>, <span class="num">24.5</span>, <span class="num">87.3</span>, <span class="num">23.8</span>, <span class="num">22.9</span>]
+<span class="var">alarm_limit</span> = <span class="num">80.0</span>
+
+<span class="kw">for</span> <span class="var">wert</span> <span class="kw">in</span> <span class="var">messwerte</span>:
+    <span class="kw">if</span> <span class="var">wert</span> &gt; <span class="var">alarm_limit</span>:
+        <span class="fn">print</span>(<span class="fsl">f</span><span class="str">"ALARM bei <span class="fsl">{wert}</span> °C – Stoppe Prüfung!"</span>)
+        <span class="kw">break</span>            <span class="cmt"># Schleife sofort verlassen</span>
+    <span class="fn">print</span>(<span class="fsl">f</span><span class="str">"OK: <span class="fsl">{wert}</span> °C"</span>)
+
+<span class="fn">print</span>(<span class="str">"Prüfung abgeschlossen."</span>)  <span class="cmt"># läuft immer</span>
+<span class="cmt"># → OK: 22.1 °C
+# → OK: 24.5 °C
+# → ALARM bei 87.3 °C – Stoppe Prüfung!
+# → Prüfung abgeschlossen.</span></div>
+        </div>
+
+        <div class="concept-card">
+          <div class="concept-card__name">continue – Durchlauf überspringen</div>
+          <p><code class="dhbw-inline">continue</code> überspringt den Rest des aktuellen Schleifendurchlaufs und geht direkt zum nächsten Durchlauf. Die Schleife läuft weiter.</p>
+          <div class="dhbw-code"><span class="var">messwerte</span> = [<span class="num">22.1</span>, -<span class="num">999</span>, <span class="num">24.5</span>, -<span class="num">999</span>, <span class="num">23.8</span>]
+<span class="cmt"># -999 bedeutet: Sensor-Fehler, Wert ungültig</span>
+
+<span class="kw">for</span> <span class="var">wert</span> <span class="kw">in</span> <span class="var">messwerte</span>:
+    <span class="kw">if</span> <span class="var">wert</span> == -<span class="num">999</span>:
+        <span class="fn">print</span>(<span class="str">"Sensor-Fehler, überspringe..."</span>)
+        <span class="kw">continue</span>         <span class="cmt"># Rest überspringen</span>
+    <span class="fn">print</span>(<span class="fsl">f</span><span class="str">"Gültiger Wert: <span class="fsl">{wert}</span> °C"</span>)
+<span class="cmt"># → Gültiger Wert: 22.1 °C
+# → Sensor-Fehler, überspringe...
+# → Gültiger Wert: 24.5 °C
+# → ...</span></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CODEPRINZIPIEN -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">03</span><h2 class="dhbw-slide__title">Die drei Codeprinzipien</h2></div>
+
+      <div class="principle-grid">
+        <div class="principle-card">
+          <div class="principle-badge">KISS</div>
+          <p><strong>Keep It Simple, Stupid</strong></p>
+          <p style="margin-top:var(--sp-2); font-size:var(--fs-sm);">Schreibe Code so einfach wie möglich. Wenn du deinen eigenen Code nicht auf Anhieb verstehst, ist er zu komplex.</p>
+        </div>
+        <div class="principle-card">
+          <div class="principle-badge">DRY</div>
+          <p><strong>Don't Repeat Yourself</strong></p>
+          <p style="margin-top:var(--sp-2); font-size:var(--fs-sm);">Kein Code soll mehrfach vorkommen. Was sich wiederholt, gehört in eine Funktion. Einmal ändern – überall wirksam.</p>
+        </div>
+        <div class="principle-card">
+          <div class="principle-badge">SRP</div>
+          <p><strong>Single Responsibility</strong></p>
+          <p style="margin-top:var(--sp-2); font-size:var(--fs-sm);">Jede Funktion/jeder Codeabschnitt macht <em>genau eine</em> Sache. Mische nicht Eingabe, Berechnung und Ausgabe in einer Funktion.</p>
+        </div>
+      </div>
+
+      <div class="dhbw-code mt-5"><span class="cmt">## SCHLECHTER Code (verletzt DRY + KISS)</span>
+<span class="fn">print</span>(<span class="str">"Sensor 1:"</span>, <span class="fn">float</span>(<span class="fn">input</span>(<span class="str">"Temp 1: "</span>)) * <span class="num">9</span>/<span class="num">5</span> + <span class="num">32</span>)
+<span class="fn">print</span>(<span class="str">"Sensor 2:"</span>, <span class="fn">float</span>(<span class="fn">input</span>(<span class="str">"Temp 2: "</span>)) * <span class="num">9</span>/<span class="num">5</span> + <span class="num">32</span>)
+<span class="fn">print</span>(<span class="str">"Sensor 3:"</span>, <span class="fn">float</span>(<span class="fn">input</span>(<span class="str">"Temp 3: "</span>)) * <span class="num">9</span>/<span class="num">5</span> + <span class="num">32</span>)
+
+<span class="cmt">## GUTER Code (DRY: Formel einmal, wiederverwendbar)</span>
+<span class="kw">def</span> <span class="fn">celsius_zu_fahrenheit</span>(<span class="var">celsius</span>):
+    <span class="kw">return</span> <span class="var">celsius</span> * <span class="num">9</span>/<span class="num">5</span> + <span class="num">32</span>
+
+<span class="kw">for</span> <span class="var">i</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="num">4</span>):
+    <span class="var">celsius</span> = <span class="fn">float</span>(<span class="fn">input</span>(<span class="fsl">f</span><span class="str">"Temp <span class="fsl">{i}</span>: "</span>))
+    <span class="fn">print</span>(<span class="fsl">f</span><span class="str">"Sensor <span class="fsl">{i}</span>: <span class="fsl">{celsius_zu_fahrenheit(celsius):.1f}</span> °F"</span>)</div>
+    </div>
+  </section>
+
+  <!-- SCHIFFEVERSENKEN -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">04</span><h2 class="dhbw-slide__title">Im Schiffe-Versenken-Spiel</h2></div>
+      <div class="game-box">
+        <div class="game-box__header">
+          <span class="game-box__icon">🚢</span>
+          <div>
+            <h3 class="game-box__title">break beim Spielende</h3>
+            <p class="game-box__subtitle">Alle Schiffe versenkt → sofort beenden</p>
+          </div>
+        </div>
+        <div class="dhbw-code"><span class="cmt"># Spielschleife mit break bei Gewinn</span>
+<span class="var">versenkte_schiffe</span> = <span class="num">0</span>
+<span class="var">gesamt_schiffe</span>    = <span class="num">3</span>   <span class="cmt"># 3-Felder-Schiff</span>
+
+<span class="kw">while</span> <span class="kw">True</span>:                  <span class="cmt"># Endlosschleife</span>
+    <span class="var">eingabe</span> = <span class="fn">input</span>(<span class="str">"Schuss: "</span>)
+    <span class="kw">if</span> <span class="var">eingabe</span> == <span class="str">"ende"</span>:
+        <span class="kw">break</span>               <span class="cmt"># Manuell beenden</span>
+
+    <span class="cmt"># ... Schuss verarbeiten ...</span>
+    <span class="kw">if</span> <span class="var">versenkte_schiffe</span> == <span class="var">gesamt_schiffe</span>:
+        <span class="fn">print</span>(<span class="str">"🎉 Gewonnen! Alle Schiffe versenkt!"</span>)
+        <span class="kw">break</span>               <span class="cmt"># Schleife beenden</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUICK-REFERENCE -->
+  <section class="dhbw-slide page-break">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">05</span><h2 class="dhbw-slide__title">Quick-Reference</h2></div>
+      <table class="quick-ref">
+        <thead><tr><th style="width:20%">Konzept</th><th>Was es tut</th><th>Wann einsetzen</th></tr></thead>
+        <tbody>
+          <tr><td><code>break</code></td><td>Schleife sofort verlassen</td><td>Abbruchbedingung erfüllt (Alarm, Gewinn, Fehler)</td></tr>
+          <tr><td><code>continue</code></td><td>Aktuellen Durchlauf überspringen, weitermachen</td><td>Ungültige/uninteressante Werte filtern</td></tr>
+          <tr><td>KISS</td><td>Keep It Simple – einfach schreiben</td><td>Immer – bei jeder Zeile Code</td></tr>
+          <tr><td>DRY</td><td>Don't Repeat Yourself – kein Duplikat-Code</td><td>Sobald du Code kopierst: stop und schreibe eine Funktion</td></tr>
+          <tr><td>SRP</td><td>Eine Funktion = eine Aufgabe</td><td>Wenn eine Funktion zu lang wird oder mehrere Dinge tut</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer class="dhbw-footer">DHBW Stuttgart · Maschinenbau · Informatik-Grundlagen · WS 2025/26 · Python Praxis Nachschlagewerk</footer>
+</body>
+</html>

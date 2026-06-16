@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>V01 – Python Praxis: Erste Schritte | DHBW Stuttgart</title>
+  <link rel="stylesheet" href="../../src/dhbw-base.css">
+  <style>
+    /* ── Praxis-spezifische Ergänzungen ─────────────────────── */
+    .concept-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--sp-6);
+      margin-top: var(--sp-5);
+    }
+
+    .concept-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-top: 4px solid var(--red);
+      border-radius: var(--r-card);
+      padding: var(--sp-5) var(--sp-6);
+      box-shadow: var(--shadow-card);
+    }
+
+    .concept-card__name {
+      font-family: var(--dhbw-font-mono);
+      font-size: var(--fs-lg);
+      font-weight: var(--dhbw-fw-bold);
+      color: var(--red);
+      margin-bottom: var(--sp-2);
+    }
+
+    .concept-card__desc {
+      color: var(--text);
+      margin-bottom: var(--sp-4);
+    }
+
+    /* ── Code-Blöcke ────────────────────────────────────────── */
+    .dhbw-code {
+      background: var(--code-bg);
+      color: var(--code-text);
+      font-family: var(--dhbw-font-mono);
+      font-size: 0.9rem;
+      line-height: var(--lh-code);
+      padding: var(--sp-4) var(--sp-5);
+      border-radius: var(--r-base);
+      overflow-x: auto;
+      margin: var(--sp-3) 0;
+      white-space: pre;
+    }
+
+    .kw  { color: #F97316; font-weight: 600; }   /* Keywords */
+    .str { color: #22C55E; }                       /* Strings  */
+    .num { color: #A78BFA; }                       /* Numbers  */
+    .cmt { color: #7A9CB3; font-style: italic; }   /* Comments */
+    .fn  { color: #60A5FA; }                       /* Builtins */
+    .var { color: #E8EFF5; }                       /* Variables */
+
+    /* ── Syntax-Signatur Box ────────────────────────────────── */
+    .syntax-box {
+      background: var(--code-bg-in);
+      border-left: 3px solid var(--red);
+      border-radius: 0 var(--r-base) var(--r-base) 0;
+      padding: var(--sp-3) var(--sp-4);
+      margin: var(--sp-3) 0;
+      font-family: var(--dhbw-font-mono);
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+
+    .syntax-box strong { color: var(--red); }
+
+    /* ── Schiffeversenken-Kasten ────────────────────────────── */
+    .game-box {
+      background: #0F1E2B;
+      border: 2px solid #2A4A6B;
+      border-radius: var(--r-card);
+      padding: var(--sp-5) var(--sp-6);
+      margin-top: var(--sp-6);
+    }
+
+    .game-box__header {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-3);
+      margin-bottom: var(--sp-4);
+    }
+
+    .game-box__icon {
+      font-size: 1.5rem;
+    }
+
+    .game-box__title {
+      font-size: var(--fs-md);
+      font-weight: var(--dhbw-fw-bold);
+      color: #60A5FA;
+      margin: 0;
+    }
+
+    .game-box__subtitle {
+      font-size: var(--fs-sm);
+      color: #7A9CB3;
+      margin-top: var(--sp-1);
+    }
+
+    /* ── Quick-Reference Tabelle ────────────────────────────── */
+    .quick-ref {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: var(--sp-4);
+      font-size: var(--fs-sm);
+    }
+
+    .quick-ref th {
+      background: var(--red);
+      color: #fff;
+      padding: var(--sp-2) var(--sp-4);
+      text-align: left;
+      font-weight: var(--dhbw-fw-semi);
+    }
+
+    .quick-ref td {
+      padding: var(--sp-2) var(--sp-4);
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    .quick-ref tr:nth-child(even) td { background: var(--canvas); }
+
+    .quick-ref code {
+      font-family: var(--dhbw-font-mono);
+      font-size: 0.85rem;
+      background: var(--code-bg-in);
+      padding: 1px 5px;
+      border-radius: var(--r-sm);
+      color: var(--red);
+    }
+
+    /* ── Utility ────────────────────────────────────────────── */
+    .mt-4 { margin-top: var(--sp-4); }
+    .mt-5 { margin-top: var(--sp-5); }
+    .mt-6 { margin-top: var(--sp-6); }
+
+    .param-row { margin-top: var(--sp-3); }
+    .param-label {
+      font-family: var(--dhbw-font-mono);
+      font-size: var(--fs-sm);
+      color: var(--red);
+      font-weight: var(--dhbw-fw-semi);
+    }
+
+    /* ── Footer ─────────────────────────────────────────────── */
+    .dhbw-footer {
+      background: var(--text);
+      color: #9CA3AF;
+      text-align: center;
+      padding: var(--sp-5) var(--gutter);
+      font-size: var(--fs-sm);
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       PRINT / DIN A4
+    ══════════════════════════════════════════════════════════ */
+    @media print {
+      @page {
+        size: A4;
+        margin: 15mm 18mm 15mm 18mm;
+      }
+
+      .dhbw-header { display: none; }
+
+      .dhbw-hero {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        padding: 12mm 0 10mm;
+      }
+
+      .dhbw-slide, .dhbw-slide--alt {
+        padding: 8mm 0;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .dhbw-slide__header {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .concept-card {
+        break-inside: avoid;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .dhbw-code {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        font-size: 0.78rem;
+      }
+
+      .game-box {
+        break-inside: avoid;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .dhbw-callout {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .page-break { page-break-before: always; }
+      .dhbw-footer { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════════════════════
+       HEADER
+  ══════════════════════════════════════════════════════════ -->
+  <header class="dhbw-header">
+    <div class="dhbw-header__inner">
+      <a href="#" class="dhbw-header__logo">
+        <span class="dhbw-header__logo-text">DHBW Stuttgart</span>
+      </a>
+      <nav class="dhbw-header__nav">
+        <a href="V01-Binaeres-Zahlensystem_skript.html" class="dhbw-header__nav-link">Theorie</a>
+        <a href="#" class="dhbw-header__nav-link dhbw-header__nav-link--active">Python Praxis</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════════════════════════════
+       HERO
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-hero">
+    <div class="dhbw-hero__inner">
+      <p class="dhbw-hero__label">Vorlesung 01 · Python Praxis · Maschinenbau</p>
+      <h1 class="dhbw-hero__title">Erste Schritte in Python</h1>
+      <p class="dhbw-hero__subtitle">print(), input() und Variablen – das Fundament jedes Programms</p>
+      <p class="dhbw-hero__meta">WS 2025/26 &nbsp;·&nbsp; DHBW Stuttgart &nbsp;·&nbsp; Nachschlagewerk Python-Praxis</p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       LERNZIELE
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">01</span>
+        <h2 class="dhbw-slide__title">Das kannst du danach</h2>
+      </div>
+
+      <div class="dhbw-goals">
+        <p class="dhbw-goals__title">📌 Nach dieser Einheit kannst du …</p>
+        <ul>
+          <li>mit <strong>print()</strong> Texte und Werte auf der Konsole ausgeben.</li>
+          <li>mit <strong>input()</strong> Eingaben vom Nutzer einlesen und weiterverarbeiten.</li>
+          <li><strong>Variablen</strong> anlegen, benennen und Werte darin speichern.</li>
+          <li>deinen Code mit <strong>Kommentaren</strong> verständlich dokumentieren.</li>
+          <li>ein kleines Konsolenprogramm schreiben – z.&nbsp;B. zur Messdatenerfassung.</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       WAS IST EINE VARIABLE? (mit SVG)
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">02</span>
+        <h2 class="dhbw-slide__title">Was ist eine Variable?</h2>
+      </div>
+
+      <p>Eine <strong>Variable</strong> ist ein benannter Speicherplatz im Arbeitsspeicher. Du kannst dir eine Variable wie ein beschriftetes Kästchen vorstellen: Du gibst ihm einen Namen und legst einen Wert hinein. Später kannst du den Wert jederzeit auslesen oder ändern.</p>
+
+      <!-- SVG: Variablen als beschriftete Kästchen -->
+      <svg viewBox="0 0 560 130" width="100%" style="max-width:560px; display:block; margin:var(--sp-5) auto;"
+           role="img" aria-label="Drei Variablen als beschriftete Kästchen: temperatur=23.5, messung_nr=1, einheit='Grad C'">
+
+        <!-- temperatur -->
+        <rect x="10" y="30" width="160" height="70" rx="6" fill="#1E2936" stroke="#2A4A6B" stroke-width="2"/>
+        <rect x="10" y="10" width="160" height="28" rx="6" fill="#E2001A"/>
+        <text x="90" y="28" text-anchor="middle" font-family="'Fira Code', monospace" font-size="13" font-weight="700" fill="#fff">temperatur</text>
+        <text x="90" y="72" text-anchor="middle" font-family="'Fira Code', monospace" font-size="22" font-weight="700" fill="#A78BFA">23.5</text>
+        <text x="90" y="92" text-anchor="middle" font-family="'Source Sans 3', Arial, sans-serif" font-size="11" fill="#7A9CB3">float (Dezimalzahl)</text>
+
+        <!-- Pfeil 1 -->
+        <text x="188" y="68" text-anchor="middle" font-family="'Source Sans 3', Arial, sans-serif" font-size="22" fill="#D1D5DB">→</text>
+
+        <!-- messung_nr -->
+        <rect x="206" y="30" width="160" height="70" rx="6" fill="#1E2936" stroke="#2A4A6B" stroke-width="2"/>
+        <rect x="206" y="10" width="160" height="28" rx="6" fill="#E2001A"/>
+        <text x="286" y="28" text-anchor="middle" font-family="'Fira Code', monospace" font-size="13" font-weight="700" fill="#fff">messung_nr</text>
+        <text x="286" y="72" text-anchor="middle" font-family="'Fira Code', monospace" font-size="22" font-weight="700" fill="#A78BFA">1</text>
+        <text x="286" y="92" text-anchor="middle" font-family="'Source Sans 3', Arial, sans-serif" font-size="11" fill="#7A9CB3">int (Ganzzahl)</text>
+
+        <!-- Pfeil 2 -->
+        <text x="384" y="68" text-anchor="middle" font-family="'Source Sans 3', Arial, sans-serif" font-size="22" fill="#D1D5DB">→</text>
+
+        <!-- einheit -->
+        <rect x="402" y="30" width="148" height="70" rx="6" fill="#1E2936" stroke="#2A4A6B" stroke-width="2"/>
+        <rect x="402" y="10" width="148" height="28" rx="6" fill="#E2001A"/>
+        <text x="476" y="28" text-anchor="middle" font-family="'Fira Code', monospace" font-size="13" font-weight="700" fill="#fff">einheit</text>
+        <text x="476" y="72" text-anchor="middle" font-family="'Fira Code', monospace" font-size="17" font-weight="700" fill="#22C55E">"Grad C"</text>
+        <text x="476" y="92" text-anchor="middle" font-family="'Source Sans 3', Arial, sans-serif" font-size="11" fill="#7A9CB3">str (Text)</text>
+      </svg>
+
+      <p class="mt-4">In Python brauchst du kein spezielles Schlüsselwort wie <code class="dhbw-inline">var</code> oder <code class="dhbw-inline">int</code> – du weist einfach einen Wert zu, und Python erkennt den Typ automatisch.</p>
+
+      <div class="dhbw-callout dhbw-callout--tip mt-5">
+        <span class="dhbw-callout__label">Gute Variablennamen</span>
+        <p>Verwende beschreibende Namen in Kleinbuchstaben mit Unterstrichen: <code class="dhbw-inline">drehzahl_rpm</code>, <code class="dhbw-inline">temperatur_celsius</code>, <code class="dhbw-inline">messung_nr</code>. Meide kryptische Abkürzungen wie <code class="dhbw-inline">x</code>, <code class="dhbw-inline">tmp1</code>, <code class="dhbw-inline">val</code>.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       KONZEPTKARTEN
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">03</span>
+        <h2 class="dhbw-slide__title">Funktionen im Detail</h2>
+      </div>
+
+      <div class="concept-grid">
+
+        <!-- ── print() ──────────────────────────────────────── -->
+        <div class="concept-card">
+          <div class="concept-card__name">print()</div>
+          <p class="concept-card__desc">
+            Gibt einen oder mehrere Werte auf der Konsole aus. Python fügt nach jeder Ausgabe automatisch einen Zeilenumbruch ein. Du kannst mehrere Werte durch Kommas trennen – Python fügt dann automatisch ein Leerzeichen dazwischen ein.
+          </p>
+
+          <div class="syntax-box">
+            <strong>print(</strong>wert1, wert2, ..., sep=" ", end="\n"<strong>)</strong>
+          </div>
+
+          <div class="param-row">
+            <span class="param-label">wert1, wert2, …</span>
+            <span> – Beliebig viele Werte, die ausgegeben werden sollen</span>
+          </div>
+          <div class="param-row">
+            <span class="param-label">sep=</span>
+            <span> – Trennzeichen zwischen mehreren Werten (Standard: Leerzeichen)</span>
+          </div>
+          <div class="param-row">
+            <span class="param-label">end=</span>
+            <span> – Zeichen am Ende der Ausgabe (Standard: Zeilenumbruch <code class="dhbw-inline">\n</code>)</span>
+          </div>
+
+          <div class="dhbw-code"><span class="cmt"># Einfache Textausgabe</span>
+<span class="fn">print</span>(<span class="str">"Messung gestartet"</span>)
+
+<span class="cmt"># Variable ausgeben</span>
+<span class="var">temperatur</span> = <span class="num">23.5</span>
+<span class="fn">print</span>(<span class="str">"Temperatur:"</span>, <span class="var">temperatur</span>)       <span class="cmt"># → Temperatur: 23.5</span>
+
+<span class="cmt"># Mehrere Werte mit eigenem Trennzeichen</span>
+<span class="fn">print</span>(<span class="str">"T="</span>, <span class="var">temperatur</span>, <span class="str">"°C"</span>, sep=<span class="str">""</span>)  <span class="cmt"># → T=23.5°C</span>
+
+<span class="cmt"># Ohne Zeilenumbruch am Ende</span>
+<span class="fn">print</span>(<span class="str">"Schritt 1"</span>, end=<span class="str">" | "</span>)
+<span class="fn">print</span>(<span class="str">"Schritt 2"</span>)                       <span class="cmt"># → Schritt 1 | Schritt 2</span></div>
+        </div>
+
+        <!-- ── input() ──────────────────────────────────────── -->
+        <div class="concept-card">
+          <div class="concept-card__name">input()</div>
+          <p class="concept-card__desc">
+            Hält das Programm an und wartet auf eine Tastatureingabe des Nutzers. Der eingegebene Text wird als Ergebnis zurückgegeben. <strong>Wichtig:</strong> input() liefert immer einen Text (String) – auch wenn der Nutzer eine Zahl eingibt! Für Berechnungen muss der Text erst umgewandelt werden.
+          </p>
+
+          <div class="syntax-box">
+            <strong>eingabe = input(</strong>"Aufforderungstext"<strong>)</strong>
+          </div>
+
+          <div class="dhbw-callout dhbw-callout--merksatz mt-4">
+            <span class="dhbw-callout__label">⚠ Achtung: input() liefert immer einen Text!</span>
+            <p>Auch wenn der Nutzer <code class="dhbw-inline">42</code> eingibt, enthält die Variable den String <code class="dhbw-inline">"42"</code>, nicht die Zahl 42. Für Berechnungen muss man mit <code class="dhbw-inline">int()</code> oder <code class="dhbw-inline">float()</code> umwandeln.</p>
+          </div>
+
+          <div class="dhbw-code"><span class="cmt"># Texteingabe einlesen</span>
+<span class="var">name</span> = <span class="fn">input</span>(<span class="str">"Dein Name: "</span>)
+<span class="fn">print</span>(<span class="str">"Hallo,"</span>, <span class="var">name</span>)
+
+<span class="cmt"># Zahl einlesen und umwandeln</span>
+<span class="var">eingabe</span> = <span class="fn">input</span>(<span class="str">"Temperatur in °C: "</span>)
+<span class="var">temperatur</span> = <span class="fn">float</span>(<span class="var">eingabe</span>)          <span class="cmt"># Text → Dezimalzahl</span>
+<span class="fn">print</span>(<span class="str">"Gespeichert:"</span>, <span class="var">temperatur</span>, <span class="str">"°C"</span>)
+
+<span class="cmt"># Kurzschreibweise (alles in einer Zeile)</span>
+<span class="var">drehzahl</span> = <span class="fn">int</span>(<span class="fn">input</span>(<span class="str">"Drehzahl in RPM: "</span>))
+<span class="fn">print</span>(<span class="str">"RPM eingelesen:"</span>, <span class="var">drehzahl</span>)</div>
+        </div>
+
+        <!-- ── Variablen ─────────────────────────────────────── -->
+        <div class="concept-card">
+          <div class="concept-card__name">Variablen</div>
+          <p class="concept-card__desc">
+            Variablen speichern Werte unter einem Namen. In Python wird der Typ automatisch erkannt – du musst ihn nicht angeben. Ein Gleichheitszeichen <code class="dhbw-inline">=</code> bedeutet in Python immer <em>„weise zu"</em>, nicht <em>„ist gleich"</em>.
+          </p>
+
+          <div class="syntax-box">
+            <strong>variablenname = wert</strong>
+          </div>
+
+          <div class="dhbw-code"><span class="cmt"># Zuweisung: links = Name, rechts = Wert</span>
+<span class="var">temperatur</span>   = <span class="num">23.5</span>         <span class="cmt"># float: Dezimalzahl</span>
+<span class="var">messung_nr</span>   = <span class="num">1</span>            <span class="cmt"># int: Ganzzahl</span>
+<span class="var">einheit</span>      = <span class="str">"Grad Celsius"</span><span class="cmt"># str: Text</span>
+<span class="var">sensor_aktiv</span> = <span class="kw">True</span>         <span class="cmt"># bool: Wahrheitswert</span>
+
+<span class="cmt"># Wert ändern – einfach neu zuweisen</span>
+<span class="var">messung_nr</span> = <span class="num">2</span>              <span class="cmt"># überschreibt den alten Wert</span>
+
+<span class="cmt"># Wert erhöhen (häufiges Muster)</span>
+<span class="var">messung_nr</span> = <span class="var">messung_nr</span> + <span class="num">1</span>  <span class="cmt"># jetzt 3</span>
+<span class="var">messung_nr</span> += <span class="num">1</span>              <span class="cmt"># Kurzschreibweise: jetzt 4</span>
+
+<span class="cmt"># Mehrere Zuweisungen in einer Zeile</span>
+<span class="var">x</span>, <span class="var">y</span>, <span class="var">z</span> = <span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span></div>
+
+          <div class="dhbw-callout dhbw-callout--tip mt-4">
+            <span class="dhbw-callout__label">Namensregeln</span>
+            <p>Variablennamen dürfen Buchstaben, Ziffern und <code class="dhbw-inline">_</code> enthalten – aber <em>nicht</em> mit einer Ziffer beginnen. Groß- und Kleinschreibung wird unterschieden: <code class="dhbw-inline">Temperatur</code> und <code class="dhbw-inline">temperatur</code> sind zwei verschiedene Variablen.</p>
+          </div>
+        </div>
+
+        <!-- ── Kommentare ────────────────────────────────────── -->
+        <div class="concept-card">
+          <div class="concept-card__name"># Kommentare</div>
+          <p class="concept-card__desc">
+            Kommentare sind Erklärungen im Code, die Python komplett ignoriert. Sie beginnen mit dem Zeichen <code class="dhbw-inline">#</code> und gelten bis zum Zeilenende. Gute Kommentare erklären das <em>Warum</em>, nicht das offensichtliche <em>Was</em>.
+          </p>
+
+          <div class="syntax-box">
+            <strong># Das ist ein Kommentar</strong> &nbsp;←&nbsp; gilt bis Zeilenende
+          </div>
+
+          <div class="dhbw-code"><span class="cmt"># ──────────────────────────────────────────────────────
+# Programm: Temperatur-Logger
+# Zweck: Messwert einlesen und ausgeben
+# ──────────────────────────────────────────────────────</span>
+
+<span class="var">messung_nr</span> = <span class="num">1</span>   <span class="cmt"># aktuelle Messung (beginnt bei 1)</span>
+
+<span class="cmt"># Messung einlesen</span>
+<span class="var">wert</span> = <span class="fn">float</span>(<span class="fn">input</span>(<span class="str">"Temperatur (°C): "</span>))
+
+<span class="fn">print</span>(<span class="str">"Messung"</span>, <span class="var">messung_nr</span>, <span class="str">":"</span>, <span class="var">wert</span>, <span class="str">"°C"</span>)</div>
+
+          <div class="dhbw-callout dhbw-callout--example mt-4">
+            <span class="dhbw-callout__label">Wann kommentieren?</span>
+            <p>Kommentiere <strong>komplexe Formeln</strong>, <strong>nicht-offensichtliche Entscheidungen</strong> und <strong>den Zweck von Abschnitten</strong>. Nicht nötig: <code class="dhbw-inline">messung_nr = 1  # setzt messung_nr auf 1</code> – das liest man direkt aus dem Code.</p>
+          </div>
+        </div>
+
+      </div><!-- end concept-grid -->
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SCHIFFEVERSENKEN-KASTEN
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">04</span>
+        <h2 class="dhbw-slide__title">Im Schiffe-Versenken-Spiel</h2>
+      </div>
+
+      <p>Im Laufe des Semesters bauen wir gemeinsam ein Schiffe-Versenken-Spiel in Python. Hier siehst du, wo die Konzepte aus dieser Einheit direkt zum Einsatz kommen:</p>
+
+      <div class="game-box">
+        <div class="game-box__header">
+          <span class="game-box__icon">🚢</span>
+          <div>
+            <h3 class="game-box__title">Schiffe Versenken – Grundgerüst</h3>
+            <p class="game-box__subtitle">print() · input() · Variablen</p>
+          </div>
+        </div>
+        <div class="dhbw-code"><span class="cmt"># Spielfeld-Größe als Variable gespeichert</span>
+<span class="var">feldgroesse</span> = <span class="num">5</span>
+
+<span class="cmt"># Schiff-Position als Variable (Tupel-Liste)</span>
+<span class="var">schiff</span> = [(<span class="num">0</span>, <span class="num">1</span>), (<span class="num">0</span>, <span class="num">2</span>), (<span class="num">0</span>, <span class="num">3</span>)]
+
+<span class="cmt"># Ausgabe: Spaltenköpfe</span>
+<span class="fn">print</span>(<span class="str">"   "</span>, end=<span class="str">""</span>)
+<span class="fn">print</span>(<span class="str">"A B C D E"</span>)   <span class="cmt"># → A B C D E</span>
+
+<span class="cmt"># Eingabe: Spielzug einlesen</span>
+<span class="var">eingabe</span> = <span class="fn">input</span>(<span class="str">"Gib einen Schuss an (z.B. A1): "</span>)</div>
+      </div>
+
+      <div class="dhbw-callout mt-5">
+        <span class="dhbw-callout__label">Verbindung zur Theorie</span>
+        <p>In V01 haben wir gelernt, dass Computer intern mit Binärzahlen arbeiten. Wenn du <code class="dhbw-inline">feldgroesse = 5</code> schreibst, wird die Zahl 5 vom Computer als <strong>00000101</strong> im Arbeitsspeicher abgelegt.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       QUICK-REFERENCE
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide page-break">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">05</span>
+        <h2 class="dhbw-slide__title">Quick-Reference</h2>
+      </div>
+
+      <table class="quick-ref">
+        <thead>
+          <tr>
+            <th style="width:22%">Konzept</th>
+            <th style="width:35%">Syntax / Beispiel</th>
+            <th>Beschreibung</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>print(x)</code></td>
+            <td><code>print("Hallo")</code></td>
+            <td>Gibt <code>x</code> auf der Konsole aus</td>
+          </tr>
+          <tr>
+            <td><code>print(a, b)</code></td>
+            <td><code>print("T=", temp)</code></td>
+            <td>Gibt mehrere Werte mit Leerzeichen dazwischen aus</td>
+          </tr>
+          <tr>
+            <td><code>print(..., sep=)</code></td>
+            <td><code>print(a, b, sep=",")</code></td>
+            <td>Eigenes Trennzeichen zwischen den Werten</td>
+          </tr>
+          <tr>
+            <td><code>print(..., end=)</code></td>
+            <td><code>print("A", end=" | ")</code></td>
+            <td>Eigenes Abschlusszeichen (statt Zeilenumbruch)</td>
+          </tr>
+          <tr>
+            <td><code>input("Text")</code></td>
+            <td><code>eingabe = input("Name: ")</code></td>
+            <td>Liest eine Texteingabe vom Nutzer ein</td>
+          </tr>
+          <tr>
+            <td><code>int(text)</code></td>
+            <td><code>n = int(input("Zahl: "))</code></td>
+            <td>Wandelt Text in eine Ganzzahl um</td>
+          </tr>
+          <tr>
+            <td><code>float(text)</code></td>
+            <td><code>t = float(input("Temp: "))</code></td>
+            <td>Wandelt Text in eine Dezimalzahl um</td>
+          </tr>
+          <tr>
+            <td><code>name = wert</code></td>
+            <td><code>temperatur = 23.5</code></td>
+            <td>Variable anlegen und Wert zuweisen</td>
+          </tr>
+          <tr>
+            <td><code>name += zahl</code></td>
+            <td><code>zaehler += 1</code></td>
+            <td>Wert um eine Zahl erhöhen (Kurzschreibweise)</td>
+          </tr>
+          <tr>
+            <td><code># Kommentar</code></td>
+            <td><code># Temperatur in °C</code></td>
+            <td>Erklärung im Code – Python ignoriert alles nach <code>#</code></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="dhbw-callout dhbw-callout--praxis mt-6">
+        <span class="dhbw-callout__label">Praxis-Tipp: Messdaten-Erfassung</span>
+        <p>Ein typisches Muster für die Erfassung eines Messwertes in der Maschinentechnik:</p>
+        <div class="dhbw-code mt-4"><span class="cmt"># Messdaten einlesen und ausgeben</span>
+<span class="var">sensor_name</span> = <span class="fn">input</span>(<span class="str">"Sensorbezeichnung: "</span>)
+<span class="var">messwert</span>    = <span class="fn">float</span>(<span class="fn">input</span>(<span class="str">"Messwert: "</span>))
+<span class="var">einheit</span>     = <span class="fn">input</span>(<span class="str">"Einheit (z.B. °C, RPM, bar): "</span>)
+
+<span class="fn">print</span>(<span class="str">"────────────────────────"</span>)
+<span class="fn">print</span>(<span class="str">"Sensor:"</span>,   <span class="var">sensor_name</span>)
+<span class="fn">print</span>(<span class="str">"Messwert:"</span>, <span class="var">messwert</span>, <span class="var">einheit</span>)
+<span class="fn">print</span>(<span class="str">"────────────────────────"</span>)</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════════════════════════ -->
+  <footer class="dhbw-footer">
+    DHBW Stuttgart · Maschinenbau · Informatik-Grundlagen · WS 2025/26 · Python Praxis Nachschlagewerk
+  </footer>
+
+</body>
+</html>

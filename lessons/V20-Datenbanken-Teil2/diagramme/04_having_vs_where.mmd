@@ -1,9 +1,0 @@
-flowchart TD
-    A[Alle Zeilen] --> B{WHERE<br/>filtert Einzelzeilen}
-    B -->|passt| C[Uebrige Zeilen]
-    B -->|passt nicht| X[verworfen]
-    C --> D[GROUP BY]
-    D --> E[Gruppen mit Aggregaten]
-    E --> F{HAVING<br/>filtert Gruppen}
-    F -->|Gruppenbedingung ok| G[Ergebnis]
-    F -->|Gruppe verworfen| Y[verworfen]

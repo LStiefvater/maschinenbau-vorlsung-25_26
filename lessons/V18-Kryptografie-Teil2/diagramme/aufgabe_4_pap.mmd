@@ -1,7 +1,0 @@
-flowchart TD
-    Start(["Start: knacke(ziel_hash, wortliste)"]) --> F{{"Fuer wort in wortliste"}}
-    F --> H["h = sha256(wort).hexdigest()"]
-    H --> C{"h == ziel_hash?"}
-    C -- "Ja" --> R1(["return wort"])
-    C -- "Nein" --> F
-    F -- "Schleife fertig" --> R2(["return None"])

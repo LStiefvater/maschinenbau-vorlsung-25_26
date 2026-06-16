@@ -1,9 +1,0 @@
-flowchart TD
-    S(["Start statistik(*werte)"]) --> C{"werte leer?"}
-    C -- "ja" --> L["ergebnis =<br/>anzahl 0, summe 0, mittelwert 0"]
-    L --> E(["Ende: ergebnis zurueckgeben"])
-    C -- "nein" --> A["anzahl = len(werte)"]
-    A --> B["summe = sum(werte)"]
-    B --> M["mittelwert = summe / anzahl"]
-    M --> R["ergebnis =<br/>anzahl, summe, mittelwert"]
-    R --> E

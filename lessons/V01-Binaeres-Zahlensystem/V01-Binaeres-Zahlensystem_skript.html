@@ -1,0 +1,437 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>V01 – Binäres Zahlensystem | DHBW Stuttgart</title>
+  <link rel="stylesheet" href="../../src/dhbw-base.css">
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════════════════════
+       1. HEADER
+  ══════════════════════════════════════════════════════════ -->
+  <header class="dhbw-header">
+    <div class="dhbw-header__inner">
+      <a href="#" class="dhbw-header__logo">
+        <span class="dhbw-header__logo-text">DHBW Stuttgart</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════════════════════════════
+       2. HERO
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-hero">
+    <div class="dhbw-hero__inner">
+      <p class="dhbw-hero__label">Vorlesung 01 · Informatik-Grundlagen · Maschinenbau</p>
+      <h1 class="dhbw-hero__title">Binäres Zahlensystem</h1>
+      <p class="dhbw-hero__subtitle">Wie Computer mit Nullen und Einsen rechnen – und warum das für Ingenieure relevant ist</p>
+      <p class="dhbw-hero__meta">WS 2025/26 &nbsp;·&nbsp; DHBW Stuttgart</p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       3. LERNZIELE
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">01</span>
+        <h2 class="dhbw-slide__title">Lernziele</h2>
+      </div>
+
+      <div class="dhbw-goals">
+        <p class="dhbw-goals__title">📌 Nach dieser Vorlesung kannst du …</p>
+        <ul>
+          <li>erklären, was ein <strong>Bit</strong> und ein <strong>Byte</strong> sind und warum Computer im Binärsystem arbeiten.</li>
+          <li>Dezimalzahlen ins Binärsystem umrechnen und Binärzahlen zurück ins Dezimalsystem.</li>
+          <li>das <strong>Hexadezimalsystem</strong> lesen und verstehen – z.&nbsp;B. Farbcodes wie <code class="dhbw-inline">#FF5733</code>.</li>
+          <li>einfache binäre Additionen schriftlich durchführen und den <strong>Übertrag</strong> korrekt weitergeben.</li>
+          <li>erklären, warum Computer negative Zahlen nicht mit einem einfachen Vorzeichen-Bit speichern (<strong>Zweierkomplement</strong>-Konzept).</li>
+          <li>das <strong>Zweierkomplement</strong> als Konzept verstehen: warum Computer negative Zahlen nicht einfach mit einem Vorzeichenbit darstellen.</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       4. WAS IST EIN BIT? (mit SVG)
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">02</span>
+        <h2 class="dhbw-slide__title">Was ist ein Bit?</h2>
+      </div>
+
+      <p>Der kleinste Informationsträger in einem Computer heißt <strong>Bit</strong> (von <em>binary digit</em>, deutsch: binäre Stelle). Ein Bit kann genau zwei Zustände annehmen: <strong>0</strong> oder <strong>1</strong>. In der Hardware entspricht das zwei definierten Spannungspegeln – typischerweise 0&nbsp;V (aus) und 3,3&nbsp;V (an).</p>
+
+      <p class="mt-5">Acht Bits zusammen bilden ein <strong>Byte</strong>. Ein Byte kann 2⁸&nbsp;=&nbsp;256 verschiedene Werte darstellen (von 0 bis 255). Alle Dateigrößen, Arbeitsspeicher-Angaben und Speicherkapazitäten werden in Vielfachen von Byte ausgedrückt: Kilobyte&nbsp;(kB), Megabyte&nbsp;(MB), Gigabyte&nbsp;(GB).</p>
+
+      <h3 class="dhbw-section-title">Stellenwert-Darstellung: 1011₂ = 11₁₀</h3>
+
+      <p>Jedes Bit repräsentiert einen <strong>Stellenwert</strong> – eine Zweierpotenz. Aktive Bits (Wert&nbsp;1) addieren ihren Stellenwert zum Gesamtwert; inaktive Bits (Wert&nbsp;0) tragen nichts bei.</p>
+
+      <svg viewBox="0 0 400 110" width="400" height="110"
+           role="img" aria-label="Stellenwert-Darstellung der Binärzahl 1011: Bit 3 aktiv (8), Bit 2 inaktiv (4), Bit 1 aktiv (2), Bit 0 aktiv (1)">
+
+        <!-- Bit 3: Wert 1 → DHBW-Rot -->
+        <rect x="15"  y="5" width="75" height="60" rx="6" fill="#E2001A"/>
+        <text x="52"  y="35" dominant-baseline="middle" text-anchor="middle"
+              font-family="'Fira Code', monospace" font-size="28" font-weight="700" fill="#ffffff">1</text>
+        <text x="52"  y="90" dominant-baseline="middle" text-anchor="middle"
+              font-family="'Source Sans 3', Arial, sans-serif" font-size="13" fill="#1A1A1A">2³ = 8</text>
+
+        <!-- Bit 2: Wert 0 → hellgrau -->
+        <rect x="110" y="5" width="75" height="60" rx="6" fill="#D1D5DB"/>
+        <text x="147" y="35" dominant-baseline="middle" text-anchor="middle"
+              font-family="'Fira Code', monospace" font-size="28" font-weight="700" fill="#6B7280">0</text>
+        <text x="147" y="90" dominant-baseline="middle" text-anchor="middle"
+              font-family="'Source Sans 3', Arial, sans-serif" font-size="13" fill="#6B7280">2² = 4</text>
+
+        <!-- Bit 1: Wert 1 → DHBW-Rot -->
+        <rect x="205" y="5" width="75" height="60" rx="6" fill="#E2001A"/>
+        <text x="242" y="35" dominant-baseline="middle" text-anchor="middle"
+              font-family="'Fira Code', monospace" font-size="28" font-weight="700" fill="#ffffff">1</text>
+        <text x="242" y="90" dominant-baseline="middle" text-anchor="middle"
+              font-family="'Source Sans 3', Arial, sans-serif" font-size="13" fill="#1A1A1A">2¹ = 2</text>
+
+        <!-- Bit 0: Wert 1 → DHBW-Rot -->
+        <rect x="300" y="5" width="75" height="60" rx="6" fill="#E2001A"/>
+        <text x="337" y="35" dominant-baseline="middle" text-anchor="middle"
+              font-family="'Fira Code', monospace" font-size="28" font-weight="700" fill="#ffffff">1</text>
+        <text x="337" y="90" dominant-baseline="middle" text-anchor="middle"
+              font-family="'Source Sans 3', Arial, sans-serif" font-size="13" fill="#1A1A1A">2⁰ = 1</text>
+
+      </svg>
+
+      <p class="mt-4 text-sec">Rot markierte Bits (Wert&nbsp;1) aktivieren ihren Stellenwert. Summe: 8 + 0 + 2 + 1 = <strong>11₁₀</strong>.</p>
+
+      <div class="dhbw-callout dhbw-callout--tip mt-5">
+        <span class="dhbw-callout__label">Merkhilfe</span>
+        <p>Stell dir jeden Bit-Schalter wie eine Lampe vor: Leuchtet sie (Wert&nbsp;1), zählt ihr Stellenwert zur Gesamtsumme. Ist sie aus (Wert&nbsp;0), trägt sie nichts bei.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       5. STELLENWERTSYSTEME
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">03</span>
+        <h2 class="dhbw-slide__title">Stellenwertsysteme</h2>
+      </div>
+
+      <p>Jedes <strong>Stellenwertsystem</strong> basiert auf einer Basis. Im vertrauten <strong>Dezimalsystem</strong> (Basis&nbsp;10) ist jede Stelle eine Zehnerpotenz wert. Das <strong>Binärsystem</strong> (Basis&nbsp;2) funktioniert exakt gleich – nur mit Zweierpotenzen statt Zehnerpotenzen.</p>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+          <h3>Dezimalsystem (Basis 10)</h3>
+          <p>Die Zahl 345 bedeutet:</p>
+          <p class="mt-4">
+            3 · 10² + 4 · 10¹ + 5 · 10⁰<br>
+            = 300 + 40 + 5 = <strong>345</strong>
+          </p>
+        </div>
+        <div class="dhbw-columns__item">
+          <h3>Binärsystem (Basis 2)</h3>
+          <p>Die Zahl 1011₂ bedeutet:</p>
+          <p class="mt-4">
+            1 · 2³ + 0 · 2² + 1 · 2¹ + 1 · 2⁰<br>
+            = 8 + 0 + 2 + 1 = <strong>11₁₀</strong>
+          </p>
+        </div>
+      </div>
+
+      <h3 class="dhbw-section-title">Die wichtigsten Zweierpotenzen</h3>
+
+      <div class="dhbw-table-wrap">
+        <table class="dhbw-table">
+          <thead>
+            <tr>
+              <th>Potenz</th>
+              <th>2⁰</th><th>2¹</th><th>2²</th><th>2³</th><th>2⁴</th>
+              <th>2⁵</th><th>2⁶</th><th>2⁷</th><th>2⁸</th><th>2¹⁰</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Dezimalwert</strong></td>
+              <td>1</td><td>2</td><td>4</td><td>8</td><td>16</td>
+              <td>32</td><td>64</td><td>128</td><td>256</td><td>1 024</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="dhbw-callout mt-4">
+        <span class="dhbw-callout__label">Praxishinweis</span>
+        <p>2¹⁰ = 1 024 ≈ 1 000. Deshalb ist 1 Kibibyte (KiB) = 1 024 Byte, nicht exakt 1 000. Daher erscheint eine „512&nbsp;GB"-Festplatte im Betriebssystem etwas kleiner – der Hersteller zählt in 10er-Potenzen (1 GB = 1 000 000 000 Byte), das Betriebssystem in 2er-Potenzen.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       6. BINÄR ↔ DEZIMAL UMRECHNUNG
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">04</span>
+        <h2 class="dhbw-slide__title">Binär ↔ Dezimal Umrechnung</h2>
+      </div>
+
+      <h3 class="dhbw-section-title">Binär → Dezimal: Stellenwerte addieren</h3>
+
+      <p>Jede Stelle wird mit ihrer Zweierpotenz multipliziert, alle Produkte werden addiert. Es ist dieselbe Methode, mit der man im Dezimalsystem „liest" – nur mit Zweierpotenzen als Stellenwerte.</p>
+
+      <div class="dhbw-callout dhbw-callout--example mt-4">
+        <span class="dhbw-callout__label">Beispiel: 10110₂ → ?₁₀</span>
+        <p>
+          1 · 2⁴ + 0 · 2³ + 1 · 2² + 1 · 2¹ + 0 · 2⁰<br>
+          = 16 + 0 + 4 + 2 + 0 = <strong>22₁₀</strong>
+        </p>
+      </div>
+
+      <h3 class="dhbw-section-title">Dezimal → Binär: Wiederholte Division durch 2</h3>
+
+      <p>Die Dezimalzahl wird so oft durch&nbsp;2 geteilt, bis 0 übrig bleibt. Die Reste (immer 0 oder&nbsp;1) werden notiert. Der erste Rest ist das <strong>LSB</strong> (niederwertigstes Bit, rechts), der letzte Rest ist das <strong>MSB</strong> (höchstwertigstes Bit, links). Die Reste von unten nach oben gelesen ergeben die Binärdarstellung.</p>
+
+      <div class="dhbw-callout dhbw-callout--example mt-4">
+        <span class="dhbw-callout__label">Beispiel: 13₁₀ → ?₂</span>
+        <div class="dhbw-table-wrap mt-4">
+          <table class="dhbw-table">
+            <thead>
+              <tr><th>Division</th><th>Ganzzahl-Ergebnis</th><th>Rest</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>13 ÷ 2</td><td>6</td><td><strong>1</strong> ← LSB</td></tr>
+              <tr><td>6 ÷ 2</td><td>3</td><td><strong>0</strong></td></tr>
+              <tr><td>3 ÷ 2</td><td>1</td><td><strong>1</strong></td></tr>
+              <tr><td>1 ÷ 2</td><td>0</td><td><strong>1</strong> ← MSB</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="mt-4">Reste von unten nach oben lesen: <strong>1101₂</strong>. Probe: 8 + 4 + 0 + 1 = 13 ✓</p>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--tip mt-5">
+        <span class="dhbw-callout__label">Begriffe: MSB und LSB</span>
+        <p><strong>MSB</strong> (Most Significant Bit) ist das höchstwertige Bit – ganz links, analog zur Tausender-Stelle im Dezimalsystem. <strong>LSB</strong> (Least Significant Bit) ist das niederwertigste Bit – ganz rechts, analog zur Einer-Stelle. Diese Begriffe begegnen dir später oft in Datenblättern von Mikrokontrollern und Sensoren.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       7. HEXADEZIMALSYSTEM + FARBCODES
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">05</span>
+        <h2 class="dhbw-slide__title">Hexadezimalsystem</h2>
+      </div>
+
+      <p>Das <strong>Hexadezimalsystem</strong> (Basis&nbsp;16) verwendet die Ziffern 0–9 sowie die Buchstaben A–F für die Werte 10–15. Der entscheidende Vorteil: Genau 4 Bits lassen sich als eine einzige Hex-Ziffer schreiben. Ein Byte (8&nbsp;Bits) entspricht damit immer exakt zwei Hex-Ziffern. Das macht Hex zur bevorzugten Schreibweise für Speicheradressen, Farben und Protokoll-Daten.</p>
+
+      <div class="dhbw-table-wrap mt-5">
+        <table class="dhbw-table">
+          <thead>
+            <tr>
+              <th>Dezimal</th>
+              <th>0</th><th>1</th><th>2</th><th>…</th><th>9</th>
+              <th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Hex</strong></td>
+              <td>0</td><td>1</td><td>2</td><td>…</td><td>9</td>
+              <td>A</td><td>B</td><td>C</td><td>D</td><td>E</td><td>F</td>
+            </tr>
+            <tr>
+              <td><strong>Binär</strong></td>
+              <td>0000</td><td>0001</td><td>0010</td><td>…</td><td>1001</td>
+              <td>1010</td><td>1011</td><td>1100</td><td>1101</td><td>1110</td><td>1111</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--example mt-5">
+        <span class="dhbw-callout__label">Umrechnung: A3₁₆ → Dezimal</span>
+        <p>A · 16¹ + 3 · 16⁰ = 10 · 16 + 3 · 1 = 160 + 3 = <strong>163₁₀</strong></p>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--praxis mt-6">
+        <span class="dhbw-callout__label">Praxisbeispiel – Farbcodes am Smartphone</span>
+        <p>Jede Bildschirmfarbe setzt sich aus drei Farbkanälen zusammen: <strong>Rot</strong>, <strong>Grün</strong> und <strong>Blau</strong> (RGB). Jeder Kanal wird durch einen Wert von 0 bis 255 beschrieben – das ist exakt ein Byte. Im Hex-Format werden alle drei Bytes direkt hintereinander geschrieben, mit einem <code class="dhbw-inline">#</code> davor.</p>
+        <p class="mt-4">
+          <strong class="text-red">#FF5733</strong> – Rot&nbsp;=&nbsp;FF₁₆&nbsp;=&nbsp;255, Grün&nbsp;=&nbsp;57₁₆&nbsp;=&nbsp;87, Blau&nbsp;=&nbsp;33₁₆&nbsp;=&nbsp;51 → kräftiges Orange-Rot.
+        </p>
+        <p class="mt-4">
+          <strong style="color:#1DA1F2">#1DA1F2</strong> – Rot&nbsp;=&nbsp;1D₁₆&nbsp;=&nbsp;29, Grün&nbsp;=&nbsp;A1₁₆&nbsp;=&nbsp;161, Blau&nbsp;=&nbsp;F2₁₆&nbsp;=&nbsp;242 → das bekannte Twitter/X-Blau.
+        </p>
+        <p class="mt-4">Da jeder Kanal 256 Abstufungen hat und drei Kanäle kombiniert werden, lassen sich 256³ = <strong>16 777 216 Farben</strong> darstellen – diesen Standard nennt man <em>True Color</em>. Jetzt weißt du, was hinter jedem Farbcode in Figma, CSS oder Instagram steckt.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       8. BINÄRE ADDITION
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">06</span>
+        <h2 class="dhbw-slide__title">Binäre Addition</h2>
+      </div>
+
+      <p>Die binäre Addition folgt demselben Prinzip wie die schriftliche Dezimaladdition. Es gibt nur vier mögliche Fälle – je zwei Eingangs-Bits ergeben eine Summe und einen <strong>Übertrag</strong> (englisch: <em>carry</em>):</p>
+
+      <div class="dhbw-table-wrap mt-5">
+        <table class="dhbw-table">
+          <thead>
+            <tr><th>Bit A</th><th>Bit B</th><th>Summe</th><th>Übertrag (Carry)</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+            <tr><td>0</td><td>1</td><td>1</td><td>0</td></tr>
+            <tr><td>1</td><td>0</td><td>1</td><td>0</td></tr>
+            <tr><td>1</td><td>1</td><td>0</td><td>1</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="mt-5">Der Übertrag entsteht, weil 1 + 1 = 2 wäre – aber die Ziffer 2 existiert im Binärsystem nicht. Stattdessen schreibt man an der aktuellen Stelle eine 0 und überträgt eine 1 an die nächsthöhere Stelle. Das ist identisch mit dem Zehnerübertrag beim Dezimaladdieren.</p>
+
+      <div class="dhbw-callout dhbw-callout--example mt-5">
+        <span class="dhbw-callout__label">Beispiel: 1011₂ + 0110₂</span>
+        <div class="dhbw-table-wrap mt-4">
+          <table class="dhbw-table">
+            <thead>
+              <tr><th></th><th>Bit 3</th><th>Bit 2</th><th>Bit 1</th><th>Bit 0</th></tr>
+            </thead>
+            <tbody>
+              <tr><td class="text-sec">Übertrag</td><td>1</td><td>1</td><td>1</td><td>–</td></tr>
+              <tr><td><strong>1011₂</strong></td><td>1</td><td>0</td><td>1</td><td>1</td></tr>
+              <tr><td><strong>0110₂</strong></td><td>0</td><td>1</td><td>1</td><td>0</td></tr>
+              <tr><td><strong>Ergebnis</strong></td><td>1</td><td>0</td><td>0</td><td>1</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="mt-4">1011₂ + 0110₂ = <strong>10001₂</strong>. Probe: 11 + 6 = <strong>17₁₀</strong> = 16 + 1 = 1·2⁴ + 1·2⁰ = 10001₂ ✓</p>
+      </div>
+
+      <div class="dhbw-callout mt-5">
+        <span class="dhbw-callout__label">Überlauf (Overflow)</span>
+        <p>Wenn das Ergebnis mehr Bits benötigt als das Register breit ist, spricht man von einem <strong>Überlauf</strong>. Ein 4-Bit-Addierwerk kann Werte nur bis 15 darstellen. Bei 11 + 6 = 17 wird das 5. Bit abgeschnitten; im Register steht dann fälschlicherweise 1. Dieses Problem ist in der Mikrocontroller-Programmierung (z.&nbsp;B. Arduino, STM32) ein klassischer Fehler, den du kennen musst.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       9. ZWEIERKOMPLEMENT (nur Konzept)
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">07</span>
+        <h2 class="dhbw-slide__title">Negative Zahlen – das Zweierkomplement</h2>
+      </div>
+
+      <p>Computer müssen auch negative Zahlen speichern. Der naheliegendste Ansatz wäre ein <strong>Vorzeichenbit</strong>: das erste Bit zeigt 0 für positiv, 1 für negativ. Dieser Ansatz hat jedoch zwei Probleme:</p>
+
+      <ul class="mt-4">
+        <li>Die Zahl Null wäre doppelt vorhanden: +0 und −0 wären unterschiedliche Bitmuster, obwohl sie denselben Wert darstellen.</li>
+        <li>Die CPU müsste intern prüfen, ob ein Vorzeichen-Bit gesetzt ist, und je nachdem anders rechnen – das erfordert extra Schaltlogik und macht die Hardware komplizierter.</li>
+      </ul>
+
+      <p class="mt-5">Die Lösung, die heute in allen modernen Prozessoren verwendet wird, heißt <strong>Zweierkomplement</strong>. Die Kernidee ist, negative Zahlen so zu kodieren, dass die normale Additions-Schaltung der CPU für positive <em>und</em> negative Zahlen gleich funktioniert – ohne jede Sonderbehandlung.</p>
+
+      <div class="dhbw-callout mt-5">
+        <span class="dhbw-callout__label">Intuition: die Uhren-Analogie</span>
+        <p>Stell dir eine Uhr vor: Zeiger auf 12 entspricht dem Wert 0. Um „−1" darzustellen, drehst du um eine Position zurück – der Zeiger steht auf 11. In einem 4-Bit-Register entspricht das dem Muster <code class="dhbw-inline">1111</code>. Wenn man jetzt <code class="dhbw-inline">1111</code> + <code class="dhbw-inline">0001</code> addiert, entsteht <code class="dhbw-inline">10000</code> – das 5. Bit passt nicht in das 4-Bit-Register und fällt weg. Es bleibt <code class="dhbw-inline">0000</code>. Die Addition von −1 und +1 ergibt also korrekt 0.</p>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--tip mt-5">
+        <span class="dhbw-callout__label">Warum ist das für Maschinenbau-Ingenieure relevant?</span>
+        <p>In Sensor-Datenblättern und Kommunikationsprotokollen begegnen dir <strong>vorzeichenbehaftete Datentypen</strong> (engl. <em>signed</em>) und <strong>vorzeichenlose Typen</strong> (engl. <em>unsigned</em>). Wer nicht versteht, dass negative Zahlen kein einfaches Vorzeichen-Bit sind, begeht klassische Bugs beim Auslesen von Temperatursensoren, Winkelsensoren (IMU) oder CAN-Bus-Nachrichten – zum Beispiel liest man −10&nbsp;°C als 65 526 aus.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       11. MERKSATZ / ZUSAMMENFASSUNG
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">08</span>
+        <h2 class="dhbw-slide__title">Zusammenfassung</h2>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--merksatz">
+        <span class="dhbw-callout__label">Merksätze V01</span>
+        <ul>
+          <li>Ein <strong>Bit</strong> ist die kleinste Informationseinheit mit den Werten 0 oder&nbsp;1. Acht Bits bilden ein <strong>Byte</strong> mit 256 möglichen Werten.</li>
+          <li>Im <strong>Binärsystem</strong> (Basis&nbsp;2) hat jede Stelle doppelt so viel Gewicht wie die rechte Nachbarstelle – statt der Zehnerpotenz gilt die Zweierpotenz.</li>
+          <li>Das <strong>Hexadezimalsystem</strong> (Basis&nbsp;16) komprimiert 4&nbsp;Bits auf eine einzige Stelle; ein Byte entspricht immer genau zwei Hex-Ziffern.</li>
+          <li>Binäre Addition funktioniert wie dezimale Addition: Bei 1 + 1 entsteht ein <strong>Übertrag</strong> an die nächste Stelle. Überschreitet das Ergebnis die Bitbreite, tritt ein <strong>Überlauf</strong> auf.</li>
+          <li>Computer speichern negative Zahlen im <strong>Zweierkomplement</strong>, damit dieselbe Additionsschaltung für positive und negative Zahlen gleichermaßen funktioniert – ohne Sonderlogik.</li>
+
+        </ul>
+      </div>
+
+      <div class="dhbw-columns mt-6">
+        <div class="dhbw-columns__item">
+          <h3>Themen dieser Vorlesung</h3>
+          <ul>
+            <li>Bit, Byte und Informationseinheiten</li>
+            <li>Dezimal ↔ Binär Umrechnung</li>
+            <li>Hexadezimalsystem &amp; Farbcodes</li>
+            <li>Binäre Addition &amp; Übertrag</li>
+            <li>Zweierkomplement (Konzept)</li>
+
+          </ul>
+        </div>
+        <div class="dhbw-columns__item">
+          <h3>Ausblick: V02 – Fließkommazahlen</h3>
+          <p>Wie speichert ein Computer nicht-ganzzahlige Werte wie 3,14 oder 0,001? Warum ergibt <code class="dhbw-inline">0.1 + 0.2</code> in Python nicht exakt 0.3? Die Antwort liegt im <strong>IEEE-754-Standard</strong> für Fließkommazahlen – Thema der nächsten Vorlesung.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       12. FOOTER
+  ══════════════════════════════════════════════════════════ -->
+  <footer class="dhbw-footer">
+    <div class="dhbw-footer__inner">
+      <span class="dhbw-footer__brand">DHBW Stuttgart</span>
+      <span>Informatik-Grundlagen für Maschinenbau &nbsp;·&nbsp; WS&nbsp;2025/26</span>
+      <span>V01 – Binäres Zahlensystem</span>
+    </div>
+  </footer>
+
+</body>
+</html>

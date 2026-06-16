@@ -1,9 +1,0 @@
-flowchart LR
-    IN["DataFrame<br/>(alle Zeilen)"] --> SPLIT["Split<br/>(nach Schluesselspalte<br/>z.B. Kategorie)"]
-    SPLIT --> G1["Gruppe A"]
-    SPLIT --> G2["Gruppe B"]
-    SPLIT --> G3["Gruppe C"]
-    G1 --> APPLY["Apply<br/>(Aggregation<br/>z.B. mean, sum)"]
-    G2 --> APPLY
-    G3 --> APPLY
-    APPLY --> COMB["Combine<br/>(Series mit<br/>einem Wert pro Gruppe)"]

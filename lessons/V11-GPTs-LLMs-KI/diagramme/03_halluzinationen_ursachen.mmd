@@ -1,9 +1,0 @@
-flowchart TD
-    H["Halluzination<br/>(plausibel, aber falsch)"]
-    U1["Trainingsdaten<br/>unvollständig oder widersprüchlich"] --> H
-    U2["Modell optimiert auf<br/>wahrscheinlichen Text,<br/>nicht auf Wahrheit"] --> H
-    U3["Kein Zugriff auf<br/>aktuelle Fakten"] --> H
-    U4["Prompt zu vage"] --> H
-    H --> G1["Gegenmittel: Quellen fordern"]
-    H --> G2["Gegenmittel: Fakten prüfen"]
-    H --> G3["Gegenmittel: Präziser Prompt"]

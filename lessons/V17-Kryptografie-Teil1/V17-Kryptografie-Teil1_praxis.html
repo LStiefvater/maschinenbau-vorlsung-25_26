@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>V17 – Python Praxis: Caesar-Chiffre, ord(), chr(), % | DHBW Stuttgart</title>
+  <link rel="stylesheet" href="../../src/dhbw-base.css">
+  <style>
+    .concept-grid { display:grid; grid-template-columns:1fr; gap:var(--sp-6); margin-top:var(--sp-5); }
+    .concept-card { background:var(--surface); border:1px solid var(--border); border-top:4px solid var(--red); border-radius:var(--r-card); padding:var(--sp-5) var(--sp-6); box-shadow:var(--shadow-card); }
+    .concept-card__name { font-family:var(--dhbw-font-mono); font-size:var(--fs-lg); font-weight:var(--dhbw-fw-bold); color:var(--red); margin-bottom:var(--sp-2); }
+    .dhbw-code { background:var(--code-bg); color:var(--code-text); font-family:var(--dhbw-font-mono); font-size:0.9rem; line-height:var(--lh-code); padding:var(--sp-4) var(--sp-5); border-radius:var(--r-base); overflow-x:auto; margin:var(--sp-3) 0; white-space:pre; }
+    .kw  { color:#F97316; font-weight:600; }
+    .str { color:#22C55E; }
+    .num { color:#A78BFA; }
+    .cmt { color:#7A9CB3; font-style:italic; }
+    .fn  { color:#60A5FA; }
+    .var { color:#E8EFF5; }
+    .fsl { color:#F0C060; }
+    .game-box { background:#0F1E2B; border:2px solid #2A4A6B; border-radius:var(--r-card); padding:var(--sp-5) var(--sp-6); margin-top:var(--sp-6); }
+    .game-box__header { display:flex; align-items:center; gap:var(--sp-3); margin-bottom:var(--sp-4); }
+    .game-box__icon { font-size:1.5rem; }
+    .game-box__title { font-size:var(--fs-md); font-weight:var(--dhbw-fw-bold); color:#60A5FA; margin:0; }
+    .game-box__subtitle { font-size:var(--fs-sm); color:#7A9CB3; margin-top:var(--sp-1); }
+    .quick-ref { width:100%; border-collapse:collapse; margin-top:var(--sp-4); font-size:var(--fs-sm); }
+    .quick-ref th { background:var(--red); color:#fff; padding:var(--sp-2) var(--sp-4); text-align:left; }
+    .quick-ref td { padding:var(--sp-2) var(--sp-4); border-bottom:1px solid var(--border); vertical-align:top; }
+    .quick-ref tr:nth-child(even) td { background:var(--canvas); }
+    .quick-ref code { font-family:var(--dhbw-font-mono); font-size:0.85rem; background:var(--code-bg-in); padding:1px 5px; border-radius:var(--r-sm); color:var(--red); }
+    .mt-4 { margin-top:var(--sp-4); } .mt-5 { margin-top:var(--sp-5); }
+    .dhbw-footer { background:var(--text); color:#9CA3AF; text-align:center; padding:var(--sp-5) var(--gutter); font-size:var(--fs-sm); }
+    @media print {
+      @page { size:A4; margin:15mm 18mm; }
+      .dhbw-header,.dhbw-footer { display:none; }
+      .dhbw-hero,.dhbw-slide,.dhbw-code,.dhbw-callout,.concept-card,.game-box { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+      .dhbw-hero { padding:12mm 0 10mm; } .dhbw-slide { padding:8mm 0; }
+      .concept-card,.game-box { break-inside:avoid; }
+      .dhbw-code { font-size:0.78rem; }
+      .page-break { page-break-before:always; }
+    }
+  </style>
+</head>
+<body>
+  <header class="dhbw-header">
+    <div class="dhbw-header__inner">
+      <a href="#" class="dhbw-header__logo"><span class="dhbw-header__logo-text">DHBW Stuttgart</span></a>
+      <nav class="dhbw-header__nav">
+        <a href="V17-Kryptografie-Teil1_skript.html" class="dhbw-header__nav-link">Theorie</a>
+        <a href="#" class="dhbw-header__nav-link dhbw-header__nav-link--active">Python Praxis</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="dhbw-hero">
+    <div class="dhbw-hero__inner">
+      <p class="dhbw-hero__label">Vorlesung 17 · Python Praxis · Maschinenbau</p>
+      <h1 class="dhbw-hero__title">Caesar-Chiffre: ord(), chr(), %</h1>
+      <p class="dhbw-hero__subtitle">Buchstaben als Zahlen – ein klassisches Verschlüsselungsbeispiel</p>
+      <p class="dhbw-hero__meta">WS 2025/26 &nbsp;·&nbsp; DHBW Stuttgart &nbsp;·&nbsp; Nachschlagewerk Python-Praxis</p>
+    </div>
+  </section>
+
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">01</span><h2 class="dhbw-slide__title">Das kannst du danach</h2></div>
+      <div class="dhbw-goals">
+        <p class="dhbw-goals__title">📌 Nach dieser Einheit kannst du …</p>
+        <ul>
+          <li>mit <strong>ord()</strong> den numerischen Code eines Zeichens abfragen.</li>
+          <li>mit <strong>chr()</strong> einen numerischen Code zurück in ein Zeichen umwandeln.</li>
+          <li>mit dem <strong>Modulo-Operator %</strong> Werte „im Kreis" rotieren.</li>
+          <li>die Caesar-Chiffre verstehen und in Python implementieren.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- SVG: Alphabet-Verschiebung (einfach) -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">02</span><h2 class="dhbw-slide__title">Die Idee der Caesar-Chiffre</h2></div>
+
+      <p>Jeder Buchstabe wird um eine feste Anzahl Positionen im Alphabet verschoben. Mit Schlüssel <strong>3</strong>: A→D, B→E, … Z→C (Wraparound!).</p>
+
+      <!-- Vereinfachtes SVG: Buchstaben-Verschiebung -->
+      <svg viewBox="0 0 480 80" width="100%" style="max-width:480px; display:block; margin:var(--sp-4) auto;"
+           role="img" aria-label="Caesar-Verschiebung: A→D, B→E, C→F mit Schlüssel 3, und Z→C als Wraparound">
+        <!-- Klartext-Reihe -->
+        <text x="10" y="20" font-family="'Source Sans 3', Arial, sans-serif" font-size="11" fill="#7A9CB3">Klartext:</text>
+        <rect x="10" y="25" width="40" height="28" rx="4" fill="#E2001A"/>
+        <text x="30" y="43" text-anchor="middle" font-family="'Fira Code', monospace" font-size="16" font-weight="700" fill="#fff">A</text>
+        <rect x="60" y="25" width="40" height="28" rx="4" fill="#E2001A"/>
+        <text x="80" y="43" text-anchor="middle" font-family="'Fira Code', monospace" font-size="16" font-weight="700" fill="#fff">B</text>
+        <rect x="110" y="25" width="40" height="28" rx="4" fill="#E2001A"/>
+        <text x="130" y="43" text-anchor="middle" font-family="'Fira Code', monospace" font-size="16" font-weight="700" fill="#fff">C</text>
+        <text x="165" y="39" font-family="'Source Sans 3', Arial, sans-serif" font-size="18" fill="#D1D5DB">···</text>
+        <rect x="190" y="25" width="40" height="28" rx="4" fill="#E2001A"/>
+        <text x="210" y="43" text-anchor="middle" font-family="'Fira Code', monospace" font-size="16" font-weight="700" fill="#fff">Z</text>
+
+        <!-- Pfeile -->
+        <text x="250" y="39" font-family="'Source Sans 3', Arial, sans-serif" font-size="18" fill="#D1D5DB">→</text>
+        <text x="268" y="20" font-family="'Source Sans 3', Arial, sans-serif" font-size="11" fill="#7A9CB3">Schlüssel: 3</text>
+
+        <!-- Chiffre-Reihe -->
+        <text x="275" y="20" font-family="'Source Sans 3', Arial, sans-serif" font-size="11" fill="#7A9CB3">Chiffrat:</text>
+        <rect x="275" y="25" width="40" height="28" rx="4" fill="#1E2936" stroke="#60A5FA" stroke-width="2"/>
+        <text x="295" y="43" text-anchor="middle" font-family="'Fira Code', monospace" font-size="16" font-weight="700" fill="#60A5FA">D</text>
+        <rect x="320" y="25" width="40" height="28" rx="4" fill="#1E2936" stroke="#60A5FA" stroke-width="2"/>
+        <text x="340" y="43" text-anchor="middle" font-family="'Fira Code', monospace" font-size="16" font-weight="700" fill="#60A5FA">E</text>
+        <rect x="365" y="25" width="40" height="28" rx="4" fill="#1E2936" stroke="#60A5FA" stroke-width="2"/>
+        <text x="385" y="43" text-anchor="middle" font-family="'Fira Code', monospace" font-size="16" font-weight="700" fill="#60A5FA">F</text>
+        <text x="415" y="39" font-family="'Source Sans 3', Arial, sans-serif" font-size="18" fill="#D1D5DB">···</text>
+        <rect x="440" y="25" width="40" height="28" rx="4" fill="#1E2936" stroke="#F97316" stroke-width="2"/>
+        <text x="460" y="43" text-anchor="middle" font-family="'Fira Code', monospace" font-size="16" font-weight="700" fill="#F97316">C</text>
+
+        <!-- Wraparound Hinweis -->
+        <text x="440" y="68" text-anchor="middle" font-family="'Source Sans 3', Arial, sans-serif" font-size="10" fill="#F97316">Wraparound!</text>
+        <text x="30"  y="68" text-anchor="middle" font-family="'Source Sans 3', Arial, sans-serif" font-size="10" fill="#E2001A">Position 0</text>
+      </svg>
+
+      <div class="dhbw-callout dhbw-callout--example mt-4">
+        <span class="dhbw-callout__label">Prompt-Datei für komplexe Grafik</span>
+        <p>Für eine detailliertere Caesar-Rad Visualisierung: <code class="dhbw-inline">V17_grafik_caesar_rad_prompt.md</code></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">03</span><h2 class="dhbw-slide__title">Werkzeuge im Detail</h2></div>
+
+      <div class="concept-grid">
+
+        <div class="concept-card">
+          <div class="concept-card__name">ord() · chr() – Zeichen ↔ Zahl</div>
+          <p><strong>ord()</strong> gibt den Unicode-Wert eines Zeichens zurück. <strong>chr()</strong> wandelt einen Unicode-Wert zurück in ein Zeichen. Für Großbuchstaben: A=65, B=66, … Z=90.</p>
+          <div class="dhbw-code"><span class="fn">print</span>(<span class="fn">ord</span>(<span class="str">"A"</span>))     <span class="cmt"># → 65</span>
+<span class="fn">print</span>(<span class="fn">ord</span>(<span class="str">"B"</span>))     <span class="cmt"># → 66</span>
+<span class="fn">print</span>(<span class="fn">ord</span>(<span class="str">"Z"</span>))     <span class="cmt"># → 90</span>
+<span class="fn">print</span>(<span class="fn">ord</span>(<span class="str">"a"</span>))     <span class="cmt"># → 97  (Kleinbuchstaben anders!)</span>
+
+<span class="fn">print</span>(<span class="fn">chr</span>(<span class="num">65</span>))      <span class="cmt"># → "A"</span>
+<span class="fn">print</span>(<span class="fn">chr</span>(<span class="num">68</span>))      <span class="cmt"># → "D"  (65 + 3 = 68)</span>
+
+<span class="cmt"># Buchstabe um 3 verschieben: A → D</span>
+<span class="var">buchstabe</span>    = <span class="str">"A"</span>
+<span class="var">verschoben</span>   = <span class="fn">chr</span>(<span class="fn">ord</span>(<span class="var">buchstabe</span>) + <span class="num">3</span>)
+<span class="fn">print</span>(<span class="var">verschoben</span>)  <span class="cmt"># → "D"</span></div>
+        </div>
+
+        <div class="concept-card">
+          <div class="concept-card__name">% – Modulo-Operator (Wraparound)</div>
+          <p>Der Modulo-Operator <code class="dhbw-inline">%</code> gibt den <strong>Rest</strong> einer Division zurück. Das ist das entscheidende Werkzeug für den Wraparound am Alphabet-Ende (Z → A).</p>
+          <div class="dhbw-code"><span class="cmt"># Modulo: Rest einer Division</span>
+<span class="fn">print</span>(<span class="num">10</span> % <span class="num">3</span>)    <span class="cmt"># → 1   (10 = 3×3 + 1)</span>
+<span class="fn">print</span>(<span class="num">26</span> % <span class="num">26</span>)   <span class="cmt"># → 0   (Alphabet: Z → A)</span>
+<span class="fn">print</span>(<span class="num">27</span> % <span class="num">26</span>)   <span class="cmt"># → 1</span>
+<span class="fn">print</span>(<span class="num">28</span> % <span class="num">26</span>)   <span class="cmt"># → 2</span>
+
+<span class="cmt"># Modulo im Alltag: gerade/ungerade</span>
+<span class="fn">print</span>(<span class="num">7</span> % <span class="num">2</span>)    <span class="cmt"># → 1  → ungerade</span>
+<span class="fn">print</span>(<span class="num">8</span> % <span class="num">2</span>)    <span class="cmt"># → 0  → gerade</span>
+
+<span class="cmt"># Messung-Nummerierung 1-5 zyklisch (Ringpuffer)</span>
+<span class="kw">for</span> <span class="var">i</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="num">10</span>):
+    <span class="fn">print</span>(<span class="var">i</span> % <span class="num">5</span>)  <span class="cmt"># → 0,1,2,3,4,0,1,2,3,4</span></div>
+        </div>
+
+        <div class="concept-card">
+          <div class="concept-card__name">Caesar-Chiffre vollständig</div>
+          <p>Alles zusammen: die vollständige Caesar-Verschlüsselung in einer Funktion.</p>
+          <div class="dhbw-code"><span class="kw">def</span> <span class="fn">caesar</span>(<span class="var">text</span>, <span class="var">schluessel</span>):
+    <span class="var">ergebnis</span> = <span class="str">""</span>
+    <span class="kw">for</span> <span class="var">zeichen</span> <span class="kw">in</span> <span class="var">text</span>.<span class="fn">upper</span>():
+        <span class="kw">if</span> <span class="var">zeichen</span>.<span class="fn">isalpha</span>():           <span class="cmt"># nur Buchstaben</span>
+            <span class="var">pos</span>     = <span class="fn">ord</span>(<span class="var">zeichen</span>) - <span class="num">65</span>  <span class="cmt"># A=0, B=1, ... Z=25</span>
+            <span class="var">neu_pos</span> = (<span class="var">pos</span> + <span class="var">schluessel</span>) % <span class="num">26</span>  <span class="cmt"># Wraparound!</span>
+            <span class="var">ergebnis</span> += <span class="fn">chr</span>(<span class="var">neu_pos</span> + <span class="num">65</span>)
+        <span class="kw">else</span>:
+            <span class="var">ergebnis</span> += <span class="var">zeichen</span>   <span class="cmt"># Sonderzeichen unverändert</span>
+    <span class="kw">return</span> <span class="var">ergebnis</span>
+
+<span class="var">klar</span>    = <span class="str">"HALLO WELT"</span>
+<span class="var">chiffre</span> = <span class="fn">caesar</span>(<span class="var">klar</span>, <span class="num">3</span>)     <span class="cmt"># → "KDOOR ZHOW"</span>
+<span class="var">dechiff</span> = <span class="fn">caesar</span>(<span class="var">chiffre</span>, <span class="num">-3</span>) <span class="cmt"># → zurück "HALLO WELT"</span>
+<span class="fn">print</span>(<span class="var">chiffre</span>)
+<span class="fn">print</span>(<span class="var">dechiff</span>)</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">04</span><h2 class="dhbw-slide__title">Im Schiffe-Versenken-Spiel</h2></div>
+      <div class="game-box">
+        <div class="game-box__header">
+          <span class="game-box__icon">🚢</span>
+          <div>
+            <h3 class="game-box__title">Verschlüsselter Spielstand</h3>
+            <p class="game-box__subtitle">Modulo für zyklische Indizes</p>
+          </div>
+        </div>
+        <div class="dhbw-code"><span class="cmt"># Modulo in Schiffeversenken: Spielernummer zyklisch</span>
+<span class="var">spieler_anzahl</span> = <span class="num">2</span>
+<span class="kw">for</span> <span class="var">runde</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="num">6</span>):
+    <span class="var">aktueller_spieler</span> = <span class="var">runde</span> % <span class="var">spieler_anzahl</span> + <span class="num">1</span>
+    <span class="fn">print</span>(<span class="fsl">f</span><span class="str">"Runde <span class="fsl">{runde+1}</span>: Spieler <span class="fsl">{aktueller_spieler}</span> ist dran"</span>)
+<span class="cmt"># → Runde 1: Spieler 1 ist dran
+# → Runde 2: Spieler 2 ist dran
+# → Runde 3: Spieler 1 ist dran (zyklisch!)</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="dhbw-slide page-break">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">05</span><h2 class="dhbw-slide__title">Quick-Reference</h2></div>
+      <table class="quick-ref">
+        <thead><tr><th style="width:25%">Funktion/Operator</th><th style="width:30%">Beispiel</th><th>Ergebnis</th></tr></thead>
+        <tbody>
+          <tr><td><code>ord(zeichen)</code></td><td><code>ord("A")</code></td><td><code>65</code> – Unicode-Wert</td></tr>
+          <tr><td><code>chr(zahl)</code></td><td><code>chr(68)</code></td><td><code>"D"</code> – Zeichen aus Zahl</td></tr>
+          <tr><td><code>a % b</code></td><td><code>28 % 26</code></td><td><code>2</code> – Rest der Division</td></tr>
+          <tr><td><code>s.isalpha()</code></td><td><code>"A".isalpha()</code></td><td><code>True</code> – nur Buchstaben?</td></tr>
+          <tr><td><code>s.isdigit()</code></td><td><code>"3".isdigit()</code></td><td><code>True</code> – nur Ziffern?</td></tr>
+          <tr><td>Caesar-Formel</td><td><code>(ord(z)-65 + k) % 26 + 65</code></td><td>Zeichen z um k Stellen verschieben</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer class="dhbw-footer">DHBW Stuttgart · Maschinenbau · Informatik-Grundlagen · WS 2025/26 · Python Praxis Nachschlagewerk</footer>
+</body>
+</html>

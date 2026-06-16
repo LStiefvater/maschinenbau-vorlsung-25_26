@@ -1,8 +1,0 @@
-flowchart TD
-    S(["Start"]) --> I["produziert = [...]<br/>ausschuss = [...]<br/>schichten = [...]"]
-    I --> Q["quote = []"]
-    Q --> L{"fuer i in range(len(schichten))"}
-    L -- "naechste Schicht" --> R["q = ausschuss[i] / produziert[i] * 100<br/>quote.append(round(q, 2))"]
-    R --> L
-    L -- "fertig" --> P["plt.bar(schichten, quote)<br/>plt.title(...)<br/>plt.xlabel(...)<br/>plt.ylabel(...)<br/>plt.show()"]
-    P --> E(["Ende"])

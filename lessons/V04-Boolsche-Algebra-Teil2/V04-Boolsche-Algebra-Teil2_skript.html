@@ -1,0 +1,409 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>V04 – Boolesche Algebra Teil 2 | DHBW Stuttgart</title>
+  <link rel="stylesheet" href="../../src/dhbw-base.css">
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════════════════════
+       1. HEADER
+  ══════════════════════════════════════════════════════════ -->
+  <header class="dhbw-header">
+    <div class="dhbw-header__inner">
+      <a href="#" class="dhbw-header__logo">
+        <span class="dhbw-header__logo-text">DHBW Stuttgart</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════════════════════════════
+       2. HERO
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-hero">
+    <div class="dhbw-hero__inner">
+      <p class="dhbw-hero__label">Vorlesung 04 · Informatik-Grundlagen · Maschinenbau</p>
+      <h1 class="dhbw-hero__title">Boolesche Algebra – Teil 2</h1>
+      <p class="dhbw-hero__subtitle">XOR, NAND, NOR, De-Morgan-Gesetze und der Halbaddierer</p>
+      <p class="dhbw-hero__meta">WS 2025/26 &nbsp;·&nbsp; DHBW Stuttgart</p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       3. LERNZIELE
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">01</span>
+        <h2 class="dhbw-slide__title">Lernziele</h2>
+      </div>
+
+      <div class="dhbw-goals">
+        <p class="dhbw-goals__title">📌 Nach dieser Vorlesung kannst du …</p>
+        <ul>
+          <li>die Operatoren <strong>XOR</strong>, <strong>NAND</strong> und <strong>NOR</strong> erklären und ihre Wahrheitstabellen erstellen.</li>
+          <li>die beiden <strong>De-Morgan-Gesetze</strong> als Merksatz wiedergeben und auf ein konkretes Beispiel anwenden.</li>
+          <li>den <strong>Halbaddierer</strong> als praktisches Anwendungsbeispiel Boolescher Logik verstehen und seine Wahrheitstabelle interpretieren.</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       4. XOR-OPERATOR
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">02</span>
+        <h2 class="dhbw-slide__title">XOR – Exklusives Oder (⊕)</h2>
+      </div>
+
+      <p>Der <strong>XOR-Operator</strong> (Exklusives Oder, Symbol: ⊕) liefert genau dann 1, wenn die beiden Eingaben <em>verschieden</em> sind. Sind beide Eingaben gleich – also beide 0 oder beide 1 – ist das Ergebnis 0. Das ist der entscheidende Unterschied zum normalen OR: „entweder A oder B, aber <em>nicht</em> beides".</p>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+          <h3>Wahrheitstabelle</h3>
+          <div class="dhbw-table-wrap mt-4">
+            <table class="dhbw-table">
+              <thead>
+                <tr><th>A</th><th>B</th><th>A ⊕ B</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>0</td><td>0</td><td>0</td></tr>
+                <tr><td>0</td><td>1</td><td class="text-red font-semi">1</td></tr>
+                <tr><td>1</td><td>0</td><td class="text-red font-semi">1</td></tr>
+                <tr><td>1</td><td>1</td><td>0</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="dhbw-columns__item">
+          <h3>Schaltsymbol</h3>
+          <p class="mt-4">Das XOR-Symbol ähnelt dem OR-Gatter, trägt aber eine zusätzliche geschwungene Linie am Eingang – das Unterscheidungsmerkmal zu OR.</p>
+          <svg viewBox="0 0 170 110" width="170" height="110"
+               role="img" aria-label="XOR-Gatter: OR-Symbol mit extra gebogener Linie am Eingang, Eingänge A und B grau, Ausgang Y rot">
+            <defs>
+              <marker id="arr-xor" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                <polygon points="0 0, 8 3, 0 6" fill="#E2001A"/>
+              </marker>
+            </defs>
+            <!-- extra XOR curve (links der OR-Kurve) -->
+            <path d="M24,18 Q42,51 24,84" fill="none" stroke="#1A1A1A" stroke-width="2"/>
+            <!-- Eingangsleitungen -->
+            <line x1="12" y1="35" x2="46" y2="35" stroke="#6B7280" stroke-width="2"/>
+            <line x1="12" y1="67" x2="46" y2="67" stroke="#6B7280" stroke-width="2"/>
+            <!-- OR-Körper (leicht nach rechts verschoben) -->
+            <path d="M38,18 Q56,51 38,84 Q74,84 97,51 Q74,18 38,18 Z" fill="#F5F5F5" stroke="#1A1A1A" stroke-width="2"/>
+            <!-- Ausgangsleitung -->
+            <line x1="97" y1="51" x2="130" y2="51" stroke="#E2001A" stroke-width="2.5" marker-end="url(#arr-xor)"/>
+            <text x="5" y="40" font-family="'Source Sans 3',Arial,sans-serif" font-size="14" fill="#6B7280">A</text>
+            <text x="5" y="72" font-family="'Source Sans 3',Arial,sans-serif" font-size="14" fill="#6B7280">B</text>
+            <text x="134" y="56" font-family="'Source Sans 3',Arial,sans-serif" font-size="14" fill="#E2001A">Y</text>
+            <text x="65" y="105" text-anchor="middle" font-family="'Source Sans 3',Arial,sans-serif" font-size="11" fill="#6B7280">XOR-Gatter</text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--praxis mt-5">
+        <span class="dhbw-callout__label">Praxisbeispiel: Zwei-Wege-Lichtschalter im Treppenhaus</span>
+        <p>Ein Treppenhaus-Licht lässt sich von zwei Schaltern (oben und unten) unabhängig ein- und ausschalten. Schalter A und Schalter B steuern gemeinsam das Licht: Das Licht (Y) ist an, wenn die Schalter <em>verschiedene</em> Positionen haben. Stehen beide oben (1,1) oder beide unten (0,0), ist das Licht aus. Das ist exakt das Verhalten von XOR – deswegen liegt in echten Treppenhäusern elektrisch eine XOR-Verschaltung vor.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       5. NAND-OPERATOR
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">03</span>
+        <h2 class="dhbw-slide__title">NAND – Negiertes AND</h2>
+      </div>
+
+      <p>Der <strong>NAND-Operator</strong> (Not-AND) ist die Verneinung des AND-Operators. Das Ergebnis ist 0 nur dann, wenn <em>alle</em> Eingaben 1 sind – in jedem anderen Fall ist das Ergebnis 1. NAND verhält sich also genau umgekehrt zu AND. Die Schreibweise lautet: A ↑ B oder ¬(A ∧ B).</p>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+          <h3>Wahrheitstabelle</h3>
+          <div class="dhbw-table-wrap mt-4">
+            <table class="dhbw-table">
+              <thead>
+                <tr><th>A</th><th>B</th><th>A ↑ B &nbsp;(NAND)</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>0</td><td>0</td><td class="text-red font-semi">1</td></tr>
+                <tr><td>0</td><td>1</td><td class="text-red font-semi">1</td></tr>
+                <tr><td>1</td><td>0</td><td class="text-red font-semi">1</td></tr>
+                <tr><td>1</td><td>1</td><td>0</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="dhbw-columns__item">
+          <h3>Schaltsymbol</h3>
+          <p class="mt-4">Das NAND-Symbol ist ein AND-Gatter mit dem Inversionskreis am Ausgang – der Kreis zeigt an, dass das Ergebnis des AND anschließend negiert wird.</p>
+          <svg viewBox="0 0 170 110" width="170" height="110"
+               role="img" aria-label="NAND-Gatter: AND-Symbol mit Inversionskreis am Ausgang">
+            <defs>
+              <marker id="arr-nand" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                <polygon points="0 0, 8 3, 0 6" fill="#E2001A"/>
+              </marker>
+            </defs>
+            <line x1="12" y1="35" x2="44" y2="35" stroke="#6B7280" stroke-width="2"/>
+            <line x1="12" y1="67" x2="44" y2="67" stroke="#6B7280" stroke-width="2"/>
+            <path d="M44,18 L44,84 Q92,84 92,51 Q92,18 44,18 Z" fill="#F5F5F5" stroke="#1A1A1A" stroke-width="2"/>
+            <circle cx="100" cy="51" r="8" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="2"/>
+            <line x1="108" y1="51" x2="130" y2="51" stroke="#E2001A" stroke-width="2.5" marker-end="url(#arr-nand)"/>
+            <text x="5" y="40" font-family="'Source Sans 3',Arial,sans-serif" font-size="14" fill="#6B7280">A</text>
+            <text x="5" y="72" font-family="'Source Sans 3',Arial,sans-serif" font-size="14" fill="#6B7280">B</text>
+            <text x="134" y="56" font-family="'Source Sans 3',Arial,sans-serif" font-size="14" fill="#E2001A">Y</text>
+            <text x="72" y="105" text-anchor="middle" font-family="'Source Sans 3',Arial,sans-serif" font-size="11" fill="#6B7280">NAND-Gatter</text>
+          </svg>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       6. NOR-OPERATOR
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">04</span>
+        <h2 class="dhbw-slide__title">NOR – Negiertes OR</h2>
+      </div>
+
+      <p>Der <strong>NOR-Operator</strong> (Not-OR) ist die Verneinung des OR-Operators. Das Ergebnis ist 1 nur dann, wenn <em>alle</em> Eingaben 0 sind. Sobald auch nur eine Eingabe 1 ist, liefert NOR den Wert 0. Die Schreibweise lautet: A ↓ B oder ¬(A ∨ B).</p>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+          <h3>Wahrheitstabelle</h3>
+          <div class="dhbw-table-wrap mt-4">
+            <table class="dhbw-table">
+              <thead>
+                <tr><th>A</th><th>B</th><th>A ↓ B &nbsp;(NOR)</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>0</td><td>0</td><td class="text-red font-semi">1</td></tr>
+                <tr><td>0</td><td>1</td><td>0</td></tr>
+                <tr><td>1</td><td>0</td><td>0</td></tr>
+                <tr><td>1</td><td>1</td><td>0</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="dhbw-columns__item">
+          <h3>Schaltsymbol</h3>
+          <p class="mt-4">Das NOR-Symbol kombiniert das OR-Gatter mit dem Inversionskreis am Ausgang – analog zum Verhältnis NAND zu AND.</p>
+          <svg viewBox="0 0 170 110" width="170" height="110"
+               role="img" aria-label="NOR-Gatter: OR-Symbol mit Inversionskreis am Ausgang">
+            <defs>
+              <marker id="arr-nor" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                <polygon points="0 0, 8 3, 0 6" fill="#E2001A"/>
+              </marker>
+            </defs>
+            <line x1="12" y1="35" x2="42" y2="35" stroke="#6B7280" stroke-width="2"/>
+            <line x1="12" y1="67" x2="42" y2="67" stroke="#6B7280" stroke-width="2"/>
+            <path d="M32,18 Q50,51 32,84 Q68,84 88,51 Q68,18 32,18 Z" fill="#F5F5F5" stroke="#1A1A1A" stroke-width="2"/>
+            <circle cx="96" cy="51" r="8" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="2"/>
+            <line x1="104" y1="51" x2="130" y2="51" stroke="#E2001A" stroke-width="2.5" marker-end="url(#arr-nor)"/>
+            <text x="5" y="40" font-family="'Source Sans 3',Arial,sans-serif" font-size="14" fill="#6B7280">A</text>
+            <text x="5" y="72" font-family="'Source Sans 3',Arial,sans-serif" font-size="14" fill="#6B7280">B</text>
+            <text x="134" y="56" font-family="'Source Sans 3',Arial,sans-serif" font-size="14" fill="#E2001A">Y</text>
+            <text x="65" y="105" text-anchor="middle" font-family="'Source Sans 3',Arial,sans-serif" font-size="11" fill="#6B7280">NOR-Gatter</text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--tip mt-5">
+        <span class="dhbw-callout__label">Merkhilfe: NAND und NOR</span>
+        <p>Der Kreis am Ausgang bedeutet immer Negation. NAND = AND + Kreis. NOR = OR + Kreis. Das Verhalten ist jeweils das genaue Gegenteil des Basis-Gatters: NAND liefert fast immer 1, NOR liefert fast immer 0.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       7. DE-MORGAN-GESETZE
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">05</span>
+        <h2 class="dhbw-slide__title">De-Morgan-Gesetze</h2>
+      </div>
+
+      <p>Der britische Mathematiker <strong>Augustus De Morgan</strong> formulierte im 19. Jahrhundert zwei Gesetze, die beschreiben, wie Negation und logische Verknüpfungen zusammenhängen. Diese Gesetze sind in der Schaltungsvereinfachung unverzichtbar.</p>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">1. De-Morgan-Gesetz</p>
+            <p class="mt-4" style="font-size:1.2rem; font-weight:600;">¬(A ∧ B) = ¬A ∨ ¬B</p>
+            <p class="mt-4">Die Negation einer AND-Verknüpfung ist gleich der OR-Verknüpfung der einzeln negierten Eingaben. Ein NAND-Gatter lässt sich also durch zwei Inverter und ein OR-Gatter ersetzen.</p>
+        </div>
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">2. De-Morgan-Gesetz</p>
+            <p class="mt-4" style="font-size:1.2rem; font-weight:600;">¬(A ∨ B) = ¬A ∧ ¬B</p>
+            <p class="mt-4">Die Negation einer OR-Verknüpfung ist gleich der AND-Verknüpfung der einzeln negierten Eingaben. Ein NOR-Gatter lässt sich also durch zwei Inverter und ein AND-Gatter ersetzen.</p>
+        </div>
+      </div>
+
+      <h3 class="dhbw-section-title mt-6">Alltagsbeispiel: Zugangskontrolle</h3>
+      <p>Regel: „Der Zugang ist gesperrt, wenn Karte A <em>oder</em> Karte B ungültig ist."</p>
+      <p class="mt-4">Als Ausdruck: Y = ¬(A ∨ B) – gesperrt, wenn A oder B versagen.</p>
+      <p class="mt-4">Nach dem 2. De-Morgan-Gesetz gilt: ¬(A ∨ B) = ¬A ∧ ¬B</p>
+      <p class="mt-4">Übersetzt: „Der Zugang ist gesperrt, wenn Karte A ungültig <em>und</em> Karte B ungültig ist." Beide Formulierungen bedeuten exakt dasselbe – De Morgan zeigt uns, wie man zwischen ihnen wechseln kann.</p>
+
+      <div class="dhbw-callout dhbw-callout--merksatz mt-5">
+        <span class="dhbw-callout__label">Merksatz</span>
+        <p>Wenn du eine Negation von innen nach außen schiebst (oder umgekehrt), wechselt das AND zu OR und umgekehrt. Eselsbrücke: „Klammer auflösen = Operator wechseln."</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       8. HALBADDIERER
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">06</span>
+        <h2 class="dhbw-slide__title">Anwendung: Der Halbaddierer</h2>
+      </div>
+
+      <p>Ein <strong>Halbaddierer</strong> ist die einfachste Schaltung, die zwei einzelne Bits addieren kann. Das Ergebnis einer Bit-Addition besteht aus zwei Teilen: der <strong>Summe</strong> (S) und dem <strong>Übertrag</strong> (carry out, C). Der Halbaddierer zeigt damit, dass Boolesche Algebra direkt die Grundlage von Rechenoperationen in Computern bildet.</p>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+          <h3>Was wird berechnet?</h3>
+          <p class="mt-4">Wenn zwei Bits addiert werden, gibt es vier Fälle:</p>
+          <p class="mt-4">0 + 0 = 0 &nbsp;(kein Übertrag)</p>
+          <p class="mt-4">0 + 1 = 1 &nbsp;(kein Übertrag)</p>
+          <p class="mt-4">1 + 0 = 1 &nbsp;(kein Übertrag)</p>
+          <p class="mt-4">1 + 1 = 0 &nbsp;<strong>+ 1 Übertrag</strong> &nbsp;(wie 1 + 1 = „10" in binär)</p>
+          <p class="mt-5">Die Summe S entspricht dem XOR-Operator. Der Übertrag C entspricht dem AND-Operator.</p>
+        </div>
+        <div class="dhbw-columns__item">
+          <h3>Wahrheitstabelle</h3>
+          <div class="dhbw-table-wrap mt-4">
+            <table class="dhbw-table">
+              <thead>
+                <tr><th>A</th><th>B</th><th>S &nbsp;(Summe)</th><th>C &nbsp;(Übertrag)</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+                <tr><td>0</td><td>1</td><td class="text-red">1</td><td>0</td></tr>
+                <tr><td>1</td><td>0</td><td class="text-red">1</td><td>0</td></tr>
+                <tr><td>1</td><td>1</td><td>0</td><td class="text-red font-semi">1</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="dhbw-section-title mt-5">Blockdiagramm des Halbaddierers</h3>
+      <svg viewBox="0 0 340 130" width="340" height="130"
+           role="img" aria-label="Halbaddierer-Blockdiagramm: Eingänge A und B, zwei Ausgänge S (XOR) und C (AND)">
+        <defs>
+          <marker id="arr-ha" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#1A1A1A"/>
+          </marker>
+          <marker id="arr-ha-r" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#E2001A"/>
+          </marker>
+        </defs>
+        <!-- Eingangsleitungen A -->
+        <line x1="10" y1="40" x2="120" y2="40" stroke="#6B7280" stroke-width="2" marker-end="url(#arr-ha)"/>
+        <!-- Eingangsleitungen B -->
+        <line x1="10" y1="90" x2="120" y2="90" stroke="#6B7280" stroke-width="2" marker-end="url(#arr-ha)"/>
+        <!-- Labels Eingänge -->
+        <text x="4" y="44" font-family="'Source Sans 3',Arial,sans-serif" font-size="15" font-weight="600" fill="#6B7280">A</text>
+        <text x="4" y="94" font-family="'Source Sans 3',Arial,sans-serif" font-size="15" font-weight="600" fill="#6B7280">B</text>
+        <!-- Halbaddierer-Box -->
+        <rect x="120" y="15" width="100" height="100" rx="6" fill="#FAE5E8" stroke="#E2001A" stroke-width="2"/>
+        <text x="170" y="58" text-anchor="middle" font-family="'Source Sans 3',Arial,sans-serif" font-size="13" font-weight="600" fill="#1A1A1A">Halb-</text>
+        <text x="170" y="76" text-anchor="middle" font-family="'Source Sans 3',Arial,sans-serif" font-size="13" font-weight="600" fill="#1A1A1A">addierer</text>
+        <!-- Ausgangsleitungen -->
+        <line x1="220" y1="40" x2="320" y2="40" stroke="#E2001A" stroke-width="2.5" marker-end="url(#arr-ha-r)"/>
+        <line x1="220" y1="90" x2="320" y2="90" stroke="#E2001A" stroke-width="2.5" marker-end="url(#arr-ha-r)"/>
+        <!-- Labels Ausgänge -->
+        <text x="325" y="36" font-family="'Source Sans 3',Arial,sans-serif" font-size="13" fill="#E2001A" font-weight="600">S</text>
+        <text x="325" y="32" dy="5" font-family="'Source Sans 3',Arial,sans-serif" font-size="10" fill="#6B7280"> (Summe)</text>
+        <text x="325" y="86" font-family="'Source Sans 3',Arial,sans-serif" font-size="13" fill="#E2001A" font-weight="600">C</text>
+        <text x="325" y="82" dy="5" font-family="'Source Sans 3',Arial,sans-serif" font-size="10" fill="#6B7280"> (Übertrag)</text>
+        <!-- Formeln innerhalb Box -->
+        <text x="170" y="98" text-anchor="middle" font-family="'Source Sans 3',Arial,sans-serif" font-size="10" fill="#6B7280">S=A⊕B  C=A∧B</text>
+      </svg>
+
+      <div class="dhbw-callout dhbw-callout--praxis mt-5">
+        <span class="dhbw-callout__label">Warum ist das wichtig?</span>
+        <p>Mehrere Halbaddierer und Volladdierer werden zu einem Ganzzahl-Addierwerk zusammengesetzt, das zwei beliebig lange Binärzahlen addieren kann. Das ist der Kern jeder arithmetisch-logischen Einheit (ALU) in einem Prozessor. Boolesche Algebra ist damit der direkte Weg vom abstrakten Logikausdruck zur funktionierenden Recheneinheit in Hardware.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       9. ZUSAMMENFASSUNG
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">07</span>
+        <h2 class="dhbw-slide__title">Zusammenfassung</h2>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--merksatz">
+        <span class="dhbw-callout__label">Merksatz</span>
+        <p><strong>XOR</strong> liefert 1 bei <em>verschiedenen</em> Eingaben (Zwei-Wege-Schalter). <strong>NAND</strong> und <strong>NOR</strong> sind die negierten Versionen von AND und OR – erkennbar am Kreis am Ausgang. Die <strong>De-Morgan-Gesetze</strong> besagen: ¬(A ∧ B) = ¬A ∨ ¬B und ¬(A ∨ B) = ¬A ∧ ¬B. Der <strong>Halbaddierer</strong> kombiniert XOR und AND, um zwei Bits zu addieren und zeigt damit, wie Boolesche Logik direkt Hardware-Rechenoperationen ermöglicht.</p>
+      </div>
+
+      <h3 class="dhbw-section-title mt-5">Überblick: Alle Operatoren auf einen Blick</h3>
+      <div class="dhbw-table-wrap">
+        <table class="dhbw-table">
+          <thead>
+            <tr><th>Operator</th><th>Symbol</th><th>Ergebnis 0 bei …</th><th>Ergebnis 1 bei …</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>AND</strong></td><td>A ∧ B</td><td>mind. einer = 0</td><td>alle = 1</td></tr>
+            <tr><td><strong>OR</strong></td><td>A ∨ B</td><td>alle = 0</td><td>mind. einer = 1</td></tr>
+            <tr><td><strong>XOR</strong></td><td>A ⊕ B</td><td>A = B (gleich)</td><td>A ≠ B (verschieden)</td></tr>
+            <tr><td><strong>NAND</strong></td><td>¬(A ∧ B)</td><td>alle = 1</td><td>mind. einer = 0</td></tr>
+            <tr><td><strong>NOR</strong></td><td>¬(A ∨ B)</td><td>mind. einer = 1</td><td>alle = 0</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════════════════════════ -->
+  <footer class="dhbw-footer">
+    <div class="dhbw-footer__inner">
+      <span class="dhbw-footer__brand">DHBW Stuttgart</span>
+      <span>Informatik-Grundlagen für Maschinenbau &nbsp;·&nbsp; WS&nbsp;2025/26</span>
+      <span>V04 – Boolesche Algebra Teil 2</span>
+    </div>
+  </footer>
+
+</body>
+</html>

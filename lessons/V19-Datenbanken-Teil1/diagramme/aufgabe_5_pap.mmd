@@ -1,5 +1,0 @@
-flowchart TD
-    Start(["Start: erhoehe_zeit(cursor, id, delta)"]) --> U["UPDATE Produkte SET\nProduktionszeit_Minuten = Produktionszeit_Minuten + ?\nWHERE Produkt_ID = ?"]
-    U --> E1(["Ende"])
-    Start2(["Start: loesche_produkt(cursor, id)"]) --> D["DELETE FROM Produkte WHERE Produkt_ID = ?"]
-    D --> E2(["Ende"])

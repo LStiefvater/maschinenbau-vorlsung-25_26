@@ -1,0 +1,363 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>V15 – Netzwerktechnik Grundlagen | DHBW Stuttgart</title>
+  <link rel="stylesheet" href="../../src/dhbw-base.css">
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════════════════════
+       1. HEADER
+  ══════════════════════════════════════════════════════════ -->
+  <header class="dhbw-header">
+    <div class="dhbw-header__inner">
+      <a href="#" class="dhbw-header__logo">
+        <span class="dhbw-header__logo-text">DHBW Stuttgart</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════════════════════════════
+       2. HERO
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-hero">
+    <div class="dhbw-hero__inner">
+      <p class="dhbw-hero__label">Vorlesung 15 · Informatik-Grundlagen · Maschinenbau</p>
+      <h1 class="dhbw-hero__title">Netzwerktechnik Grundlagen</h1>
+      <p class="dhbw-hero__subtitle">OSI-Modell, IP-Adressen, DNS und Industrieprotokolle – warum funktioniert Netflix per WLAN, aber nicht der Drucker?</p>
+      <p class="dhbw-hero__meta">WS 2025/26 &nbsp;·&nbsp; DHBW Stuttgart</p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       3. LERNZIELE
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">01</span>
+        <h2 class="dhbw-slide__title">Lernziele</h2>
+      </div>
+
+      <div class="dhbw-goals">
+        <p class="dhbw-goals__title">📌 Nach dieser Vorlesung kannst du …</p>
+        <ul>
+          <li>das <strong>Schichtenmodell</strong> als Konzept erklären und begründen, warum Netzwerke in Schichten aufgebaut sind.</li>
+          <li><strong>IP-Adresse</strong>, <strong>MAC-Adresse</strong> und <strong>Port</strong> unterscheiden und die passenden Analogien nennen.</li>
+          <li>die Funktion von <strong>DNS</strong> in einem Satz erklären.</li>
+          <li>die wichtigsten Industrieprotokolle (<strong>Modbus TCP</strong>, <strong>OPC UA</strong>, <strong>PROFINET</strong>) dem Namen nach kennen und einordnen.</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       4. WARUM SCHICHTEN?
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">02</span>
+        <h2 class="dhbw-slide__title">Warum Schichten? Komplexität beherrschen</h2>
+      </div>
+
+      <p>Netzwerkkommunikation ist ein hochkomplexes Problem: Bits müssen physisch übertragen, Pakete korrekt adressiert, Übertragungsfehler erkannt und Anwendungsdaten korrekt interpretiert werden. Würde man all das in einem einzigen riesigen System lösen, wäre es unwartbar und unflexibel. Die Lösung heißt <strong>Schichtenarchitektur</strong>: Man teilt das Gesamtproblem in klar abgegrenzte Teilprobleme auf, die jeweils von einer eigenen Schicht gelöst werden.</p>
+
+      <div class="dhbw-callout dhbw-callout--example mt-5">
+        <span class="dhbw-callout__label">Analogie: Reiseplanung in Schichten</span>
+        <p>Wenn du von Stuttgart nach München fährst, gibt es verschiedene Ebenen: Die <em>Navigations-App</em> plant die Route (Anwendungsschicht). Das <em>Auto</em> ist das Transportmittel (Transportschicht). Die <em>Straßen und Autobahnen</em> sind die physische Infrastruktur (Übertragungsschicht). Jede Ebene nutzt die darunter liegende, ohne deren Details zu kennen. Die App muss nichts über Motormanagement wissen – sie ruft nur „fahre nach München" auf.</p>
+      </div>
+
+      <p class="mt-5">Dieses Prinzip heißt <strong>Abstraktion</strong>: Jede Schicht bietet der darüber liegenden Schicht eine saubere Schnittstelle an und versteckt die eigene Komplexität. Eine neue Übertragungstechnologie (z.&nbsp;B. 5G statt WLAN) kann eingetauscht werden, ohne dass sich die Anwendungen ändern müssen.</p>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       5. OSI-MODELL
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">03</span>
+        <h2 class="dhbw-slide__title">Das OSI-Modell – 7 Schichten im Überblick</h2>
+      </div>
+
+      <p>Das <strong>OSI-Referenzmodell</strong> (Open Systems Interconnection) teilt Netzwerkkommunikation in sieben Schichten auf. Es ist ein theoretisches Referenzmodell, das 1984 von der ISO standardisiert wurde. In der Praxis werden oft nur die wichtigsten Schichten aktiv diskutiert – der Rest ist Infrastruktur, die im Hintergrund arbeitet.</p>
+
+      <figure class="mt-5" style="text-align:center;">
+        <img src="graphics/image.png"
+             alt="Das OSI-7-Schichtenmodell: sieben farbige horizontale Schichten von unten (Bitübertragung) bis oben (Anwendung) mit deutschen Bezeichnungen und Protokollbeispielen"
+             style="max-width:100%;display:block;margin:0 auto;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+        <figcaption style="font-size:0.875rem;color:#6B7280;margin-top:8px;">Abb. 1 – Das OSI-Referenzmodell mit 7 Schichten, deutschen Bezeichnungen und Protokollbeispielen</figcaption>
+      </figure>
+
+      <div class="dhbw-table-wrap mt-5">
+        <table class="dhbw-table">
+          <thead>
+            <tr><th>#</th><th>Schicht (DE)</th><th>Kurzbeschreibung</th><th>Beispiele</th><th>Relevanz</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>7</strong></td>
+              <td><strong>Anwendung</strong></td>
+              <td>Schnittstelle für Anwendungsprogramme</td>
+              <td>HTTP, FTP, SMTP, DNS</td>
+              <td class="text-red font-semi">★★★</td>
+            </tr>
+            <tr>
+              <td><strong>6</strong></td>
+              <td><strong>Darstellung</strong></td>
+              <td>Kodierung, Verschlüsselung, Kompression</td>
+              <td>TLS/SSL, JPEG, ASCII</td>
+              <td>★★☆</td>
+            </tr>
+            <tr>
+              <td><strong>5</strong></td>
+              <td><strong>Sitzung</strong></td>
+              <td>Aufbau und Steuerung von Sitzungen</td>
+              <td>NetBIOS, RPC</td>
+              <td>★☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>4</strong></td>
+              <td><strong>Transport</strong></td>
+              <td>Zuverlässige Ende-zu-Ende-Übertragung</td>
+              <td>TCP, UDP</td>
+              <td class="text-red font-semi">★★★</td>
+            </tr>
+            <tr>
+              <td><strong>3</strong></td>
+              <td><strong>Vermittlung / Netzwerk</strong></td>
+              <td>Adressierung und Routing zwischen Netzen</td>
+              <td>IP, ICMP</td>
+              <td class="text-red font-semi">★★★</td>
+            </tr>
+            <tr>
+              <td><strong>2</strong></td>
+              <td><strong>Sicherung</strong></td>
+              <td>Zuverlässige Übertragung im lokalen Netz</td>
+              <td>Ethernet, WLAN (802.11)</td>
+              <td>★★☆</td>
+            </tr>
+            <tr>
+              <td><strong>1</strong></td>
+              <td><strong>Bitübertragung</strong></td>
+              <td>Physische Übertragung von Bits</td>
+              <td>Kabel, Funk, Licht (LWL)</td>
+              <td class="text-red font-semi">★★★</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--tip mt-5">
+        <span class="dhbw-callout__label">Merkhilfe für die 7 Schichten</span>
+        <p>Von unten nach oben: <strong>B</strong>itte <strong>S</strong>end <strong>N</strong>icht <strong>T</strong>rolle <strong>S</strong>ehr <strong>D</strong>umme <strong>A</strong>nfragen → Bitübertragung, Sicherung, Netzwerk, Transport, Sitzung, Darstellung, Anwendung.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       6. TCP/IP-MODELL
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">04</span>
+        <h2 class="dhbw-slide__title">Das TCP/IP-Modell – Praxis statt Theorie</h2>
+      </div>
+
+      <p>Das <strong>TCP/IP-Modell</strong> ist das Modell, das das heutige Internet tatsächlich nutzt. Es vereinfacht die sieben OSI-Schichten auf vier praxisorientierte Schichten und bildet die technische Grundlage für alle modernen Netzwerke – von WLAN zu Hause bis zum weltweiten Internet.</p>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">4 – Anwendungsschicht</p>
+            <p>Enthält alle anwendungsspezifischen Protokolle. Entspricht OSI-Schichten 5–7. Beispiele: HTTP (Web), SMTP (E-Mail), DNS (Namensauflösung).</p>
+        </div>
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">3 – Transportschicht</p>
+            <p>Kümmert sich um zuverlässige (TCP) oder schnelle (UDP) Übertragung zwischen zwei Endpunkten. Entspricht OSI-Schicht 4.</p>
+        </div>
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">2 – Internetschicht</p>
+            <p>Zuständig für Adressierung (IP-Adressen) und Routing – also dafür, dass Pakete über mehrere Netzwerke hinweg den richtigen Weg finden. Entspricht OSI-Schicht 3.</p>
+        </div>
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">1 – Netzzugangsschicht</p>
+            <p>Physische Übertragung im lokalen Netz – Kabel, WLAN, Glasfaser. Entspricht OSI-Schichten 1–2.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       7. IP, MAC, PORT
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">05</span>
+        <h2 class="dhbw-slide__title">IP-Adresse, MAC-Adresse und Port</h2>
+      </div>
+
+      <p>Drei Konzepte bilden das Adressierungssystem von Netzwerken. Sie arbeiten auf verschiedenen Ebenen und haben unterschiedliche Aufgaben – ihre Unterschiede zu kennen ist fundamental für das Verständnis von Netzwerken.</p>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">IP-Adresse = Hausnummer</p>
+            <p>Die <strong>IP-Adresse</strong> identifiziert ein Gerät im Netzwerk – wie eine Hausnummer in einer Straße. IPv4-Adressen bestehen aus vier Zahlen (0–255), z.&nbsp;B. <code>192.168.1.1</code>. IP-Adressen können sich ändern (dynamisch vergeben durch DHCP). Sie ermöglichen das Routing über Netzwerkgrenzen hinweg.</p>
+        </div>
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">MAC-Adresse = Personalausweis</p>
+            <p>Die <strong>MAC-Adresse</strong> (Media Access Control) ist eine weltweit eindeutige Hardware-Adresse, die fest in der Netzwerkkarte eingebrannt ist – wie eine unveränderliche Seriennummer. Sie hat das Format <code>AA:BB:CC:DD:EE:FF</code> und wird nur im lokalen Netzwerk verwendet. Der Router kennt keine MAC-Adressen außerhalb des eigenen Netzes.</p>
+        </div>
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">Port = Wohnungstür</p>
+            <p>Ein <strong>Port</strong> ist eine Nummer (0–65535), die innerhalb eines Geräts bestimmt, welche Anwendung die Daten empfangen soll. Wenn IP-Adresse und Port zusammen angegeben werden, ist die Adressierung eindeutig bis zur Anwendung: <code>192.168.1.1:80</code> = HTTP-Server. Port 80 ist HTTP, Port 443 ist HTTPS, Port 22 ist SSH.</p>
+        </div>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--merksatz mt-5">
+        <span class="dhbw-callout__label">Merksatz</span>
+        <p><strong>IP-Adresse</strong> = Hausnummer (wo im Netzwerk?) · <strong>MAC-Adresse</strong> = Personalausweis (wer ist das Gerät?) · <strong>Port</strong> = Wohnungstür (welche Anwendung?)</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       8. DNS
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">06</span>
+        <h2 class="dhbw-slide__title">DNS – Das Telefonbuch des Internets</h2>
+      </div>
+
+      <p>Computer kommunizieren über IP-Adressen – Menschen merken sich aber keine Zahlen, sondern Namen wie <code>dhbw-stuttgart.de</code> oder <code>google.com</code>. Das <strong>Domain Name System</strong> (DNS) übernimmt die Übersetzung: Es wandelt menschenlesbare Domainnamen in maschinenlesbare IP-Adressen um.</p>
+
+      <div class="dhbw-callout dhbw-callout--example mt-5">
+        <span class="dhbw-callout__label">Wie DNS funktioniert – Schritt für Schritt</span>
+        <p>Du tippst <code>netflix.com</code> in den Browser. Dein Computer fragt zuerst den lokalen DNS-Cache – gibt es einen gespeicherten Eintrag? Wenn nicht, fragt er den DNS-Server deines Routers oder Internetanbieters. Dieser sucht in einer hierarchischen Struktur globaler DNS-Server, bis er die IP-Adresse von Netflix findet – z.&nbsp;B. <code>54.236.131.12</code>. Diese IP-Adresse schickt er zurück an deinen Browser, der jetzt die Verbindung aufbaut. Der gesamte Vorgang dauert Millisekunden und ist für dich unsichtbar.</p>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--praxis mt-5">
+        <span class="dhbw-callout__label">Praxisbeispiel: Netflix ja, Drucker nein</span>
+        <p>Netflix funktioniert per WLAN, weil dein Gerät eine gültige IP-Adresse hat und DNS die Serveradresse von Netflix auflösen kann. Ein Drucker „funktioniert nicht", weil er entweder im falschen Netzwerksegment sitzt, eine fehlerhafte IP-Adresse hat, oder der DNS-Eintrag für den Druckernamen nicht konfiguriert ist. Das sind unterschiedliche Netzwerkprobleme – IP-Problem vs. DNS-Problem vs. Routing-Problem.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       9. INDUSTRIEPROTOKOLLE
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">07</span>
+        <h2 class="dhbw-slide__title">Industrieprotokolle – Netzwerke in der Fertigung</h2>
+      </div>
+
+      <p>In der industriellen Automatisierung reichen Standard-IT-Protokolle wie HTTP oft nicht aus: Maschinensteuerungen brauchen <em>deterministische</em> Kommunikation (feste, garantierte Zeitabstände), hohe Verfügbarkeit und spezielle Datenmodelle für Sensoren und Aktoren. Deshalb gibt es spezialisierte <strong>Industrieprotokolle</strong>.</p>
+
+      <div class="dhbw-callout dhbw-callout--praxis mt-5">
+        <span class="dhbw-callout__label">Die drei wichtigsten Industrieprotokolle im Überblick</span>
+        <div class="dhbw-table-wrap">
+          <table class="dhbw-table">
+            <thead>
+              <tr><th>Protokoll</th><th>Herkunft / Träger</th><th>Typischer Einsatz</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Modbus TCP</strong></td>
+                <td>Ursprung 1979 (Modicon); heute offen und weit verbreitet</td>
+                <td>Einfache Sensor-/Aktor-Kommunikation, SPS-Anbindung, Energiemessung</td>
+              </tr>
+              <tr>
+                <td><strong>OPC UA</strong></td>
+                <td>OPC Foundation; plattformunabhängig</td>
+                <td>Maschinen-zu-Maschinen-Kommunikation, IoT-Gateways, Industrie-4.0-Plattformen</td>
+              </tr>
+              <tr>
+                <td><strong>PROFINET</strong></td>
+                <td>Siemens / PROFIBUS Nutzerorganisation</td>
+                <td>Echtzeitsteuerung in Fertigungsanlagen, Roboter, Antriebe</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--tip mt-5">
+        <span class="dhbw-callout__label">Maschinenbau-Relevanz</span>
+        <p>Als Maschinenbauer wirst du im Beruf an Maschinen arbeiten, die über diese Protokolle vernetzt sind. Auch wenn du die Details nicht kennen musst, ist es wichtig zu wissen, dass Industrienetzwerke anderen Anforderungen folgen als Büro-IT – insbesondere bei Echtzeit, Verfügbarkeit und Sicherheit (Security).</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       10. ZUSAMMENFASSUNG
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">08</span>
+        <h2 class="dhbw-slide__title">Zusammenfassung: Netzwerktechnik</h2>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--merksatz">
+        <span class="dhbw-callout__label">Merksatz</span>
+        <p>Das <strong>Schichtenmodell</strong> beherrscht Netzwerkkomplexität durch Abstraktion. Das <strong>OSI-Modell</strong> hat 7 Schichten; das praktische <strong>TCP/IP-Modell</strong> fasst sie auf 4 zusammen. <strong>IP-Adresse</strong> adressiert das Gerät im Netz, <strong>MAC-Adresse</strong> identifiziert die Hardware eindeutig, der <strong>Port</strong> bestimmt die Anwendung. <strong>DNS</strong> übersetzt Namen in IP-Adressen – das Telefonbuch des Internets. In der Industrie kommen <strong>Modbus TCP</strong>, <strong>OPC UA</strong> und <strong>PROFINET</strong> für deterministische Maschinenvernetzung zum Einsatz.</p>
+      </div>
+
+      <div class="dhbw-table-wrap mt-5">
+        <table class="dhbw-table">
+          <thead>
+            <tr><th>Konzept</th><th>Kernaussage</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Schichtenmodell</strong></td><td>Abstraktion: Jede Schicht löst ein Teilproblem und verbirgt die Komplexität</td></tr>
+            <tr><td><strong>OSI-Modell</strong></td><td>7 Schichten; Referenzmodell; Schicht 1, 3, 4, 7 sind praxisrelevant</td></tr>
+            <tr><td><strong>TCP/IP</strong></td><td>4-Schichten-Modell; Grundlage des Internets</td></tr>
+            <tr><td><strong>IP-Adresse</strong></td><td>Hausnummer; identifiziert Gerät im Netz; z.&nbsp;B. 192.168.1.1</td></tr>
+            <tr><td><strong>MAC-Adresse</strong></td><td>Personalausweis; Hardware-Seriennummer; nur lokal relevant</td></tr>
+            <tr><td><strong>Port</strong></td><td>Wohnungstür; welche Anwendung empfängt die Daten (0–65535)</td></tr>
+            <tr><td><strong>DNS</strong></td><td>Telefonbuch: dhbw-stuttgart.de → IP-Adresse</td></tr>
+            <tr><td><strong>Industrieprotokolle</strong></td><td>Modbus TCP, OPC UA, PROFINET für deterministische Maschinenvernetzung</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════════════════════════ -->
+  <footer class="dhbw-footer">
+    <div class="dhbw-footer__inner">
+      <span class="dhbw-footer__brand">DHBW Stuttgart</span>
+      <span>Informatik-Grundlagen für Maschinenbau &nbsp;·&nbsp; WS&nbsp;2025/26</span>
+      <span>V15 – Netzwerktechnik Grundlagen &amp; Protokolle</span>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>V06 – Python Praxis: Schleifen | DHBW Stuttgart</title>
+  <link rel="stylesheet" href="../../src/dhbw-base.css">
+  <style>
+    .concept-grid { display:grid; grid-template-columns:1fr; gap:var(--sp-6); margin-top:var(--sp-5); }
+    .concept-card { background:var(--surface); border:1px solid var(--border); border-top:4px solid var(--red); border-radius:var(--r-card); padding:var(--sp-5) var(--sp-6); box-shadow:var(--shadow-card); }
+    .concept-card__name { font-family:var(--dhbw-font-mono); font-size:var(--fs-lg); font-weight:var(--dhbw-fw-bold); color:var(--red); margin-bottom:var(--sp-2); }
+    .dhbw-code { background:var(--code-bg); color:var(--code-text); font-family:var(--dhbw-font-mono); font-size:0.9rem; line-height:var(--lh-code); padding:var(--sp-4) var(--sp-5); border-radius:var(--r-base); overflow-x:auto; margin:var(--sp-3) 0; white-space:pre; }
+    .kw  { color:#F97316; font-weight:600; }
+    .str { color:#22C55E; }
+    .num { color:#A78BFA; }
+    .cmt { color:#7A9CB3; font-style:italic; }
+    .fn  { color:#60A5FA; }
+    .var { color:#E8EFF5; }
+    .fsl { color:#F0C060; }
+    .syntax-box { background:var(--code-bg-in); border-left:3px solid var(--red); border-radius:0 var(--r-base) var(--r-base) 0; padding:var(--sp-3) var(--sp-4); margin:var(--sp-3) 0; font-family:var(--dhbw-font-mono); font-size:0.92rem; color:var(--text); }
+    .syntax-box strong { color:var(--red); }
+    .game-box { background:#0F1E2B; border:2px solid #2A4A6B; border-radius:var(--r-card); padding:var(--sp-5) var(--sp-6); margin-top:var(--sp-6); }
+    .game-box__header { display:flex; align-items:center; gap:var(--sp-3); margin-bottom:var(--sp-4); }
+    .game-box__icon { font-size:1.5rem; }
+    .game-box__title { font-size:var(--fs-md); font-weight:var(--dhbw-fw-bold); color:#60A5FA; margin:0; }
+    .game-box__subtitle { font-size:var(--fs-sm); color:#7A9CB3; margin-top:var(--sp-1); }
+    .quick-ref { width:100%; border-collapse:collapse; margin-top:var(--sp-4); font-size:var(--fs-sm); }
+    .quick-ref th { background:var(--red); color:#fff; padding:var(--sp-2) var(--sp-4); text-align:left; }
+    .quick-ref td { padding:var(--sp-2) var(--sp-4); border-bottom:1px solid var(--border); vertical-align:top; }
+    .quick-ref tr:nth-child(even) td { background:var(--canvas); }
+    .quick-ref code { font-family:var(--dhbw-font-mono); font-size:0.85rem; background:var(--code-bg-in); padding:1px 5px; border-radius:var(--r-sm); color:var(--red); }
+    .mt-4 { margin-top:var(--sp-4); } .mt-5 { margin-top:var(--sp-5); } .mt-6 { margin-top:var(--sp-6); }
+    .dhbw-footer { background:var(--text); color:#9CA3AF; text-align:center; padding:var(--sp-5) var(--gutter); font-size:var(--fs-sm); }
+    @media print {
+      @page { size:A4; margin:15mm 18mm; }
+      .dhbw-header,.dhbw-footer { display:none; }
+      .dhbw-hero,.dhbw-slide,.dhbw-code,.dhbw-callout,.concept-card,.game-box { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+      .dhbw-hero { padding:12mm 0 10mm; } .dhbw-slide { padding:8mm 0; }
+      .concept-card,.game-box { break-inside:avoid; }
+      .dhbw-code { font-size:0.78rem; }
+      .page-break { page-break-before:always; }
+    }
+  </style>
+</head>
+<body>
+  <header class="dhbw-header">
+    <div class="dhbw-header__inner">
+      <a href="#" class="dhbw-header__logo"><span class="dhbw-header__logo-text">DHBW Stuttgart</span></a>
+      <nav class="dhbw-header__nav">
+        <a href="V06-Programm-Ablauf-Plaene-Teil2_skript.html" class="dhbw-header__nav-link">Theorie</a>
+        <a href="#" class="dhbw-header__nav-link dhbw-header__nav-link--active">Python Praxis</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="dhbw-hero">
+    <div class="dhbw-hero__inner">
+      <p class="dhbw-hero__label">Vorlesung 06 · Python Praxis · Maschinenbau</p>
+      <h1 class="dhbw-hero__title">Schleifen: for &amp; while</h1>
+      <p class="dhbw-hero__subtitle">Messreihen verarbeiten, Spielrunden steuern, Daten durchlaufen</p>
+      <p class="dhbw-hero__meta">WS 2025/26 &nbsp;·&nbsp; DHBW Stuttgart &nbsp;·&nbsp; Nachschlagewerk Python-Praxis</p>
+    </div>
+  </section>
+
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">01</span><h2 class="dhbw-slide__title">Das kannst du danach</h2></div>
+      <div class="dhbw-goals">
+        <p class="dhbw-goals__title">📌 Nach dieser Einheit kannst du …</p>
+        <ul>
+          <li>mit <strong>for</strong> und <strong>range()</strong> eine Aktion eine bestimmte Anzahl mal wiederholen.</li>
+          <li>mit <strong>for</strong> über Listen und Texte iterieren (z.&nbsp;B. alle Messwerte ausgeben).</li>
+          <li>mit <strong>while</strong> eine Schleife so lange laufen lassen, wie eine Bedingung gilt.</li>
+          <li>Endlosschleifen erkennen und durch korrekte Abbruchbedingungen vermeiden.</li>
+          <li>mit <strong>enumerate()</strong> gleichzeitig Index und Wert einer Liste durchlaufen.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- SVG: for-Schleife Ablauf -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">02</span><h2 class="dhbw-slide__title">Wann for, wann while?</h2></div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:var(--sp-5); margin-top:var(--sp-4);">
+        <div style="background:var(--surface); border:1px solid var(--border); border-top:4px solid #60A5FA; border-radius:var(--r-card); padding:var(--sp-4);">
+          <h3 style="color:#60A5FA; font-family:var(--dhbw-font-mono);">for-Schleife</h3>
+          <p style="margin-top:var(--sp-3); font-size:var(--fs-sm);">Wenn du <strong>weißt, wie oft</strong> etwas wiederholt werden soll – z.&nbsp;B. 10 Messwerte einlesen, alle Elemente einer Liste verarbeiten.</p>
+        </div>
+        <div style="background:var(--surface); border:1px solid var(--border); border-top:4px solid #22C55E; border-radius:var(--r-card); padding:var(--sp-4);">
+          <h3 style="color:#22C55E; font-family:var(--dhbw-font-mono);">while-Schleife</h3>
+          <p style="margin-top:var(--sp-3); font-size:var(--fs-sm);">Wenn du <strong>nicht weißt, wie oft</strong> – z.&nbsp;B. solange der Nutzer kein "ende" eingibt, solange Temperatur &lt; Sollwert.</p>
+        </div>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--merksatz mt-5">
+        <span class="dhbw-callout__label">⚠ Endlosschleife vermeiden</span>
+        <p>Eine <code class="dhbw-inline">while</code>-Schleife, deren Bedingung nie <code class="dhbw-inline">False</code> wird, läuft ewig. Stelle sicher, dass sich irgendetwas in der Schleife verändert, das irgendwann die Bedingung auf False setzt.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- KONZEPTKARTEN -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">03</span><h2 class="dhbw-slide__title">Schleifen im Detail</h2></div>
+
+      <div class="concept-grid">
+
+        <div class="concept-card">
+          <div class="concept-card__name">for + range() – Zählschleife</div>
+          <p><code class="dhbw-inline">range(start, stop, step)</code> erzeugt eine Folge von Ganzzahlen. <code class="dhbw-inline">stop</code> ist <em>nicht</em> enthalten (exklusive Ende).</p>
+          <div class="syntax-box">
+<strong>for</strong> variable <strong>in range(</strong>stop<strong>):</strong>        <span style="color:var(--text-sec);"># 0 bis stop-1</span>
+<strong>for</strong> variable <strong>in range(</strong>start, stop<strong>):</strong>  <span style="color:var(--text-sec);"># start bis stop-1</span>
+          </div>
+          <div class="dhbw-code"><span class="cmt"># 5 Messwerte einlesen</span>
+<span class="kw">for</span> <span class="var">i</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+    <span class="var">wert</span> = <span class="fn">float</span>(<span class="fn">input</span>(<span class="fsl">f</span><span class="str">"Messung <span class="fsl">{i+1}</span>: "</span>))
+    <span class="fn">print</span>(<span class="fsl">f</span><span class="str">"  → <span class="fsl">{wert:.2f}</span> °C"</span>)
+
+<span class="cmt"># Zähler mit Start und Schritt</span>
+<span class="kw">for</span> <span class="var">sekunde</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="num">0</span>, <span class="num">60</span>, <span class="num">10</span>):  <span class="cmt"># 0, 10, 20, 30, 40, 50</span>
+    <span class="fn">print</span>(<span class="fsl">f</span><span class="str">"t = <span class="fsl">{sekunde}</span> s: Messung läuft..."</span>)
+
+<span class="cmt"># range() Merkhilfe:</span>
+<span class="cmt"># range(5)       → 0,1,2,3,4</span>
+<span class="cmt"># range(1,6)     → 1,2,3,4,5</span>
+<span class="cmt"># range(0,10,2)  → 0,2,4,6,8</span></div>
+        </div>
+
+        <div class="concept-card">
+          <div class="concept-card__name">for – über Liste / Text iterieren</div>
+          <p>Mit <code class="dhbw-inline">for x in liste</code> durchläufst du jeden Wert direkt. Mit <code class="dhbw-inline">enumerate()</code> erhältst du zusätzlich den Index.</p>
+          <div class="dhbw-code"><span class="var">messwerte</span> = [<span class="num">23.1</span>, <span class="num">24.5</span>, <span class="num">22.8</span>, <span class="num">25.0</span>, <span class="num">23.7</span>]
+
+<span class="cmt"># Direkt über Werte iterieren</span>
+<span class="kw">for</span> <span class="var">wert</span> <span class="kw">in</span> <span class="var">messwerte</span>:
+    <span class="fn">print</span>(<span class="fsl">f</span><span class="str">"Temperatur: <span class="fsl">{wert:.1f}</span> °C"</span>)
+
+<span class="cmt"># Mit enumerate(): Index + Wert</span>
+<span class="kw">for</span> <span class="var">i</span>, <span class="var">wert</span> <span class="kw">in</span> <span class="fn">enumerate</span>(<span class="var">messwerte</span>):
+    <span class="fn">print</span>(<span class="fsl">f</span><span class="str">"Messung <span class="fsl">{i+1}</span>: <span class="fsl">{wert:.1f}</span> °C"</span>)
+
+<span class="cmt"># Über String iterieren</span>
+<span class="var">eingabe</span> = <span class="str">"A3"</span>
+<span class="kw">for</span> <span class="var">zeichen</span> <span class="kw">in</span> <span class="var">eingabe</span>:
+    <span class="fn">print</span>(<span class="var">zeichen</span>)   <span class="cmt"># → A, dann 3</span></div>
+        </div>
+
+        <div class="concept-card">
+          <div class="concept-card__name">while – bedingte Schleife</div>
+          <p><code class="dhbw-inline">while</code> wiederholt den Block so lange, bis die Bedingung <code class="dhbw-inline">False</code> ist. Typisch: auf Nutzereingabe warten, Prozess überwachen.</p>
+          <div class="syntax-box">
+<strong>while</strong> bedingung<strong>:</strong>
+    <span style="color:var(--text-sec);"># läuft solange bedingung True ist</span>
+          </div>
+          <div class="dhbw-code"><span class="cmt"># Eingabe wiederholen bis gültig</span>
+<span class="var">wert</span> = -<span class="num">1</span>
+<span class="kw">while</span> <span class="var">wert</span> &lt; <span class="num">0</span>:
+    <span class="var">wert</span> = <span class="fn">float</span>(<span class="fn">input</span>(<span class="str">"Positive Temperatur eingeben: "</span>))
+    <span class="kw">if</span> <span class="var">wert</span> &lt; <span class="num">0</span>:
+        <span class="fn">print</span>(<span class="str">"Ungültig! Bitte positive Zahl."</span>)
+
+<span class="cmt"># Prozess überwachen</span>
+<span class="var">temp</span> = <span class="num">20.0</span>
+<span class="kw">while</span> <span class="var">temp</span> &lt; <span class="num">80</span>:
+    <span class="fn">print</span>(<span class="fsl">f</span><span class="str">"Aufheizen: <span class="fsl">{temp:.1f}</span> °C"</span>)
+    <span class="var">temp</span> += <span class="num">5.0</span>   <span class="cmt"># temp muss sich ändern!</span>
+<span class="fn">print</span>(<span class="str">"Betriebstemperatur erreicht."</span>)</div>
+        </div>
+
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--example mt-6">
+        <span class="dhbw-callout__label">Prompt-Datei: while-Schleife Ablaufdiagramm</span>
+        <p>Eine visuelle Darstellung der while-Schleife mit Abbruchbedingung findest du als Bildgenerierungs-Prompt in: <code class="dhbw-inline">V06_grafik_while_loop_prompt.md</code></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCHIFFEVERSENKEN -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">04</span><h2 class="dhbw-slide__title">Im Schiffe-Versenken-Spiel</h2></div>
+      <p>Die Spielschleife ist eine klassische <code class="dhbw-inline">while</code>-Schleife – sie läuft solange, bis der Spieler "ende" eingibt:</p>
+      <div class="game-box">
+        <div class="game-box__header">
+          <span class="game-box__icon">🚢</span>
+          <div>
+            <h3 class="game-box__title">Der Game-Loop</h3>
+            <p class="game-box__subtitle">while-Schleife + for-Schleife für Spielfeld</p>
+          </div>
+        </div>
+        <div class="dhbw-code"><span class="cmt"># Hauptspielschleife (while)</span>
+<span class="var">eingabe</span> = <span class="fn">input</span>(<span class="str">"Gib einen Schuss an: "</span>)
+<span class="kw">while</span> <span class="var">eingabe</span> != <span class="str">"ende"</span>:
+    <span class="cmt"># ... Schuss verarbeiten ...</span>
+
+    <span class="cmt"># Spielfeld ausgeben (for-Schleife)</span>
+    <span class="fn">print</span>(<span class="str">"   A B C D E"</span>)
+    <span class="kw">for</span> <span class="var">i</span>, <span class="var">zeile</span> <span class="kw">in</span> <span class="fn">enumerate</span>(<span class="var">spielfeld</span>):
+        <span class="fn">print</span>(<span class="fsl">f</span><span class="str">"<span class="fsl">{i+1}</span>  "</span>, end=<span class="str">""</span>)
+        <span class="kw">for</span> <span class="var">feld</span> <span class="kw">in</span> <span class="var">zeile</span>:
+            <span class="fn">print</span>(<span class="var">feld</span>, end=<span class="str">" "</span>)
+        <span class="fn">print</span>()
+
+    <span class="var">eingabe</span> = <span class="fn">input</span>(<span class="str">"Nächster Schuss: "</span>)   <span class="cmt"># wichtig: aktualisieren!</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUICK-REFERENCE -->
+  <section class="dhbw-slide page-break">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">05</span><h2 class="dhbw-slide__title">Quick-Reference</h2></div>
+      <table class="quick-ref">
+        <thead><tr><th style="width:30%">Syntax</th><th>Bedeutung &amp; Hinweis</th></tr></thead>
+        <tbody>
+          <tr><td><code>for i in range(n):</code></td><td>n mal wiederholen, i läuft von 0 bis n-1</td></tr>
+          <tr><td><code>for i in range(a,b):</code></td><td>a bis b-1 (b ist exklusiv!)</td></tr>
+          <tr><td><code>for i in range(a,b,s):</code></td><td>Mit Schrittweite s (kann auch negativ sein)</td></tr>
+          <tr><td><code>for x in liste:</code></td><td>Jeden Wert in der Liste einmal verarbeiten</td></tr>
+          <tr><td><code>for i, x in enumerate(liste):</code></td><td>Index i + Wert x gleichzeitig</td></tr>
+          <tr><td><code>while bedingung:</code></td><td>Läuft solange Bedingung True – Variable muss sich ändern!</td></tr>
+          <tr><td><code>while True:</code></td><td>Endlosschleife – nur mit break beenden</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer class="dhbw-footer">DHBW Stuttgart · Maschinenbau · Informatik-Grundlagen · WS 2025/26 · Python Praxis Nachschlagewerk</footer>
+</body>
+</html>

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Schiffe Versenken – Python Praxis Gesamtübersicht | DHBW Stuttgart</title>
+  <link rel="stylesheet" href="../src/dhbw-base.css">
+  <style>
+    .concept-grid { display:grid; grid-template-columns:1fr; gap:var(--sp-6); margin-top:var(--sp-5); }
+    .concept-card { background:var(--surface); border:1px solid var(--border); border-top:4px solid var(--red); border-radius:var(--r-card); padding:var(--sp-5) var(--sp-6); box-shadow:var(--shadow-card); }
+    .concept-card__name { font-family:var(--dhbw-font-mono); font-size:var(--fs-lg); font-weight:var(--dhbw-fw-bold); color:var(--red); margin-bottom:var(--sp-2); }
+    .dhbw-code { background:var(--code-bg); color:var(--code-text); font-family:var(--dhbw-font-mono); font-size:0.9rem; line-height:var(--lh-code); padding:var(--sp-4) var(--sp-5); border-radius:var(--r-base); overflow-x:auto; margin:var(--sp-3) 0; white-space:pre; }
+    .kw  { color:#F97316; font-weight:600; }
+    .str { color:#22C55E; }
+    .num { color:#A78BFA; }
+    .cmt { color:#7A9CB3; font-style:italic; }
+    .fn  { color:#60A5FA; }
+    .var { color:#E8EFF5; }
+    .fsl { color:#F0C060; }
+    .quick-ref { width:100%; border-collapse:collapse; margin-top:var(--sp-4); font-size:var(--fs-sm); }
+    .quick-ref th { background:var(--red); color:#fff; padding:var(--sp-2) var(--sp-4); text-align:left; }
+    .quick-ref td { padding:var(--sp-2) var(--sp-4); border-bottom:1px solid var(--border); vertical-align:top; }
+    .quick-ref tr:nth-child(even) td { background:var(--canvas); }
+    .quick-ref code { font-family:var(--dhbw-font-mono); font-size:0.85rem; background:var(--code-bg-in); padding:1px 5px; border-radius:var(--r-sm); color:var(--red); }
+    .nb-grid { display:grid; grid-template-columns:1fr 1fr; gap:var(--sp-4); margin-top:var(--sp-5); }
+    .nb-card { background:var(--canvas); border:1px solid var(--border); border-left:4px solid var(--red); border-radius:var(--r-card); padding:var(--sp-4); }
+    .nb-card__nr { font-family:var(--dhbw-font-mono); font-size:var(--fs-sm); font-weight:700; color:var(--red); margin-bottom:var(--sp-1); }
+    .nb-card__title { font-weight:var(--dhbw-fw-semi); font-size:var(--fs-base); }
+    .nb-card__topic { font-size:var(--fs-sm); color:var(--text-sec); margin-top:var(--sp-1); }
+    .nb-card__link { display:inline-block; margin-top:var(--sp-2); font-size:var(--fs-sm); color:var(--red); text-decoration:none; }
+    .nb-card__link:hover { text-decoration:underline; }
+    .spielfeld { display:inline-block; background:var(--code-bg); border-radius:var(--r-base); padding:var(--sp-4); font-family:var(--dhbw-font-mono); font-size:1.2rem; line-height:2; margin:var(--sp-4) auto; display:block; max-width:280px; }
+    .sf-header { color:#60A5FA; font-weight:700; }
+    .sf-water  { color:#60A5FA; }
+    .sf-hit    { color:#E2001A; font-weight:700; }
+    .sf-miss   { color:#A78BFA; }
+    .mt-4 { margin-top:var(--sp-4); } .mt-5 { margin-top:var(--sp-5); } .mt-6 { margin-top:var(--sp-6); }
+    .dhbw-footer { background:var(--text); color:#9CA3AF; text-align:center; padding:var(--sp-5) var(--gutter); font-size:var(--fs-sm); }
+    @media print {
+      @page { size:A4; margin:15mm 18mm; }
+      .dhbw-header,.dhbw-footer { display:none; }
+      .dhbw-hero,.dhbw-slide,.dhbw-code,.dhbw-callout,.concept-card,.nb-card { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+      .dhbw-hero { padding:12mm 0 10mm; } .dhbw-slide { padding:8mm 0; }
+      .concept-card,.nb-card { break-inside:avoid; }
+      .dhbw-code { font-size:0.78rem; }
+      .page-break { page-break-before:always; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="dhbw-header">
+    <div class="dhbw-header__inner">
+      <a href="#" class="dhbw-header__logo"><span class="dhbw-header__logo-text">DHBW Stuttgart</span></a>
+      <nav class="dhbw-header__nav">
+        <a href="#uebersicht" class="dhbw-header__nav-link">Übersicht</a>
+        <a href="#code" class="dhbw-header__nav-link">Vollständiger Code</a>
+        <a href="#module" class="dhbw-header__nav-link">Module</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="dhbw-hero">
+    <div class="dhbw-hero__inner">
+      <p class="dhbw-hero__label">Semesterprojekt · Python Praxis · Maschinenbau</p>
+      <h1 class="dhbw-hero__title">🚢 Schiffe Versenken</h1>
+      <p class="dhbw-hero__subtitle">Das Abschlussprojekt – alle gelernten Konzepte in einem Spiel vereint</p>
+      <p class="dhbw-hero__meta">WS 2025/26 &nbsp;·&nbsp; DHBW Stuttgart &nbsp;·&nbsp; Python Praxis Nachschlagewerk</p>
+    </div>
+  </section>
+
+  <!-- ÜBERSICHT -->
+  <section id="uebersicht" class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">01</span>
+        <h2 class="dhbw-slide__title">Das Projekt</h2>
+      </div>
+
+      <p>Das Schiffe-Versenken-Spiel ist der <strong>rote Faden</strong> durch das gesamte Semester. In jedem Modul haben wir einen Teil des Spiels gelernt. Am Ende des Semesters haben alle Teile zusammen und das Spiel funktioniert vollständig in der Konsole.</p>
+
+      <!-- Spielfeld-Visualisierung -->
+      <div class="spielfeld" aria-label="Beispiel-Spielfeld 5x5 mit Treffern und Wasser">
+        <div><span class="sf-header">   A </span><span class="sf-header">B </span><span class="sf-header">C </span><span class="sf-header">D </span><span class="sf-header">E</span></div>
+        <div><span style="color:#7A9CB3;">1  </span><span class="sf-hit">X </span><span class="sf-water">~ </span><span class="sf-water">~ </span><span class="sf-water">~ </span><span class="sf-water">~</span></div>
+        <div><span style="color:#7A9CB3;">2  </span><span class="sf-miss">O </span><span class="sf-hit">X </span><span class="sf-water">~ </span><span class="sf-water">~ </span><span class="sf-water">~</span></div>
+        <div><span style="color:#7A9CB3;">3  </span><span class="sf-water">~ </span><span class="sf-miss">O </span><span class="sf-water">~ </span><span class="sf-water">~ </span><span class="sf-water">~</span></div>
+        <div><span style="color:#7A9CB3;">4  </span><span class="sf-water">~ </span><span class="sf-water">~ </span><span class="sf-water">~ </span><span class="sf-water">~ </span><span class="sf-water">~</span></div>
+        <div><span style="color:#7A9CB3;">5  </span><span class="sf-water">~ </span><span class="sf-water">~ </span><span class="sf-water">~ </span><span class="sf-water">~ </span><span class="sf-water">~</span></div>
+      </div>
+      <p style="text-align:center; font-size:var(--fs-sm); color:var(--text-sec); margin-top:var(--sp-2);"><span style="color:#E2001A;">X</span> = Treffer &nbsp;|&nbsp; <span style="color:#A78BFA;">O</span> = Wasser &nbsp;|&nbsp; <span style="color:#60A5FA;">~</span> = Unbekannt</p>
+
+      <p class="mt-5">Für eine realistische Spielfeld-Grafik: Prompt-Datei <code class="dhbw-inline">schiffeversenken_grafik_spielfeld_prompt.md</code></p>
+    </div>
+  </section>
+
+  <!-- NOTEBOOKS ÜBERSICHT -->
+  <section class="dhbw-slide dhbw-slide--alt" id="module">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">02</span>
+        <h2 class="dhbw-slide__title">Die 8 Lernschritte</h2>
+      </div>
+
+      <p>Das Projekt ist in 8 Jupyter-Notebooks aufgeteilt. Jedes Notebook baut auf dem vorherigen auf:</p>
+
+      <div class="nb-grid">
+        <div class="nb-card">
+          <div class="nb-card__nr">01</div>
+          <div class="nb-card__title">Verzweigungen</div>
+          <div class="nb-card__topic">if/elif/else – Treffer, Wasser, schon beschossen</div>
+          <a href="01_Verzweigungen.ipynb" class="nb-card__link">→ Notebook öffnen</a>
+        </div>
+        <div class="nb-card">
+          <div class="nb-card__nr">02</div>
+          <div class="nb-card__title">Schleifen</div>
+          <div class="nb-card__topic">while-Spielschleife, for-Schleife für Spielfeld-Ausgabe</div>
+          <a href="02_Schleifen.ipynb" class="nb-card__link">→ Notebook öffnen</a>
+        </div>
+        <div class="nb-card">
+          <div class="nb-card__nr">03</div>
+          <div class="nb-card__title">Listen &amp; Tupel</div>
+          <div class="nb-card__topic">Spielfeld als 2D-Liste, Schiff als Tupel-Liste</div>
+          <a href="03_Listen_Tupel.ipynb" class="nb-card__link">→ Notebook öffnen</a>
+        </div>
+        <div class="nb-card">
+          <div class="nb-card__nr">04</div>
+          <div class="nb-card__title">Dictionaries &amp; Sets</div>
+          <div class="nb-card__topic">Spielzustände speichern, bereits beschossene Felder als Set</div>
+          <a href="04_Dictionaries_Sets.ipynb" class="nb-card__link">→ Notebook öffnen</a>
+        </div>
+        <div class="nb-card">
+          <div class="nb-card__nr">05</div>
+          <div class="nb-card__title">Funktionen</div>
+          <div class="nb-card__topic">spiellogik.py – erstelle_spielfeld(), spielfeld_ausgeben()</div>
+          <a href="05_Funktionen.ipynb" class="nb-card__link">→ Notebook öffnen</a>
+        </div>
+        <div class="nb-card">
+          <div class="nb-card__nr">06</div>
+          <div class="nb-card__title">Dateien &amp; Imports</div>
+          <div class="nb-card__topic">Spielstand als CSV speichern und laden</div>
+          <a href="06_Dateien_Imports.ipynb" class="nb-card__link">→ Notebook öffnen</a>
+        </div>
+        <div class="nb-card">
+          <div class="nb-card__nr">07</div>
+          <div class="nb-card__title">Fehlerbehandlung</div>
+          <div class="nb-card__topic">try/except für ungültige Eingaben, match/case für Spielstatus</div>
+          <a href="07_Fehlerbehandlung_PatternMatching.ipynb" class="nb-card__link">→ Notebook öffnen</a>
+        </div>
+        <div class="nb-card" style="border-left-color:#22C55E;">
+          <div class="nb-card__nr" style="color:#22C55E;">08</div>
+          <div class="nb-card__title">Abschlussprojekt ✅</div>
+          <div class="nb-card__topic">Vollständiges Spiel zusammenbauen</div>
+          <a href="08_Abschlussprojekt.ipynb" class="nb-card__link">→ Notebook öffnen</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VOLLSTÄNDIGER CODE -->
+  <section id="code" class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">03</span>
+        <h2 class="dhbw-slide__title">Der vollständige Code erklärt</h2>
+      </div>
+
+      <p>Hier ist <code class="dhbw-inline">schiffe_versenken.py</code> – das lauffähige Endprogramm – mit Kommentaren zu jedem Abschnitt:</p>
+
+      <div class="dhbw-code"><span class="cmt"># ── SCHIFFE VERSENKEN – vollständiges Konsolenprogramm ──────────────────
+# Jede Zeile erklärt, welches Konzept sie verwendet</span>
+
+<span class="cmt"># ── 1. Datenstrukturen (V08: Listen & Tupel) ───────────────────────────</span>
+<span class="var">spielfeld</span> = []                       <span class="cmt"># leere Liste für das 5×5-Spielfeld</span>
+<span class="var">schiff</span>    = [(<span class="num">0</span>, <span class="num">1</span>), (<span class="num">0</span>, <span class="num">2</span>), (<span class="num">0</span>, <span class="num">3</span>)]   <span class="cmt"># Schiff = 3 Koordinaten-Tupel</span>
+
+<span class="cmt"># ── 2. Spielfeld aufbauen (V06: for-Schleife, V08: append) ─────────────</span>
+<span class="kw">for</span> <span class="var">i</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+    <span class="var">spielfeld</span>.<span class="fn">append</span>([<span class="str">"~"</span>] * <span class="num">5</span>)      <span class="cmt"># 5 Zeilen mit je 5 "~" (Wasser)</span>
+
+<span class="cmt"># ── 3. Spielfeld ausgeben (V06: for, V02: print-Formatierung) ──────────</span>
+<span class="fn">print</span>(<span class="str">"   "</span>, end=<span class="str">""</span>)
+<span class="kw">for</span> <span class="var">buchstabe</span> <span class="kw">in</span> <span class="str">"ABCDE"</span>:
+    <span class="fn">print</span>(<span class="fsl">f</span><span class="str">"<span class="fsl">{buchstabe}</span> "</span>, end=<span class="str">""</span>)
+<span class="fn">print</span>()                               <span class="cmt"># Zeilenumbruch nach Spaltenkopf</span>
+
+<span class="kw">for</span> <span class="var">zeile_idx</span>, <span class="var">zeile_inhalt</span> <span class="kw">in</span> <span class="fn">enumerate</span>(<span class="var">spielfeld</span>):
+    <span class="fn">print</span>(<span class="fsl">f</span><span class="str">"<span class="fsl">{zeile_idx + 1}</span>  "</span>, end=<span class="str">""</span>)
+    <span class="kw">for</span> <span class="var">feld</span> <span class="kw">in</span> <span class="var">zeile_inhalt</span>:
+        <span class="fn">print</span>(<span class="fsl">f</span><span class="str">"<span class="fsl">{feld}</span> "</span>, end=<span class="str">""</span>)
+    <span class="fn">print</span>()
+
+<span class="cmt"># ── 4. Erste Eingabe (V01: input) ──────────────────────────────────────</span>
+<span class="var">eingabe</span> = <span class="fn">input</span>(<span class="str">"Gib einen Schuss an: "</span>)
+
+<span class="cmt"># ── 5. Spielschleife (V06: while, V07: break) ──────────────────────────</span>
+<span class="kw">while</span> <span class="var">eingabe</span> != <span class="str">"ende"</span>:
+
+    <span class="cmt"># ── 6. Koordinaten parsen (V12: str-Methoden, V03: int-Umwandlung) ──</span>
+    <span class="var">spalte</span>     = <span class="str">"ABCDE"</span>.<span class="fn">index</span>(<span class="var">eingabe</span>[<span class="num">0</span>].<span class="fn">upper</span>())   <span class="cmt"># Buchstabe → Index</span>
+    <span class="var">zeile</span>      = <span class="fn">int</span>(<span class="var">eingabe</span>[<span class="num">1</span>]) - <span class="num">1</span>                  <span class="cmt"># Ziffer → Index</span>
+    <span class="var">koordinate</span> = (<span class="var">zeile</span>, <span class="var">spalte</span>)                       <span class="cmt"># Tupel bauen</span>
+
+    <span class="cmt"># ── 7. Treffer prüfen (V04: Vergleich, V05: if/else) ─────────────────</span>
+    <span class="kw">if</span> <span class="var">koordinate</span> <span class="kw">in</span> <span class="var">schiff</span>:
+        <span class="var">spielfeld</span>[<span class="var">zeile</span>][<span class="var">spalte</span>] = <span class="str">"X"</span>
+        <span class="fn">print</span>(<span class="str">"Treffer!"</span>)
+    <span class="kw">else</span>:
+        <span class="var">spielfeld</span>[<span class="var">zeile</span>][<span class="var">spalte</span>] = <span class="str">"O"</span>
+        <span class="fn">print</span>(<span class="str">"Wasser!"</span>)
+
+    <span class="cmt"># ── 8. Spielfeld neu ausgeben (gleiche Logik wie oben) ───────────────</span>
+    <span class="fn">print</span>(<span class="str">"   "</span>, end=<span class="str">""</span>)
+    <span class="kw">for</span> <span class="var">buchstabe</span> <span class="kw">in</span> <span class="str">"ABCDE"</span>:
+        <span class="fn">print</span>(<span class="fsl">f</span><span class="str">"<span class="fsl">{buchstabe}</span> "</span>, end=<span class="str">""</span>)
+    <span class="fn">print</span>()
+    <span class="kw">for</span> <span class="var">zeile_idx</span>, <span class="var">zeile_inhalt</span> <span class="kw">in</span> <span class="fn">enumerate</span>(<span class="var">spielfeld</span>):
+        <span class="fn">print</span>(<span class="fsl">f</span><span class="str">"<span class="fsl">{zeile_idx + 1}</span>  "</span>, end=<span class="str">""</span>)
+        <span class="kw">for</span> <span class="var">feld</span> <span class="kw">in</span> <span class="var">zeile_inhalt</span>:
+            <span class="fn">print</span>(<span class="fsl">f</span><span class="str">"<span class="fsl">{feld}</span> "</span>, end=<span class="str">""</span>)
+        <span class="fn">print</span>()
+
+    <span class="cmt"># ── 9. Nächste Eingabe (while-Schleife braucht Update!) ──────────────</span>
+    <span class="var">eingabe</span> = <span class="fn">input</span>(<span class="str">"Gib einen Schuss an: "</span>)</div>
+
+      <div class="dhbw-callout dhbw-callout--tip mt-5">
+        <span class="dhbw-callout__label">Verbesserte Version in spiellogik.py</span>
+        <p>Die Datei <code class="dhbw-inline">spiellogik.py</code> zeigt, wie man den Code mit Funktionen (V11) aufteilt: <code class="dhbw-inline">erstelle_spielfeld()</code> und <code class="dhbw-inline">spielfeld_ausgeben()</code>. Das ist das DRY-Prinzip aus V07 in der Praxis.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- KONZEPTINDEX -->
+  <section class="dhbw-slide dhbw-slide--alt page-break">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">04</span>
+        <h2 class="dhbw-slide__title">Wo steckt welches Konzept?</h2>
+      </div>
+
+      <table class="quick-ref">
+        <thead>
+          <tr>
+            <th style="width:15%">Modul</th>
+            <th style="width:30%">Python-Konzept</th>
+            <th>Wo im Spiel?</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>V01</td><td><code>print()</code>, <code>input()</code>, Variablen</td><td>Spielfeld ausgeben, Spielzug einlesen, <code>spielfeld</code>/<code>schiff</code> als Variablen</td></tr>
+          <tr><td>V02</td><td>f-Strings, Formatierung</td><td>Spaltenköpfe A-E, Zeilennummern, Treffer-Meldungen</td></tr>
+          <tr><td>V03</td><td>int(), float(), str(), type()</td><td>Eingabe <code>"A3"</code> → Koordinaten: <code>int("3") - 1</code></td></tr>
+          <tr><td>V04</td><td>Vergleichsoperatoren, <code>in</code></td><td><code>koordinate in schiff</code> prüft Treffer</td></tr>
+          <tr><td>V05</td><td>if/elif/else</td><td>Treffer/Wasser/Schon-beschossen-Entscheidung</td></tr>
+          <tr><td>V06</td><td>for, while, enumerate</td><td>Spielfeld-Ausgabe (for), Game-Loop (while)</td></tr>
+          <tr><td>V07</td><td>break, KISS/DRY/SRP</td><td>Spielende-Abbruch mit break, Refactoring zu spiellogik.py</td></tr>
+          <tr><td>V08</td><td>Listen, Tupel, 2D-Liste</td><td>Spielfeld als <code>list[list[str]]</code>, Schiff als <code>list[tuple]</code></td></tr>
+          <tr><td>V11</td><td>def, return</td><td><code>erstelle_spielfeld()</code>, <code>spielfeld_ausgeben()</code></td></tr>
+          <tr><td>V12</td><td>String-Methoden</td><td><code>eingabe.strip().upper()</code> für robuste Eingabe</td></tr>
+          <tr><td>V14</td><td>open(), os.path</td><td>Spielstand in <code>spielstand.csv</code> speichern</td></tr>
+          <tr><td>V15</td><td>csv.DictReader</td><td>Spielstand aus CSV laden</td></tr>
+          <tr><td>V17</td><td>% (Modulo)</td><td>Zyklischer Spielerwechsel in Mehrspielermodus</td></tr>
+          <tr><td>V18</td><td>hashlib</td><td>Spielstand-Integrität verifizieren</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer class="dhbw-footer">
+    DHBW Stuttgart · Maschinenbau · Informatik-Grundlagen · WS 2025/26 · Schiffe Versenken – Semesterprojekt
+  </footer>
+
+</body>
+</html>

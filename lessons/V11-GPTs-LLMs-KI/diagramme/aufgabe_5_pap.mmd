@@ -1,8 +1,0 @@
-flowchart TD
-    S(["Start fuelle_template(pfad, **felder)"]) --> L["Datei unter pfad oeffnen<br/>und Text einlesen"]
-    L --> I["Iterator ueber felder.items()"]
-    I --> C{"noch ein<br/>(k, v) Paar?"}
-    C -- "ja" --> P["platzhalter = '{' + k.upper() + '}'"]
-    P --> R["text = text.replace(platzhalter, v)"]
-    R --> I
-    C -- "nein" --> E(["Ende: text zurueckgeben"])

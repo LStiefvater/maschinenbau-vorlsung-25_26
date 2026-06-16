@@ -1,7 +1,0 @@
-flowchart LR
-    Neu([Neu]) --> Bereit[Bereit]
-    Bereit --> Laufend[Laufend]
-    Laufend --> Bereit
-    Laufend --> Wartend[Wartend / Blockiert]
-    Wartend --> Bereit
-    Laufend --> Beendet([Beendet])

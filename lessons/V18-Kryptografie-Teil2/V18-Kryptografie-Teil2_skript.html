@@ -1,0 +1,370 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>V18 – Kryptografie Teil 2 | DHBW Stuttgart</title>
+  <link rel="stylesheet" href="../../src/dhbw-base.css">
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════════════════════
+       1. HEADER
+  ══════════════════════════════════════════════════════════ -->
+  <header class="dhbw-header">
+    <div class="dhbw-header__inner">
+      <a href="#" class="dhbw-header__logo">
+        <span class="dhbw-header__logo-text">DHBW Stuttgart</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════════════════════════════
+       2. HERO
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-hero">
+    <div class="dhbw-hero__inner">
+      <p class="dhbw-hero__label">Vorlesung 18 · Informatik-Grundlagen · Maschinenbau</p>
+      <h1 class="dhbw-hero__title">Kryptografie Teil 2</h1>
+      <p class="dhbw-hero__subtitle">Hash-Funktionen, Passwort-Hashing, Salt und digitale Signaturen – warum Passwörter nie im Klartext gespeichert werden dürfen.</p>
+      <p class="dhbw-hero__meta">WS 2025/26 &nbsp;·&nbsp; DHBW Stuttgart</p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       3. LERNZIELE
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">01</span>
+        <h2 class="dhbw-slide__title">Lernziele</h2>
+      </div>
+
+      <div class="dhbw-goals">
+        <p class="dhbw-goals__title">📌 Nach dieser Vorlesung kannst du …</p>
+        <ul>
+          <li>eine <strong>Hash-Funktion</strong> von einer Verschlüsselung unterscheiden und den Unterschied in einem Satz erklären.</li>
+          <li>die drei Kern-Eigenschaften einer guten Hash-Funktion (<strong>deterministisch</strong>, <strong>Einweg</strong>, <strong>Lawineneffekt</strong>) benennen und beschreiben.</li>
+          <li>erklären, warum Passwörter niemals im Klartext gespeichert werden dürfen und wie <strong>Passwort-Hashing</strong> schützt.</li>
+          <li>das <strong>Salt-Konzept</strong> erklären und dessen Bedeutung für den Schutz vor Rainbow-Table-Angriffen verstehen.</li>
+          <li><strong>Digitale Signaturen</strong> als Konzept verstehen und mit einem Praxisbeispiel verbinden.</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       4. WAS IST EINE HASH-FUNKTION?
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">02</span>
+        <h2 class="dhbw-slide__title">Hash-Funktion – der digitale Fingerabdruck</h2>
+      </div>
+
+      <p>Eine <strong>Hash-Funktion</strong> ist eine mathematische Funktion, die eine beliebig lange Eingabe nimmt und daraus eine Ausgabe fester Länge erzeugt – den sogenannten <strong>Hash-Wert</strong> oder kurz <strong>Hash</strong>. Der Hash ist wie ein digitaler Fingerabdruck: Er repräsentiert die Eingabe eindeutig, verrät aber nichts über den Originalinhalt.</p>
+
+      <p class="mt-5">Der fundamentale Unterschied zur Verschlüsselung: Eine Verschlüsselung ist umkehrbar – wer den Schlüssel hat, kann entschlüsseln. Eine Hash-Funktion ist <em>nicht umkehrbar</em>. Aus dem Hash kann man den Originalinhalt nicht zurückrechnen. Das macht Hash-Funktionen für bestimmte Anwendungen ideal – und für andere ungeeignet.</p>
+
+      <div class="dhbw-callout dhbw-callout--example mt-5">
+        <span class="dhbw-callout__label">Hash-Funktion vs. Verschlüsselung</span>
+        <p><strong>Verschlüsselung:</strong> „Hallo" → (mit Schlüssel K) → „Xklmq" → (mit Schlüssel K) → „Hallo" (umkehrbar, braucht Schlüssel zum Lesen). <strong>Hash-Funktion:</strong> „Hallo" → <code>185f8db32...</code> – diese Operation ist nicht umkehrbar. Es gibt keinen Schlüssel, der zurück zu „Hallo" führt.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       5. 3 KERN-EIGENSCHAFTEN
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">03</span>
+        <h2 class="dhbw-slide__title">Die drei Kern-Eigenschaften einer guten Hash-Funktion</h2>
+      </div>
+
+      <p>Nicht jede Funktion, die eine Eingabe in eine Zahl umwandelt, ist eine kryptografisch sichere Hash-Funktion. Drei Eigenschaften sind entscheidend:</p>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">1 – Deterministisch</p>
+            <p>Dieselbe Eingabe erzeugt <em>immer</em> denselben Hash-Wert. Das klingt trivial, ist aber fundamental: Nur so kann man später überprüfen, ob eine Eingabe mit einem gespeicherten Hash übereinstimmt. <code>SHA-256("Hallo") = 185f8db32...</code> – immer, überall, ohne Ausnahme.</p>
+        </div>
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">2 – Einweg-Eigenschaft</p>
+            <p>Aus dem Hash-Wert lässt sich die Eingabe nicht zurückrechnen. Die Berechnung geht nur in eine Richtung. Selbst mit unbegrenzter Rechenzeit gibt es keinen effizienten Algorithmus, der aus <code>185f8db32...</code> das ursprüngliche „Hallo" rekonstruiert.</p>
+        </div>
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">3 – Lawineneffekt (Avalanche Effect)</p>
+            <p>Eine minimale Änderung der Eingabe führt zu einem völlig anderen Hash-Wert. Aus „Hallo" wird ein komplett anderer Hash als aus „Hallo!" (mit Ausrufezeichen). Diese Eigenschaft verhindert, dass Angreifer aus ähnlichen Eingaben auf ähnliche Hashes schließen können.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       6. HASH-ALGORITHMEN
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">04</span>
+        <h2 class="dhbw-slide__title">Hash-Algorithmen im Vergleich</h2>
+      </div>
+
+      <p>Im Laufe der Zeit wurden verschiedene Hash-Algorithmen entwickelt. Einige gelten heute als unsicher, weil Angreifer Kollisionen (zwei verschiedene Eingaben mit gleichem Hash) erzeugen konnten. Für neue Systeme gibt es klare Empfehlungen.</p>
+
+      <div class="dhbw-table-wrap mt-5">
+        <table class="dhbw-table">
+          <thead>
+            <tr><th>Algorithmus</th><th>Hash-Länge</th><th>Status</th><th>Einsatz</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>MD5</strong></td>
+              <td>128 Bit (32 Zeichen hex)</td>
+              <td class="text-red font-semi">❌ Unsicher</td>
+              <td>Nicht mehr für Sicherheitszwecke; höchstens noch für Prüfsummen ohne Sicherheitsrelevanz</td>
+            </tr>
+            <tr>
+              <td><strong>SHA-1</strong></td>
+              <td>160 Bit (40 Zeichen hex)</td>
+              <td class="text-red font-semi">❌ Unsicher</td>
+              <td>2017 praktisch gebrochen; nicht mehr verwenden</td>
+            </tr>
+            <tr>
+              <td><strong>SHA-256</strong></td>
+              <td>256 Bit (64 Zeichen hex)</td>
+              <td style="color: green; font-weight: 600;">✅ Empfohlen</td>
+              <td>Standard für Passwort-Hashing, Blockchain (Bitcoin), TLS-Zertifikate, digitale Signaturen</td>
+            </tr>
+            <tr>
+              <td><strong>SHA-3</strong></td>
+              <td>variabel (224–512 Bit)</td>
+              <td style="color: green; font-weight: 600;">✅ Empfohlen</td>
+              <td>Modernster Standard (2015); andere interne Struktur als SHA-2 als Backup-Option</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--tip mt-5">
+        <span class="dhbw-callout__label">Kollisionsangriffe – eine Randnotiz</span>
+        <p>Bei MD5 und SHA-1 konnten Forscher gezielt zwei verschiedene Dokumente mit gleichem Hash-Wert erzeugen – das nennt sich <strong>Kollision</strong>. Damit lassen sich z.&nbsp;B. gefälschte Zertifikate erstellen. SHA-256 gilt aktuell als kollisionsresistent.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       7. PASSWORT-HASHING
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">05</span>
+        <h2 class="dhbw-slide__title">Passwort-Hashing – warum nie im Klartext speichern?</h2>
+      </div>
+
+      <p>Ein Server muss überprüfen können, ob du das richtige Passwort eingibst – aber er darf dein Passwort selbst nicht kennen. Die Lösung: Der Server speichert nicht das Passwort, sondern nur dessen <strong>Hash-Wert</strong>. Beim Login berechnet der Server den Hash des eingegebenen Passworts und vergleicht ihn mit dem gespeicherten Hash. Stimmen sie überein, ist das Passwort korrekt – ohne dass das Klartext-Passwort je gespeichert oder übertragen wird.</p>
+
+      <div class="dhbw-callout dhbw-callout--praxis mt-5">
+        <span class="dhbw-callout__label">Praxisbeispiel: haveibeenpwned.com</span>
+        <p>Auf der Website <strong>haveibeenpwned.com</strong> kann man prüfen, ob die eigene E-Mail-Adresse in einem bekannten Datenbankleaks aufgetaucht ist. Die Website speichert Hash-Werte von hunderten Millionen gestohlener Passwörter. Wenn ein Angreifer eine Datenbank mit Passwort-Hashes stiehlt, kann er aus den Hashes nicht direkt die Passwörter lesen – er muss jeden Hash einzeln „knacken".</p>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--tip mt-5">
+        <span class="dhbw-callout__label">Rainbow Tables – der nächste Angriff</span>
+        <p>Wenn alle Nutzer mit gleichem Passwort denselben Hash haben, kann ein Angreifer sogenannte <strong>Rainbow Tables</strong> nutzen: vorberechnete Tabellen mit Millionen von Passwörtern und deren Hashes. Steht ein Hash in der Tabelle, ist das Passwort sofort bekannt. Lösung: <strong>Salt</strong>.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       8. SALT + SVG
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">06</span>
+        <h2 class="dhbw-slide__title">Salt – individuelles Zufallsgewürz pro Passwort</h2>
+      </div>
+
+      <p>Ein <strong>Salt</strong> ist eine zufällig generierte Zeichenkette, die vor dem Hashing an das Passwort angehängt wird. Jeder Nutzer bekommt ein eigenes, zufälliges Salt. Das Salt wird nicht geheim gehalten – es wird zusammen mit dem Hash in der Datenbank gespeichert. Trotzdem macht es Rainbow-Table-Angriffe praktisch wirkungslos, weil Rainbow Tables für ein bestimmtes Salt vollständig neu berechnet werden müssten.</p>
+
+      <!-- SVG: Salt-Konzept -->
+      <div style="display:flex; justify-content:center; margin-top: 2rem;">
+        <svg viewBox="0 0 640 230" xmlns="http://www.w3.org/2000/svg" style="max-width:620px; width:100%;" aria-label="Salt-Konzept: Gleiches Passwort + unterschiedliche Salts = unterschiedliche Hashes">
+
+          <!-- Überschrift -->
+          <text x="320" y="18" text-anchor="middle" fill="#1A1A1A" font-family="sans-serif" font-size="13" font-weight="bold">Gleiches Passwort + unterschiedlicher Salt = unterschiedlicher Hash</text>
+
+          <!-- ── Nutzer 1 ── -->
+          <!-- Box: Passwort -->
+          <rect x="10" y="35" width="130" height="40" rx="6" fill="#F5F5F5" stroke="#D1D5DB"/>
+          <text x="75" y="52" text-anchor="middle" fill="#6B7280" font-family="sans-serif" font-size="10">Passwort</text>
+          <text x="75" y="67" text-anchor="middle" fill="#1A1A1A" font-family="monospace" font-size="12" font-weight="bold">1234</text>
+
+          <!-- Box: Salt 1 -->
+          <rect x="155" y="35" width="130" height="40" rx="6" fill="#FAE5E8" stroke="#E2001A"/>
+          <text x="220" y="52" text-anchor="middle" fill="#6B7280" font-family="sans-serif" font-size="10">Salt (zufällig)</text>
+          <text x="220" y="67" text-anchor="middle" fill="#E2001A" font-family="monospace" font-size="12" font-weight="bold">x7q2#F</text>
+
+          <!-- Plus -->
+          <text x="150" y="60" text-anchor="middle" fill="#1A1A1A" font-family="sans-serif" font-size="18" font-weight="bold">+</text>
+
+          <!-- Pfeil -->
+          <line x1="287" y1="55" x2="330" y2="55" stroke="#1A1A1A" stroke-width="1.5"/>
+          <polygon points="330,51 338,55 330,59" fill="#1A1A1A"/>
+
+          <!-- Box: Hash-Funktion -->
+          <rect x="340" y="35" width="110" height="40" rx="6" fill="#1E2936"/>
+          <text x="395" y="52" text-anchor="middle" fill="#E8EFF5" font-family="sans-serif" font-size="10">SHA-256</text>
+          <text x="395" y="67" text-anchor="middle" fill="#60A5FA" font-family="sans-serif" font-size="10">Hash-Funktion</text>
+
+          <!-- Pfeil -->
+          <line x1="452" y1="55" x2="495" y2="55" stroke="#1A1A1A" stroke-width="1.5"/>
+          <polygon points="495,51 503,55 495,59" fill="#1A1A1A"/>
+
+          <!-- Box: Hash-Ergebnis 1 -->
+          <rect x="505" y="35" width="125" height="40" rx="6" fill="#E8F0F7" stroke="#E2001A"/>
+          <text x="567" y="52" text-anchor="middle" fill="#6B7280" font-family="sans-serif" font-size="10">Hash (gespeichert)</text>
+          <text x="567" y="67" text-anchor="middle" fill="#E2001A" font-family="monospace" font-size="11" font-weight="bold">9a3f1c...</text>
+
+          <!-- Label Nutzer 1 -->
+          <text x="5" y="92" fill="#1A1A1A" font-family="sans-serif" font-size="11">👤 Nutzer 1</text>
+
+          <!-- ── Nutzer 2 ── -->
+          <!-- Box: Passwort -->
+          <rect x="10" y="130" width="130" height="40" rx="6" fill="#F5F5F5" stroke="#D1D5DB"/>
+          <text x="75" y="147" text-anchor="middle" fill="#6B7280" font-family="sans-serif" font-size="10">Passwort</text>
+          <text x="75" y="162" text-anchor="middle" fill="#1A1A1A" font-family="monospace" font-size="12" font-weight="bold">1234</text>
+
+          <!-- Box: Salt 2 (anderer!) -->
+          <rect x="155" y="130" width="130" height="40" rx="6" fill="#FAE5E8" stroke="#E2001A"/>
+          <text x="220" y="147" text-anchor="middle" fill="#6B7280" font-family="sans-serif" font-size="10">Salt (zufällig)</text>
+          <text x="220" y="162" text-anchor="middle" fill="#E2001A" font-family="monospace" font-size="12" font-weight="bold">p2mK!9</text>
+
+          <!-- Plus -->
+          <text x="150" y="155" text-anchor="middle" fill="#1A1A1A" font-family="sans-serif" font-size="18" font-weight="bold">+</text>
+
+          <!-- Pfeil -->
+          <line x1="287" y1="150" x2="330" y2="150" stroke="#1A1A1A" stroke-width="1.5"/>
+          <polygon points="330,146 338,150 330,154" fill="#1A1A1A"/>
+
+          <!-- Box: Hash-Funktion -->
+          <rect x="340" y="130" width="110" height="40" rx="6" fill="#1E2936"/>
+          <text x="395" y="147" text-anchor="middle" fill="#E8EFF5" font-family="sans-serif" font-size="10">SHA-256</text>
+          <text x="395" y="162" text-anchor="middle" fill="#60A5FA" font-family="sans-serif" font-size="10">Hash-Funktion</text>
+
+          <!-- Pfeil -->
+          <line x1="452" y1="150" x2="495" y2="150" stroke="#1A1A1A" stroke-width="1.5"/>
+          <polygon points="495,146 503,150 495,154" fill="#1A1A1A"/>
+
+          <!-- Box: Hash-Ergebnis 2 (anderer!) -->
+          <rect x="505" y="130" width="125" height="40" rx="6" fill="#E8F0F7" stroke="#E2001A"/>
+          <text x="567" y="147" text-anchor="middle" fill="#6B7280" font-family="sans-serif" font-size="10">Hash (gespeichert)</text>
+          <text x="567" y="162" text-anchor="middle" fill="#E2001A" font-family="monospace" font-size="11" font-weight="bold">7c1b4e...</text>
+
+          <!-- Label Nutzer 2 -->
+          <text x="5" y="187" fill="#1A1A1A" font-family="sans-serif" font-size="11">👤 Nutzer 2</text>
+
+          <!-- Erklärung unten -->
+          <text x="320" y="215" text-anchor="middle" fill="#6B7280" font-family="sans-serif" font-size="11">Gleiches Passwort „1234" → unterschiedliche Salts → völlig unterschiedliche Hashes → Rainbow Tables wirkungslos</text>
+
+        </svg>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       9. DIGITALE SIGNATUR
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">07</span>
+        <h2 class="dhbw-slide__title">Digitale Signatur – Echtheit und Integrität beweisen</h2>
+      </div>
+
+      <p>Eine <strong>digitale Signatur</strong> ist das digitale Äquivalent einer handschriftlichen Unterschrift – aber deutlich fälschungssicherer. Sie beweist gleichzeitig zwei Dinge: dass eine Nachricht oder Datei von einem bestimmten Absender stammt (Authentizität) und dass sie seit dem Signieren nicht verändert wurde (Integrität).</p>
+
+      <p class="mt-5">Das technische Prinzip kombiniert Hash-Funktion und asymmetrische Kryptografie: <strong>Hash-Wert der Nachricht + Signierung mit Private Key = Digitale Signatur.</strong> Der Empfänger berechnet selbst den Hash der empfangenen Datei und entschlüsselt die beigelegte Signatur mit dem öffentlichen Schlüssel des Absenders. Stimmen beide Hashes überein, ist die Datei authentisch und unverändert.</p>
+
+      <div class="dhbw-callout dhbw-callout--praxis mt-5">
+        <span class="dhbw-callout__label">Praxisbeispiel: Firmware-Update-Verifikation</span>
+        <p>Wenn du ein Firmware-Update für deinen Router oder ein Softwareupdate für deinen Laptop herunterlädst, wird die Datei mit einer digitalen Signatur des Herstellers geliefert. Dein Gerät überprüft die Signatur automatisch: Wurde die Datei seit dem Signieren durch den Hersteller verändert? Stimmt der Hash? Nur wenn beide Checks positiv sind, wird das Update installiert. Das verhindert, dass ein Angreifer manipulierte Firmware einschleusen kann – selbst wenn er die Verbindung abfängt.</p>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--tip mt-5">
+        <span class="dhbw-callout__label">Digitale Signatur ≠ Verschlüsselung</span>
+        <p>Eine Signatur verschlüsselt den Inhalt nicht – jeder kann die signierte Datei lesen. Die Signatur beweist nur Echtheit und Unversehrtheit, nicht Vertraulichkeit. Für Vertraulichkeit braucht man zusätzlich Verschlüsselung.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       10. ZUSAMMENFASSUNG
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">08</span>
+        <h2 class="dhbw-slide__title">Zusammenfassung: Kryptografie Teil 2</h2>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--merksatz">
+        <span class="dhbw-callout__label">Merksatz</span>
+        <p>Eine <strong>Hash-Funktion</strong> ist eine Einwegfunktion – aus dem Hash kann man die Eingabe nicht zurückrechnen. Gute Hash-Funktionen sind deterministisch, haben die Einweg-Eigenschaft und zeigen den Lawineneffekt. <strong>SHA-256</strong> ist der aktuelle Standard; MD5 und SHA-1 sind gebrochen. Passwörter werden als Hash gespeichert – nie im Klartext. Ein <strong>Salt</strong> macht Rainbow-Table-Angriffe wirkungslos. <strong>Digitale Signaturen</strong> beweisen Authentizität und Integrität durch Hash + Private Key.</p>
+      </div>
+
+      <div class="dhbw-table-wrap mt-5">
+        <table class="dhbw-table">
+          <thead>
+            <tr><th>Konzept</th><th>Kernaussage</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Hash-Funktion</strong></td><td>Einweg; beliebige Eingabe → fixer Hash; nicht umkehrbar</td></tr>
+            <tr><td><strong>Deterministisch</strong></td><td>Gleiche Eingabe → immer gleicher Hash</td></tr>
+            <tr><td><strong>Einweg-Eigenschaft</strong></td><td>Hash → Eingabe nicht zurückrechenbar</td></tr>
+            <tr><td><strong>Lawineneffekt</strong></td><td>Minimale Änderung der Eingabe → völlig anderer Hash</td></tr>
+            <tr><td><strong>SHA-256</strong></td><td>Aktueller Standard; MD5 und SHA-1 sind veraltet und unsicher</td></tr>
+            <tr><td><strong>Passwort-Hashing</strong></td><td>Nur Hash wird gespeichert; Klartext bleibt unbekannt</td></tr>
+            <tr><td><strong>Salt</strong></td><td>Zufallszeichenkette pro Nutzer; macht Rainbow Tables wirkungslos</td></tr>
+            <tr><td><strong>Digitale Signatur</strong></td><td>Hash + Private Key = Beweis für Authentizität und Integrität</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════════════════════════ -->
+  <footer class="dhbw-footer">
+    <div class="dhbw-footer__inner">
+      <span class="dhbw-footer__brand">DHBW Stuttgart</span>
+      <span>Informatik-Grundlagen für Maschinenbau &nbsp;·&nbsp; WS&nbsp;2025/26</span>
+      <span>V18 – Kryptografie Teil 2</span>
+    </div>
+  </footer>
+
+</body>
+</html>

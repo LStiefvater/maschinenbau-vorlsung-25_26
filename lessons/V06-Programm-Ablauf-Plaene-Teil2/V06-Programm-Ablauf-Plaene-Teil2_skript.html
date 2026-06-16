@@ -1,0 +1,373 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>V06 – Programm-Ablauf-Pläne Teil 2 | DHBW Stuttgart</title>
+  <link rel="stylesheet" href="../../src/dhbw-base.css">
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════════════════════
+       1. HEADER
+  ══════════════════════════════════════════════════════════ -->
+  <header class="dhbw-header">
+    <div class="dhbw-header__inner">
+      <a href="#" class="dhbw-header__logo">
+        <span class="dhbw-header__logo-text">DHBW Stuttgart</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════════════════════════════
+       2. HERO
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-hero">
+    <div class="dhbw-hero__inner">
+      <p class="dhbw-hero__label">Vorlesung 06 · Informatik-Grundlagen · Maschinenbau</p>
+      <h1 class="dhbw-hero__title">Programm-Ablauf-Pläne – Teil 2</h1>
+      <p class="dhbw-hero__subtitle">Pseudocode, Schleifen in PAPs und die Übersetzung zwischen beiden Welten</p>
+      <p class="dhbw-hero__meta">WS 2025/26 &nbsp;·&nbsp; DHBW Stuttgart</p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       3. LERNZIELE
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">01</span>
+        <h2 class="dhbw-slide__title">Lernziele</h2>
+      </div>
+
+      <div class="dhbw-goals">
+        <p class="dhbw-goals__title">📌 Nach dieser Vorlesung kannst du …</p>
+        <ul>
+          <li><strong>Pseudocode</strong> lesen und einfachen Pseudocode für bekannte Algorithmen selbst schreiben.</li>
+          <li>den Unterschied zwischen <strong>kopfgesteuerter</strong> und fußgesteuerter Schleife erklären.</li>
+          <li>Schleifen in PAPs darstellen und zwischen PAP und Pseudocode hin- und her übersetzen.</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       4. WAS IST PSEUDOCODE?
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">02</span>
+        <h2 class="dhbw-slide__title">Was ist Pseudocode?</h2>
+      </div>
+
+      <p><strong>Pseudocode</strong> ist eine informelle, strukturierte Textnotation zur Beschreibung von Algorithmen. Er ähnelt einer Programmiersprache in seiner Struktur (Einrückungen, Schlüsselwörter, Bedingungen), ist aber bewusst <em>nicht</em> die Syntax einer konkreten Sprache. Ein Algorithmus in Pseudocode lässt sich anschließend in jede beliebige Programmiersprache übersetzen.</p>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">PAP vs. Pseudocode</p>
+            <p>Der PAP zeigt den Ablauf <em>visuell</em> mit Symbolen und Pfeilen – ideal zum Überblick und zur Kommunikation. Pseudocode schreibt denselben Ablauf <em>textuell</em> – kompakter, leichter zu schreiben, und näher an der späteren Umsetzung.</p>
+        </div>
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">Wann wird Pseudocode eingesetzt?</p>
+            <p>Pseudocode wird verwendet, um Algorithmen zu erklären, in Büchern, technischen Berichten und Spezifikationen. Er ist die Sprache zwischen dem „Was soll passieren?" (PAP) und dem „Wie ist es umgesetzt?" (echter Code).</p>
+        </div>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--tip mt-5">
+        <span class="dhbw-callout__label">Kein Standard – aber klare Konventionen</span>
+        <p>Es gibt keinen verbindlichen Pseudocode-Standard. Wichtig ist, dass Einrückungen die Struktur zeigen, Schlüsselwörter klar und konsistent verwendet werden und die Logik eindeutig lesbar ist. In diesem Kurs verwenden wir deutsche Schlüsselwörter (WENN, SOLANGE, FÜR etc.).</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       5. PSEUDOCODE-NOTATION
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">03</span>
+        <h2 class="dhbw-slide__title">Pseudocode-Notation: Die Grundbausteine</h2>
+      </div>
+
+      <p>Die folgende Tabelle zeigt die Pseudocode-Schlüsselwörter, die in diesem Kurs verwendet werden. Sie sind bewusst an den deutschen Sprachgebrauch angelehnt, damit die Logik klar verständlich bleibt.</p>
+
+      <div class="dhbw-table-wrap mt-5">
+        <table class="dhbw-table">
+          <thead>
+            <tr><th>Schlüsselwort</th><th>Bedeutung</th><th>PAP-Äquivalent</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>BEGINN / ENDE</strong></td><td>Markiert den Anfang und das Ende des Algorithmus</td><td>Start/Ende-Oval</td></tr>
+            <tr><td><strong>EINGABE</strong></td><td>Daten werden von außen eingelesen</td><td>Parallelogramm (Eingabe)</td></tr>
+            <tr><td><strong>AUSGABE</strong></td><td>Daten werden ausgegeben (z.&nbsp;B. auf dem Bildschirm)</td><td>Parallelogramm (Ausgabe)</td></tr>
+            <tr><td><strong>WENN … DANN … SONST … ENDE WENN</strong></td><td>Bedingte Verzweigung</td><td>Entscheidungsraute</td></tr>
+            <tr><td><strong>SOLANGE … WIEDERHOLE … ENDE SOLANGE</strong></td><td>Kopfgesteuerte Schleife (WHILE)</td><td>Raute + Rückpfeil</td></tr>
+            <tr><td><strong>FÜR … BIS … WIEDERHOLE … ENDE FÜR</strong></td><td>Zählschleife (FOR)</td><td>Raute mit Zähler + Rückpfeil</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="dhbw-section-title mt-6">Beispiel: Pseudocode für eine Verzweigung</h3>
+      <pre class="dhbw-code"><code>BEGINN
+  EINGABE: Temperatur
+  WENN Temperatur &lt; 10 DANN
+    AUSGABE: "Jacke anziehen"
+  SONST
+    AUSGABE: "T-Shirt reicht"
+  ENDE WENN
+ENDE</code></pre>
+
+      <div class="dhbw-callout dhbw-callout--example mt-5">
+        <span class="dhbw-callout__label">Einrückung zeigt Struktur</span>
+        <p>Alles, was innerhalb eines WENN-DANN-Blocks steht, wird eingerückt. Diese Einrückung zeigt auf einen Blick, welche Anweisungen zusammengehören – genau wie die Pfeile und Symbole im PAP. Ohne korrekte Einrückung ist Pseudocode schwer lesbar.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       6. KOPF- VS. FUSSGESTEUERTE SCHLEIFE
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">04</span>
+        <h2 class="dhbw-slide__title">Kopfgesteuerte vs. Fußgesteuerte Schleife</h2>
+      </div>
+
+      <p>Schleifen unterscheiden sich danach, <em>wann</em> die Abbruchbedingung geprüft wird. Bei der <strong>kopfgesteuerten Schleife</strong> steht die Bedingung am Anfang – vor der ersten Ausführung des Schleifenkörpers. Ist die Bedingung von Beginn an falsch, wird der Körper kein einziges Mal durchlaufen.</p>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+          <h3>Kopfgesteuert (SOLANGE … WIEDERHOLE)</h3>
+          <p class="mt-4">Prüfung <em>vor</em> dem Schleifenkörper. Der Körper kann 0-mal, 1-mal oder n-mal ausgeführt werden.</p>
+          <pre class="dhbw-code"><code>SOLANGE Bedingung DANN
+  Schleifenkörper
+ENDE SOLANGE</code></pre>
+        </div>
+        <div class="dhbw-columns__item">
+          <div class="dhbw-callout dhbw-callout--tip">
+            <span class="dhbw-callout__label">Randnotiz: Fußgesteuert</span>
+            <p>Bei der fußgesteuerten Schleife (WIEDERHOLE … BIS) steht die Bedingung <em>nach</em> dem Körper. Der Körper wird dadurch <strong>mindestens einmal</strong> ausgeführt, weil die Prüfung erst am Ende stattfindet. Im Kurs beschränken wir uns auf die kopfgesteuerte Variante, da sie in der Praxis häufiger vorkommt und leichter zu verstehen ist.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       7. FOR VS. WHILE IN PSEUDOCODE
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">05</span>
+        <h2 class="dhbw-slide__title">FOR-Schleife vs. WHILE-Schleife</h2>
+      </div>
+
+      <p>Die zwei wichtigsten Schleifentypen unterscheiden sich in ihrer Anwendung: Die <strong>WHILE-Schleife</strong> (SOLANGE) läuft, solange eine Bedingung wahr ist – man weiß vorher nicht, wie oft sie ausgeführt wird. Die <strong>FOR-Schleife</strong> (FÜR) zählt von einem Startwert bis zu einem Endwert und läuft eine <em>bekannte</em> Anzahl von Durchläufen.</p>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+          <h3>WHILE-Schleife: Unbekannte Anzahl</h3>
+          <p class="mt-4">Verwende WHILE, wenn nicht im Voraus feststeht, wie oft die Schleife ausgeführt wird. Die Schleife läuft so lange, bis eine bestimmte Bedingung nicht mehr zutrifft.</p>
+          <pre class="dhbw-code"><code>SOLANGE Tank nicht leer WIEDERHOLE
+  Fahre weiter
+ENDE SOLANGE</code></pre>
+        </div>
+        <div class="dhbw-columns__item">
+          <h3>FOR-Schleife: Bekannte Anzahl</h3>
+          <p class="mt-4">Verwende FOR, wenn du genau weißt, wie oft ein Schritt wiederholt werden soll. Ein Zähler läuft von einem Startwert bis zu einem Endwert.</p>
+          <pre class="dhbw-code"><code>FÜR zähler VON 1 BIS 5 WIEDERHOLE
+  AUSGABE: "Durchlauf " + zähler
+ENDE FÜR</code></pre>
+        </div>
+      </div>
+
+      <div class="dhbw-table-wrap mt-5">
+        <table class="dhbw-table">
+          <thead>
+            <tr><th>Schleifen-Typ</th><th>Keyword</th><th>Anzahl Durchläufe</th><th>Typischer Einsatz</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>FOR / Zählschleife</strong></td>
+              <td>FÜR … BIS</td>
+              <td>Vorher bekannt</td>
+              <td>10 Posts anzeigen, 5 Messungen auslesen</td>
+            </tr>
+            <tr>
+              <td><strong>WHILE / bedingte Schleife</strong></td>
+              <td>SOLANGE … WIEDERHOLE</td>
+              <td>Vorher unbekannt</td>
+              <td>Warten auf Benutzereingabe, Sensor abfragen bis Wert erreicht</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       8. PRAXISBEISPIEL: INSTAGRAM FEED PAP
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">06</span>
+        <h2 class="dhbw-slide__title">Praxisbeispiel: Instagram-Feed als Schleife</h2>
+      </div>
+
+      <p>Beim Scrollen durch einen Instagram-Feed passiert algorithmisch genau das: Eine Schleife lädt und zeigt Posts, solange eine Bedingung erfüllt ist. Das folgende PAP und der zugehörige Pseudocode zeigen diese Logik. Der Zähler <strong>count</strong> verfolgt, wie viele Posts bereits angezeigt wurden.</p>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+          <h3>Pseudocode: Instagram-Feed</h3>
+          <pre class="dhbw-code"><code>BEGINN
+  count = 0
+
+  SOLANGE count &lt; 10 WIEDERHOLE
+    Zeige nächsten Post
+    count = count + 1
+  ENDE SOLANGE
+
+  AUSGABE: "Alle Posts geladen"
+ENDE</code></pre>
+          <p class="mt-4">Die Schleife startet mit dem Zähler bei 0. Jeder Durchlauf zeigt einen Post und erhöht den Zähler um 1. Erreicht der Zähler den Wert 10, ist die Bedingung (count &lt; 10) nicht mehr wahr – die Schleife endet.</p>
+        </div>
+        <div class="dhbw-columns__item">
+          <h3>PAP: Instagram-Feed</h3>
+          <!-- Instagram Feed PAP SVG -->
+          <svg viewBox="0 0 310 430" width="310" height="430"
+               role="img" aria-label="PAP Instagram-Feed: Start, count=0, Schleife count kleiner 10, Zeige Post, count+1, Rückpfeil, NEIN-Zweig zu Ende">
+            <defs>
+              <marker id="arr-ig" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                <polygon points="0 0, 8 3, 0 6" fill="#1A1A1A"/>
+              </marker>
+            </defs>
+
+            <!-- START -->
+            <ellipse cx="125" cy="28" rx="62" ry="22" fill="#E2001A" stroke="#B50016" stroke-width="2"/>
+            <text x="125" y="32" text-anchor="middle" dominant-baseline="middle"
+                  font-family="'Source Sans 3',Arial,sans-serif" font-size="13" font-weight="700" fill="#FFFFFF">START</text>
+
+            <!-- → count = 0 -->
+            <line x1="125" y1="50" x2="125" y2="70" stroke="#1A1A1A" stroke-width="2" marker-end="url(#arr-ig)"/>
+
+            <!-- Prozess: count = 0 -->
+            <rect x="62" y="72" width="126" height="40" rx="3" fill="#F5F5F5" stroke="#1A1A1A" stroke-width="2"/>
+            <text x="125" y="96" text-anchor="middle" dominant-baseline="middle"
+                  font-family="'Source Sans 3',Arial,sans-serif" font-size="13" fill="#1A1A1A">count = 0</text>
+
+            <!-- → Decision -->
+            <line x1="125" y1="112" x2="125" y2="132" stroke="#1A1A1A" stroke-width="2" marker-end="url(#arr-ig)"/>
+
+            <!-- Decision: count < 10? -->
+            <polygon points="125,134 190,165 125,196 60,165" fill="#FAE5E8" stroke="#E2001A" stroke-width="2"/>
+            <text x="125" y="169" text-anchor="middle" dominant-baseline="middle"
+                  font-family="'Source Sans 3',Arial,sans-serif" font-size="11" fill="#1A1A1A">count &lt; 10?</text>
+
+            <!-- JA down label + arrow -->
+            <text x="110" y="214" font-family="'Source Sans 3',Arial,sans-serif" font-size="12" fill="#1A1A1A">Ja</text>
+            <line x1="125" y1="196" x2="125" y2="218" stroke="#1A1A1A" stroke-width="2" marker-end="url(#arr-ig)"/>
+
+            <!-- NEIN right → ENDE oval -->
+            <text x="193" y="160" font-family="'Source Sans 3',Arial,sans-serif" font-size="12" fill="#1A1A1A">Nein</text>
+            <line x1="190" y1="165" x2="248" y2="165" stroke="#1A1A1A" stroke-width="2" marker-end="url(#arr-ig)"/>
+            <!-- ENDE oval to the right -->
+            <ellipse cx="278" cy="165" rx="30" ry="18" fill="#E2001A" stroke="#B50016" stroke-width="2"/>
+            <text x="278" y="169" text-anchor="middle" dominant-baseline="middle"
+                  font-family="'Source Sans 3',Arial,sans-serif" font-size="11" font-weight="700" fill="#FFFFFF">ENDE</text>
+
+            <!-- Prozess: Zeige Post -->
+            <rect x="58" y="220" width="134" height="40" rx="3" fill="#F5F5F5" stroke="#1A1A1A" stroke-width="2"/>
+            <text x="125" y="244" text-anchor="middle" dominant-baseline="middle"
+                  font-family="'Source Sans 3',Arial,sans-serif" font-size="12" fill="#1A1A1A">Zeige nächsten Post</text>
+
+            <!-- → count = count + 1 -->
+            <line x1="125" y1="260" x2="125" y2="280" stroke="#1A1A1A" stroke-width="2" marker-end="url(#arr-ig)"/>
+
+            <!-- Prozess: count = count + 1 -->
+            <rect x="58" y="282" width="134" height="40" rx="3" fill="#F5F5F5" stroke="#1A1A1A" stroke-width="2"/>
+            <text x="125" y="306" text-anchor="middle" dominant-baseline="middle"
+                  font-family="'Source Sans 3',Arial,sans-serif" font-size="12" fill="#1A1A1A">count = count + 1</text>
+
+            <!-- Loop-back: down → left → up → to left of diamond -->
+            <line x1="125" y1="322" x2="125" y2="348" stroke="#1A1A1A" stroke-width="2"/>
+            <line x1="125" y1="348" x2="22" y2="348" stroke="#1A1A1A" stroke-width="2"/>
+            <line x1="22" y1="348" x2="22" y2="165" stroke="#1A1A1A" stroke-width="2"/>
+            <line x1="22" y1="165" x2="58" y2="165" stroke="#1A1A1A" stroke-width="2" marker-end="url(#arr-ig)"/>
+
+            <!-- Label loop-back -->
+            <text x="9" y="262" text-anchor="middle" font-family="'Source Sans 3',Arial,sans-serif" font-size="10" fill="#6B7280"
+                  transform="rotate(-90, 9, 262)">Wiederholung</text>
+
+          </svg>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       9. PAP ↔ PSEUDOCODE VERGLEICH
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">07</span>
+        <h2 class="dhbw-slide__title">PAP und Pseudocode: Ein direkter Vergleich</h2>
+      </div>
+
+      <p>PAP und Pseudocode beschreiben denselben Algorithmus – nur auf unterschiedliche Weisen. Die folgende Tabelle zeigt, wie die Elemente aufeinander abgebildet werden. Diese Übersetzungsfähigkeit ist eine wichtige Grundkompetenz: Wer einen PAP lesen kann, kann ihn in Pseudocode übersetzen, und umgekehrt.</p>
+
+      <div class="dhbw-table-wrap mt-5">
+        <table class="dhbw-table">
+          <thead>
+            <tr><th>PAP-Element</th><th>Symbol</th><th>Pseudocode-Äquivalent</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Start/Ende-Oval</td><td>Ellipse (rot)</td><td>BEGINN / ENDE</td></tr>
+            <tr><td>Prozess-Rechteck</td><td>Rechteck</td><td>Zuweisung oder Aktion (z.&nbsp;B. count = 0)</td></tr>
+            <tr><td>Entscheidungsraute + Ja/Nein-Pfeile</td><td>Raute</td><td>WENN … DANN … SONST … ENDE WENN</td></tr>
+            <tr><td>Raute + Rückpfeil (oben)</td><td>Raute mit Schleife</td><td>SOLANGE … WIEDERHOLE … ENDE SOLANGE</td></tr>
+            <tr><td>Parallelogramm</td><td>Parallelogramm</td><td>EINGABE / AUSGABE</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--merksatz mt-5">
+        <span class="dhbw-callout__label">Merksatz</span>
+        <p>PAP und Pseudocode sind zwei Seiten derselben Medaille. Der PAP eignet sich für visuelle Kommunikation und Überblick. Der Pseudocode eignet sich für präzise, kompakte Beschreibung. In der Praxis werden beide kombiniert: Zuerst den PAP zeichnen, dann den Pseudocode schreiben, dann umsetzen.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════════════════════════ -->
+  <footer class="dhbw-footer">
+    <div class="dhbw-footer__inner">
+      <span class="dhbw-footer__brand">DHBW Stuttgart</span>
+      <span>Informatik-Grundlagen für Maschinenbau &nbsp;·&nbsp; WS&nbsp;2025/26</span>
+      <span>V06 – Programm-Ablauf-Pläne Teil 2</span>
+    </div>
+  </footer>
+
+</body>
+</html>

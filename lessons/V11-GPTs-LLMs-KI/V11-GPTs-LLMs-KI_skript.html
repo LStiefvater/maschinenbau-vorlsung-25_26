@@ -1,0 +1,370 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>V11 – GPTs, LLMs &amp; Künstliche Intelligenz | DHBW Stuttgart</title>
+  <link rel="stylesheet" href="../../src/dhbw-base.css">
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════════════════════
+       1. HEADER
+  ══════════════════════════════════════════════════════════ -->
+  <header class="dhbw-header">
+    <div class="dhbw-header__inner">
+      <a href="#" class="dhbw-header__logo">
+        <span class="dhbw-header__logo-text">DHBW Stuttgart</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════════════════════════════
+       2. HERO
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-hero">
+    <div class="dhbw-hero__inner">
+      <p class="dhbw-hero__label">Vorlesung 11 · Informatik-Grundlagen · Maschinenbau</p>
+      <h1 class="dhbw-hero__title">GPTs, LLMs &amp; Künstliche Intelligenz</h1>
+      <p class="dhbw-hero__subtitle">Wie funktioniert ChatGPT wirklich? Was steckt hinter Machine Learning und Large Language Models?</p>
+      <p class="dhbw-hero__meta">WS 2025/26 &nbsp;·&nbsp; DHBW Stuttgart</p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       3. LERNZIELE
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">01</span>
+        <h2 class="dhbw-slide__title">Lernziele</h2>
+      </div>
+
+      <div class="dhbw-goals">
+        <p class="dhbw-goals__title">📌 Nach dieser Vorlesung kannst du …</p>
+        <ul>
+          <li>die Begriffe <strong>KI</strong>, <strong>Machine Learning</strong> und <strong>Deep Learning</strong> voneinander abgrenzen und als verschachtelte Konzepte erklären.</li>
+          <li>in eigenen Worten beschreiben, wie <strong>Large Language Models</strong> grundsätzlich funktionieren – als Wort-Vorhersagemaschine.</li>
+          <li>mindestens vier Alltagsanwendungen von KI benennen und dem richtigen Teilgebiet zuordnen.</li>
+          <li>die Grenzen von KI-Systemen (Halluzinationen, Bias) kennen und erklären, warum LLMs keine verlässlichen Wissensdatenbanken sind.</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       4. WAS IST KI?
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">02</span>
+        <h2 class="dhbw-slide__title">Was ist Künstliche Intelligenz?</h2>
+      </div>
+
+      <p><strong>Künstliche Intelligenz</strong> (KI) ist ein Oberbegriff für alle Verfahren, die einem Computer ermöglichen, Aufgaben auszuführen, für die man normalerweise menschliche Intelligenz benötigt – zum Beispiel Bilder erkennen, Sprache verstehen oder Texte verfassen.</p>
+
+      <p class="mt-5">Der entscheidende Unterschied zur klassischen Programmierung liegt im Ansatz: Bei klassischer Software schreiben Entwickler explizite Regeln – „wenn X, dann Y". Bei KI-Systemen werden diese Regeln nicht geschrieben, sondern aus Daten <em>gelernt</em>. Das System analysiert tausende oder millionen von Beispielen und leitet selbst Muster und Regeln daraus ab.</p>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">Klassische Programmierung</p>
+            <p>Ein Entwickler schreibt eine Regel: „Wenn die E-Mail das Wort ‚Gewonnen' im Betreff enthält UND der Absender unbekannt ist, dann verschiebe in Spam." Diese Regel gilt immer – auch wenn neue Spam-Varianten kommen, die andere Wörter nutzen.</p>
+        </div>
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">KI / Machine Learning</p>
+            <p>Das System bekommt 100.000 E-Mails mit der Markierung „Spam" oder „Kein Spam" und lernt selbst, welche Muster auf Spam hinweisen. Es erkennt danach auch neue Spam-Varianten, ohne dass jemand eine neue Regel geschrieben hat.</p>
+        </div>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--merksatz mt-5">
+        <span class="dhbw-callout__label">Kernunterschied</span>
+        <p><strong>Klassische Programmierung:</strong> Regeln + Daten → Antworten.&nbsp;&nbsp;|&nbsp;&nbsp;<strong>Machine Learning:</strong> Daten + Antworten → Regeln werden automatisch aus den Daten gelernt.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       5. KI-GESCHICHTE
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">03</span>
+        <h2 class="dhbw-slide__title">KI in drei Phasen – eine kurze Geschichte</h2>
+      </div>
+
+      <p>Die KI-Forschung entwickelt sich seit den 1950er Jahren in mehreren Wellen, wobei jede Phase auf dem Scheitern oder den Grenzen der vorherigen aufbaut.</p>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">Phase 1: Symbolische KI (1950er–1980er)</p>
+            <p>Die erste KI-Welle versuchte, menschliches Wissen als explizite Regeln in sogenannte <strong>Expertensysteme</strong> zu kodieren. Experten formulierten tausende Wenn-Dann-Regeln für ein bestimmtes Fachgebiet. Diese Systeme funktionierten in engen Domänen, scheiterten aber an der Komplexität der realen Welt – es ist schlicht unmöglich, alle Regeln manuell zu schreiben.</p>
+        </div>
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">Phase 2: Klassisches Machine Learning (1990er–2010er)</p>
+            <p>Statt Regeln zu schreiben, ließ man Algorithmen aus Daten lernen. Verfahren wie <strong>Entscheidungsbäume</strong> und <strong>Support Vector Machines</strong> konnten Muster in strukturierten Daten erkennen. Spam-Filter und erste Produktempfehlungen entstanden in dieser Phase. Die Grenzen lagen bei unstrukturierten Daten wie Bildern oder natürlicher Sprache.</p>
+        </div>
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">Phase 3: Deep Learning (ab ca. 2012)</p>
+            <p><strong>Deep Learning</strong> nutzt mehrstufige neuronale Netze, die durch riesige Datenmengen und leistungsstarke GPUs trainiert werden. Seit 2012 dominierten Deep-Learning-Systeme Bilderkennungswettbewerbe und übertrafen Menschen in vielen Aufgaben. ChatGPT, Gesichtserkennung am Handy und Sprachassistenten sind Produkte dieser dritten Welle.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       6. MACHINE LEARNING
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">04</span>
+        <h2 class="dhbw-slide__title">Machine Learning – Das Grundprinzip</h2>
+      </div>
+
+      <p><strong>Machine Learning</strong> (ML) ist ein Teilgebiet der KI, in dem Systeme automatisch aus Daten lernen, ohne für jeden Fall explizit programmiert zu werden. Das Grundprinzip lässt sich auf eine einfache Formel bringen: <strong>Daten + Algorithmus → Modell</strong>.</p>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">Trainingsdaten</p>
+            <p>Ein ML-System lernt aus einer großen Menge von Beispielen, den sogenannten <strong>Trainingsdaten</strong>. Für einen Spam-Filter sind das E-Mails mit der Markierung „Spam" oder „Kein Spam". Je mehr und je bessere Daten vorhanden sind, desto leistungsfähiger wird das gelernte Modell.</p>
+        </div>
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">Algorithmus und Training</p>
+            <p>Der <strong>Algorithmus</strong> analysiert die Trainingsdaten und sucht nach statistischen Mustern. Beim sogenannten <strong>Training</strong> werden interne Parameter so angepasst, dass der Algorithmus für bekannte Beispiele korrekte Vorhersagen macht.</p>
+        </div>
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">Modell und Vorhersage</p>
+            <p>Das Ergebnis des Trainings ist ein <strong>Modell</strong> – eine komprimierte mathematische Darstellung der gelernten Muster. Dieses Modell kann auf neue, unbekannte Daten angewendet werden, um Vorhersagen zu treffen.</p>
+        </div>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--example mt-5">
+        <span class="dhbw-callout__label">Alltagsbeispiel: Spotify-Empfehlungen</span>
+        <p>Spotify analysiert, welche Songs du hörst, überspringst, auf Repeat stellst oder zu Playlists hinzufügst. Zusammen mit dem Hörverhalten von Millionen ähnlicher Nutzer entsteht ein Modell, das vorhersagt, welcher Song dir als nächstes gefallen wird. Niemand hat Spotify gesagt „dieser Nutzer mag Indie-Rock aus den 2000ern" – das System hat es selbst gelernt.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       7. DEEP LEARNING
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">05</span>
+        <h2 class="dhbw-slide__title">Deep Learning – Künstliche Neuronen und Schichten</h2>
+      </div>
+
+      <p><strong>Deep Learning</strong> ist ein spezieller Ansatz innerhalb des Machine Learning, der von der Struktur des menschlichen Gehirns inspiriert ist. Statt eines einzigen Algorithmus werden viele künstliche Neuronen in mehreren Schichten hintereinandergeschaltet – daher der Name „tief" (englisch <em>deep</em>).</p>
+
+      <p class="mt-5">Ein <strong>künstliches Neuron</strong> ist – vereinfacht gesprochen – eine Recheneinheit, die Eingaben empfängt, sie gewichtet zusammenrechnet und entscheidet, ob es ein Signal weitergibt. Die Schichten heißen <strong>Eingabeschicht</strong>, <strong>versteckte Schichten</strong> und <strong>Ausgabeschicht</strong>. Jede Schicht erkennt komplexere Muster als die vorherige: Bei der Bilderkennung etwa erkennt die erste Schicht Kanten, die zweite Formen, die dritte Gesichtsteile, die vierte vollständige Gesichter.</p>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">Intuition: Gesichtserkennung am Handy</p>
+            <p>Zeigt man einem Deep-Learning-Netz millionen von beschrifteten Gesichtsfotos, lernt es selbst, welche Pixel-Muster welchem Gesicht entsprechen. Niemand musste Regeln wie „runde Augen + Nase mittig = Gesicht" explizit eingeben. Das Netz extrahiert diese Merkmale automatisch.</p>
+        </div>
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">Warum es so mächtig ist</p>
+            <p>Deep Learning braucht keine manuell formulierten Merkmale. Es extrahiert relevante Strukturen automatisch aus rohen Daten – aus Pixeln, aus Schallwellen, aus Text. Das macht es universell einsetzbar für Bilder, Audio und Sprache gleichermaßen.</p>
+        </div>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--tip mt-5">
+        <span class="dhbw-callout__label">Die verschachtelte Beziehung</span>
+        <p><strong>KI</strong> ist der Überbegriff. <strong>Machine Learning</strong> ist ein Teilgebiet der KI. <strong>Deep Learning</strong> ist ein spezieller Ansatz innerhalb von ML. Und <strong>GPT-Modelle</strong> sind Deep-Learning-Systeme mit einer besonderen Architektur. Stellt man diese Begriffe als ineinander verschachtelte Kreise dar, sitzt GPT im innersten.</p>
+      </div>
+
+      <figure class="mt-5" style="text-align:center;">
+        <img src="graphics/image.png"
+             alt="Übersichtsdiagramm: KI als äußerer Kreis, Machine Learning darin, Deep Learning darin, LLMs im Kern"
+             style="max-width:100%;display:block;margin:0 auto;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+        <figcaption style="font-size:0.875rem;color:#6B7280;margin-top:8px;">Abb. 1 – KI, Machine Learning, Deep Learning und LLMs als ineinander verschachtelte Konzepte</figcaption>
+      </figure>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       8. TRANSFORMER / GPT
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">06</span>
+        <h2 class="dhbw-slide__title">GPT und Transformer – die Wort-Vorhersagemaschine</h2>
+      </div>
+
+      <p>GPT steht für <strong>Generative Pre-trained Transformer</strong>. Ein <strong>Transformer</strong> ist eine bestimmte Deep-Learning-Architektur, die 2017 von Google vorgestellt wurde und seitdem nahezu alle modernen Sprachmodelle antreibt – von ChatGPT über Copilot bis Gemini.</p>
+
+      <p class="mt-5">Das Grundprinzip eines <strong>Large Language Model</strong> (LLM) ist verblüffend einfach: Ein LLM ist eine Maschine, die immer das wahrscheinlichste nächste Wort vorhersagt. Trainiert auf Milliarden von Texten aus dem Internet, aus Büchern und Artikeln, hat das Modell gelernt, welche Wörter in welchen Zusammenhängen aufeinanderfolgen. Wenn du ChatGPT fragst „Was ist die Hauptstadt von Deutschland?", antwortet das Modell nicht, weil es „weiß" dass Berlin die Hauptstadt ist – sondern weil nach dieser Frage in den Trainingsdaten sehr häufig das Wort „Berlin" folgte.</p>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">Kontextverständnis durch Attention</p>
+            <p>Der Kern der Transformer-Architektur ist der sogenannte <strong>Attention-Mechanismus</strong>. Er ermöglicht dem Modell, beim Vorhersagen eines Wortes den gesamten bisherigen Kontext zu berücksichtigen – nicht nur das direkt vorherige Wort. Das macht die Texte kohärent und thematisch konsistent, auch über viele Sätze hinweg.</p>
+        </div>
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">Pre-training und Fine-tuning</p>
+            <p>GPT-Modelle werden in zwei Phasen trainiert. Im <strong>Pre-training</strong> lernt das Modell aus riesigen Textmengen, Wörter vorherzusagen. Beim nachgelagerten <strong>Fine-tuning</strong> wird das Modell gezielt angepasst, um hilfreiche Antworten statt zufälliger Textfortsetzungen zu liefern.</p>
+        </div>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--merksatz mt-5">
+        <span class="dhbw-callout__label">Kernaussage</span>
+        <p>Ein LLM „weiß" nichts und „versteht" nichts im menschlichen Sinne. Es ist eine hochspezialisierte statistische Maschine, die auf der Basis von Milliarden Wort-Nachfolge-Wahrscheinlichkeiten den Text vervollständigt, der am wahrscheinlichsten auf deine Eingabe folgt.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       9. LLM-ANWENDUNGEN
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">07</span>
+        <h2 class="dhbw-slide__title">KI im Alltag – Anwendungen überall</h2>
+      </div>
+
+      <p>KI-Systeme sind längst Teil des täglichen Lebens – oft ohne dass man es bemerkt. Die folgende Übersicht ordnet bekannte Anwendungen den richtigen KI-Teilgebieten zu.</p>
+
+      <div class="dhbw-table-wrap mt-5">
+        <table class="dhbw-table">
+          <thead>
+            <tr><th>Anwendung</th><th>KI-Verfahren</th><th>Was passiert im Hintergrund?</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>ChatGPT, Copilot, Gemini</strong></td>
+              <td>Large Language Model (LLM)</td>
+              <td>Wort-für-Wort-Vorhersage auf Basis von Milliarden Trainingstexten</td>
+            </tr>
+            <tr>
+              <td><strong>Spotify-Empfehlungen</strong></td>
+              <td>Klassisches ML (Collaborative Filtering)</td>
+              <td>Ähnliche Nutzerprofile werden abgeglichen, Präferenzen übertragen</td>
+            </tr>
+            <tr>
+              <td><strong>Netflix-Empfehlungen</strong></td>
+              <td>ML + Deep Learning</td>
+              <td>Sehdauer, Abbruchpunkte und Wiederholungen fließen ins Modell ein</td>
+            </tr>
+            <tr>
+              <td><strong>Handy-Gesichtserkennung</strong></td>
+              <td>Deep Learning (CNN)</td>
+              <td>Gesichtsmerkmale werden durch neuronale Schichten erkannt und verglichen</td>
+            </tr>
+            <tr>
+              <td><strong>Spam-Filter</strong></td>
+              <td>Klassisches ML</td>
+              <td>Textmuster und Metadaten des Absenders entscheiden über die Einordnung</td>
+            </tr>
+            <tr>
+              <td><strong>Google Translate</strong></td>
+              <td>Transformer / LLM</td>
+              <td>Übersetzung als statistisches Problem: wahrscheinlichste Entsprechung suchen</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       10. RISIKEN
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">08</span>
+        <h2 class="dhbw-slide__title">Grenzen von KI: Halluzinationen und Bias</h2>
+      </div>
+
+      <p>Wer KI-Systeme sinnvoll einsetzen möchte, muss ihre Grenzen kennen. Zwei Probleme sind dabei besonders wichtig: <strong>Halluzinationen</strong> und <strong>Bias</strong>.</p>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">Halluzinationen</p>
+            <p>Ein LLM erzeugt immer den wahrscheinlichsten nächsten Text – auch wenn die zugrundeliegende Information falsch oder schlicht erfunden ist. Das Modell „erfindet" Fakten, die plausibel klingen, aber nicht existieren. ChatGPT hat bereits Bücher, Gerichtsurteile und wissenschaftliche Artikel erfunden – vollständig mit Titel, Autor und Jahreszahl.</p>
+            <p class="mt-4">Das Modell bemerkt nicht, wenn es etwas nicht weiß, weil es kein echtes Wissen besitzt – es kennt nur statistische Muster über Wort-Nachfolgen.</p>
+        </div>
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">Bias – Verzerrungen aus den Daten</p>
+            <p><strong>Bias</strong> (Verzerrung) entsteht, wenn die Trainingsdaten selbst Vorurteile oder Ungleichgewichte enthalten. Ein Modell, das auf historischen Stellenanzeigen trainiert wird, in denen Frauen in bestimmten Berufen seltener vorkommen, lernt diese Verzerrung mit – und gibt entsprechend verzerrte Empfehlungen weiter, rein statistisch, ohne böse Absicht.</p>
+        </div>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--tip mt-5">
+        <span class="dhbw-callout__label">Sicherer Umgang mit LLMs</span>
+        <p>Behandle LLM-Ausgaben wie Aussagen eines gut informierten, aber unzuverlässigen Bekannten: interessant und oft hilfreich, aber niemals ohne Überprüfung zu übernehmen – insbesondere bei Fakten, Zahlen und Quellenangaben. LLMs sind keine Suchmaschinen und keine verifizierten Datenbanken.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       11. ZUSAMMENFASSUNG
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">09</span>
+        <h2 class="dhbw-slide__title">Zusammenfassung</h2>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--merksatz">
+        <span class="dhbw-callout__label">Merksatz</span>
+        <p><strong>KI</strong> ist der Überbegriff für Systeme mit intelligenzähnlichem Verhalten. <strong>Machine Learning</strong> lässt Systeme aus Daten lernen, statt Regeln manuell zu schreiben. <strong>Deep Learning</strong> tut das mit mehrschichtigen neuronalen Netzen. <strong>LLMs</strong> sind Deep-Learning-Systeme, die Text Wort für Wort vorhersagen – und damit täuschend kompetent wirken, ohne wirklich zu „verstehen". Wer das weiß, kann KI-Werkzeuge sinnvoll und kritisch einsetzen.</p>
+      </div>
+
+      <div class="dhbw-table-wrap mt-5">
+        <table class="dhbw-table">
+          <thead>
+            <tr><th>Begriff</th><th>Einordnung</th><th>Kernaussage</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Künstliche Intelligenz</strong></td><td>Überbegriff</td><td>Systeme, die Aufgaben erledigen, die normalerweise Intelligenz erfordern</td></tr>
+            <tr><td><strong>Machine Learning</strong></td><td>Teilgebiet der KI</td><td>Daten + Algorithmus → Modell lernt selbst Regeln</td></tr>
+            <tr><td><strong>Deep Learning</strong></td><td>Spezialfall von ML</td><td>Mehrstufige neuronale Netze; mächtig für Bild, Audio und Text</td></tr>
+            <tr><td><strong>LLM / GPT</strong></td><td>Deep-Learning-Modell</td><td>Wort-Vorhersagemaschine, trainiert auf Milliarden Texten</td></tr>
+            <tr><td><strong>Halluzination</strong></td><td>LLM-Schwäche</td><td>Plausibel klingende, aber falsche oder erfundene Ausgaben</td></tr>
+            <tr><td><strong>Bias</strong></td><td>ML-Schwäche</td><td>Verzerrungen in Trainingsdaten führen zu verzerrten Ergebnissen</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════════════════════════ -->
+  <footer class="dhbw-footer">
+    <div class="dhbw-footer__inner">
+      <span class="dhbw-footer__brand">DHBW Stuttgart</span>
+      <span>Informatik-Grundlagen für Maschinenbau &nbsp;·&nbsp; WS&nbsp;2025/26</span>
+      <span>V11 – GPTs, LLMs &amp; Künstliche Intelligenz</span>
+    </div>
+  </footer>
+
+</body>
+</html>
