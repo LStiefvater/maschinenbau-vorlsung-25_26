@@ -1,0 +1,324 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>V07 – Software Engineering: KISS, DRY, SRP | DHBW Stuttgart</title>
+  <link rel="stylesheet" href="../../src/dhbw-base.css">
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════════════════════
+       1. HEADER
+  ══════════════════════════════════════════════════════════ -->
+  <header class="dhbw-header">
+    <div class="dhbw-header__inner">
+      <a href="#" class="dhbw-header__logo">
+        <span class="dhbw-header__logo-text">DHBW Stuttgart</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════════════════════════════
+       2. HERO
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-hero">
+    <div class="dhbw-hero__inner">
+      <p class="dhbw-hero__label">Vorlesung 07 · Informatik-Grundlagen · Maschinenbau</p>
+      <h1 class="dhbw-hero__title">Software Engineering</h1>
+      <p class="dhbw-hero__subtitle">KISS, DRY und SRP – drei Prinzipien für guten Code und gute Systeme</p>
+      <p class="dhbw-hero__meta">WS 2025/26 &nbsp;·&nbsp; DHBW Stuttgart</p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       3. LERNZIELE
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">01</span>
+        <h2 class="dhbw-slide__title">Lernziele</h2>
+      </div>
+
+      <div class="dhbw-goals">
+        <p class="dhbw-goals__title">📌 Nach dieser Vorlesung kannst du …</p>
+        <ul>
+          <li>erklären, warum Codequalität langfristig entscheidend ist und was <strong>Technical Debt</strong> bedeutet.</li>
+          <li>die Prinzipien <strong>KISS</strong>, <strong>DRY</strong> und <strong>SRP</strong> in eigenen Worten beschreiben und auf reale Beispiele anwenden.</li>
+          <li>überflüssige Komplexität in einem System oder Algorithmus erkennen und benennen.</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       4. WAS IST SOFTWARE ENGINEERING?
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">02</span>
+        <h2 class="dhbw-slide__title">Was ist Software Engineering?</h2>
+      </div>
+
+      <p><strong>Software Engineering</strong> ist die systematische Anwendung von Ingenieursprinzipien auf die Entwicklung, Wartung und den Betrieb von Software. Es geht nicht nur darum, dass ein Programm funktioniert – es geht darum, dass es <em>zuverlässig, wartbar und verständlich</em> funktioniert, auch wenn es über Jahre hinweg von verschiedenen Menschen weiterentwickelt wird.</p>
+
+      <p class="mt-5">Die Parallele zum Maschinenbau ist direkt: Ein Maschinenbauingenieur baut nicht einfach irgendetwas, das funktioniert. Er achtet auf Materialwahl, Toleranzen, Montierbarkeit und Wartungsfreundlichkeit. Ein Software Engineer denkt genau so über seinen Code nach.</p>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">Was guten Code ausmacht</p>
+            <p>Guter Code ist korrekt, aber das allein reicht nicht. Er muss außerdem lesbar, testbar, änderbar und verständlich sein – auch für jemanden, der ihn sechs Monate später zum ersten Mal liest.</p>
+        </div>
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">Was schlechten Code teuer macht</p>
+            <p>Schlechter Code funktioniert anfangs vielleicht – aber jede Änderung kostet mehr Zeit als die vorherige. Ein Fehler an einer Stelle bricht plötzlich etwas ganz anderes. Das Teamwork leidet, weil niemand den Code mehr durchblickt.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       5. TECHNICAL DEBT
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">03</span>
+        <h2 class="dhbw-slide__title">Technical Debt – Technische Schulden</h2>
+      </div>
+
+      <p><strong>Technical Debt</strong> (technische Schulden) bezeichnet den Mehraufwand, der durch bewusst oder unbewusst getroffene schlechte Designentscheidungen in der Vergangenheit entsteht. Wie bei einem finanziellen Kredit akkumulieren sich „Zinsen": Je länger schlechter Code existiert, desto aufwendiger wird es, ihn zu warten oder zu erweitern.</p>
+
+      <div class="dhbw-callout dhbw-callout--example mt-5">
+        <span class="dhbw-callout__label">Anschauliches Beispiel</span>
+        <p>Ein Team baut in einer Fabrik schnell eine provisorische Steuerungslogik, um eine Deadline einzuhalten – „das klären wir später". Sechs Monate später hat die Maschine 12 weitere Erweiterungen, alle aufgebaut auf dem fragilen Provisorium. Jede neue Funktion dauert jetzt dreimal so lange und birgt das Risiko, bestehende Funktionen zu beschädigen. Das ist Technical Debt in der Praxis.</p>
+      </div>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">Bewusste Schulden</p>
+            <p>Manchmal nimmt man Technical Debt bewusst in Kauf – zum Beispiel für einen schnellen Prototyp. Entscheidend ist, dass man es <em>weiß</em> und einplant, die Schulden später zu begleichen.</p>
+        </div>
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">Unbewusste Schulden</p>
+            <p>Häufiger entstehen Schulden unbewusst durch mangelndes Wissen oder schlechte Gewohnheiten. Genau hier helfen Prinzipien wie KISS, DRY und SRP – sie verhindern, dass Schulden überhaupt erst entstehen.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       6. KISS
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">04</span>
+        <h2 class="dhbw-slide__title">KISS – Keep It Simple, Stupid</h2>
+      </div>
+
+      <p>Das <strong>KISS-Prinzip</strong> besagt: Wähle immer die einfachste Lösung, die die Anforderung erfüllt. Komplexität ist kein Zeichen von Qualität oder Intelligenz – im Gegenteil. Eine unnötig komplizierte Lösung ist schwerer zu verstehen, schwerer zu warten und fehleranfälliger als eine einfache.</p>
+
+      <p class="mt-5">Die Abkürzung wurde ursprünglich in den 1960er Jahren von der US Navy geprägt. Das Prinzip gilt für alle Bereiche des Engineerings, nicht nur für Software.</p>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">Die Ikea-Anleitung</p>
+            <p>Eine gute Montageanleitung zeigt jeden Schritt mit klaren Symbolen, ohne unnötige Erklärungen. Jeder kann sie befolgen – unabhängig von Vorkenntnissen. Das ist KISS: minimale Komplexität, maximale Verständlichkeit.</p>
+        </div>
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">Das Roman-Problem</p>
+            <p>Stell dir vor, die Ikea-Anleitung wäre stattdessen ein 300-Seiten-Roman, der die Geschichte jedes Schraubendrehers beschreibt. Die Information ist da, aber komplett überwältigt von unnötiger Komplexität. Das passiert in Code, wenn Entwickler zu viel auf einmal lösen wollen.</p>
+        </div>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--tip mt-5">
+        <span class="dhbw-callout__label">KISS in der Praxis erkennen</span>
+        <p>Frage dich nach jeder Lösung: „Würde jemand, der das zum ersten Mal sieht, in 5 Minuten verstehen, was hier passiert?" Wenn die Antwort nein ist, gibt es eine einfachere Möglichkeit. Komplexität sollte aus dem Problem kommen, nicht aus der Lösung.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       7. DRY
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">05</span>
+        <h2 class="dhbw-slide__title">DRY – Don't Repeat Yourself</h2>
+      </div>
+
+      <p>Das <strong>DRY-Prinzip</strong> besagt: Jede Information, jede Logik, jede Regel soll in einem System genau <em>einmal</em> vorhanden sein. Wer dieselbe Logik an zehn Stellen kopiert, muss sie bei einer Änderung auch an zehn Stellen aktualisieren – und vergisst garantiert mindestens eine. Das erzeugt Fehler und Inkonsistenzen.</p>
+
+      <div class="dhbw-callout dhbw-callout--example mt-5">
+        <span class="dhbw-callout__label">Analogie: Die Adresse im Adressbuch</span>
+        <p>Angenommen, du schreibst einem Freund 10 verschiedene Briefe und trägst deine Rücksendeadresse in jeden Brief einzeln von Hand ein. Du ziehst um – und musst nun alle 10 Briefe suchen und korrigieren. Hättest du stattdessen ein Adressbuch geführt, hätte eine einzige Änderung genügt. DRY sagt: Leg das Adressbuch an.</p>
+      </div>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+          <h3>Verletzung von DRY (Vorher)</h3>
+          <p class="mt-4">Dieselbe Berechnung erscheint dreimal an verschiedenen Stellen. Wenn sich die Formel ändert, müssen alle drei Stellen gefunden und angepasst werden.</p>
+          <pre class="dhbw-code"><code>// Stelle 1: Berechne Preis mit Rabatt
+preis = grundpreis * 0.9
+
+// Stelle 2: Berechne anderen Preis
+preis2 = andererPreis * 0.9
+
+// Stelle 3: Nochmal dieselbe Logik
+finalpreis = listenpreis * 0.9</code></pre>
+        </div>
+        <div class="dhbw-columns__item">
+          <h3>DRY-konform (Nachher)</h3>
+          <p class="mt-4">Die Rabatt-Logik ist an genau einer Stelle definiert. Eine Änderung des Rabattes erfordert nur eine einzige Anpassung – und alle Berechnungen sind automatisch konsistent.</p>
+          <pre class="dhbw-code"><code>// Die Logik lebt genau einmal
+FUNKTION berechneRabattpreis(preis)
+  ERGEBNIS = preis * 0.9
+ENDE FUNKTION
+
+preis1 = berechneRabattpreis(grundpreis)
+preis2 = berechneRabattpreis(andererPreis)
+preis3 = berechneRabattpreis(listenpreis)</code></pre>
+        </div>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--tip mt-5">
+        <span class="dhbw-callout__label">Wann ist Wiederholung ein Warnsignal?</span>
+        <p>Sobald du den Verdacht hast, etwas kopiert zu haben, ist das ein Warnsignal. Die Frage lautet: „Wenn sich diese Logik ändert, wie viele Stellen müsste ich dann anpassen?" Wenn die Antwort mehr als eins ist, verletzt du DRY.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       8. SRP
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">06</span>
+        <h2 class="dhbw-slide__title">SRP – Single Responsibility Principle</h2>
+      </div>
+
+      <p>Das <strong>Single Responsibility Principle</strong> (SRP, Prinzip der einzigen Verantwortlichkeit) besagt: Eine Funktion, ein Modul, eine Klasse soll genau <em>eine</em> klar definierte Aufgabe erfüllen – und diese gut. Wer eine Funktion schreibt, die gleichzeitig berechnet, speichert, formatiert und ausgibt, hat vier Aufgaben in einen Behälter gestopft. Das macht es fast unmöglich, eine davon zu ändern, ohne die anderen zu berühren.</p>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">Das Multitool-Problem</p>
+            <p>Ein Schweizer Taschenmesser kann viele Dinge – aber keines davon besonders gut. Wenn du wirklich gut schneiden musst, nimmst du ein richtiges Messer. Wenn du wirklich gut schrauben musst, nimmst du einen richtigen Schraubenzieher. Spezialisierung schlägt Multitasking in der Tiefe.</p>
+        </div>
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">Spezialwerkzeug im Software Engineering</p>
+            <p>Eine Funktion mit einer Aufgabe ist wie ein gutes Spezialwerkzeug: leicht zu verstehen, leicht zu testen und leicht auszutauschen, ohne das gesamte System zu berühren. Mehrere kleine, klare Funktionen sind wartbarer als eine große, unüberschaubare.</p>
+        </div>
+      </div>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+          <h3>SRP verletzt (Vorher)</h3>
+          <p class="mt-4">Eine Funktion übernimmt alles: Einlesen, Berechnen und Ausgeben. Ändert sich das Ausgabeformat, muss man die gesamte Logik anfassen.</p>
+          <pre class="dhbw-code"><code>FUNKTION verarbeiteBestellung()
+  // Daten einlesen
+  EINGABE: menge, preis
+
+  // Berechnung
+  gesamt = menge * preis
+
+  // Ausgabe formatieren und speichern
+  AUSGABE: "Gesamt: " + gesamt
+  Speichere in Datenbank
+ENDE FUNKTION</code></pre>
+        </div>
+        <div class="dhbw-columns__item">
+          <h3>SRP eingehalten (Nachher)</h3>
+          <p class="mt-4">Drei Funktionen, je eine Verantwortlichkeit. Jede kann unabhängig verändert, getestet und ausgetauscht werden.</p>
+          <pre class="dhbw-code"><code>FUNKTION berechneGesamt(menge, preis)
+  ERGEBNIS = menge * preis
+ENDE FUNKTION
+
+FUNKTION formatiereAusgabe(wert)
+  ERGEBNIS = "Gesamt: " + wert
+ENDE FUNKTION
+
+FUNKTION speichereBestellung(wert)
+  Speichere in Datenbank
+ENDE FUNKTION</code></pre>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       9. ZUSAMMENFASSUNG
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">07</span>
+        <h2 class="dhbw-slide__title">Zusammenfassung: Drei Prinzipien, ein Ziel</h2>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--merksatz">
+        <span class="dhbw-callout__label">Merksatz</span>
+        <p><strong>KISS</strong> sagt: Wähle die einfachste Lösung. <strong>DRY</strong> sagt: Wiederhole keine Logik. <strong>SRP</strong> sagt: Eine Funktion, eine Aufgabe. Alle drei Prinzipien verfolgen dasselbe Ziel: Code zu schreiben, der auch in einem Jahr noch verständlich, änderbar und zuverlässig ist. Technical Debt entsteht, wenn diese Prinzipien ignoriert werden – und wächst, bis Weiterentwicklung zum Stillstand kommt.</p>
+      </div>
+
+      <div class="dhbw-table-wrap mt-5">
+        <table class="dhbw-table">
+          <thead>
+            <tr><th>Prinzip</th><th>Kernaussage</th><th>Warnsignal</th><th>Analogie</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>KISS</strong></td>
+              <td>So einfach wie möglich</td>
+              <td>„Das versteht doch kein normaler Mensch"</td>
+              <td>Ikea-Anleitung statt 300-Seiten-Roman</td>
+            </tr>
+            <tr>
+              <td><strong>DRY</strong></td>
+              <td>Keine doppelte Logik</td>
+              <td>„Das hab ich gerade copy-paste gemacht"</td>
+              <td>Adressbuch statt Adresse 10 Mal schreiben</td>
+            </tr>
+            <tr>
+              <td><strong>SRP</strong></td>
+              <td>Eine Aufgabe pro Einheit</td>
+              <td>„Diese Funktion macht eigentlich 5 Sachen"</td>
+              <td>Spezialwerkzeug statt Schweizer Taschenmesser</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════════════════════════ -->
+  <footer class="dhbw-footer">
+    <div class="dhbw-footer__inner">
+      <span class="dhbw-footer__brand">DHBW Stuttgart</span>
+      <span>Informatik-Grundlagen für Maschinenbau &nbsp;·&nbsp; WS&nbsp;2025/26</span>
+      <span>V07 – Software Engineering: KISS, DRY, SRP</span>
+    </div>
+  </footer>
+
+</body>
+</html>

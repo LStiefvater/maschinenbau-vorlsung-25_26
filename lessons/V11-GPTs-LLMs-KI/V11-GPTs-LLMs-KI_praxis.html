@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>V11 – Python Praxis: Funktionen | DHBW Stuttgart</title>
+  <link rel="stylesheet" href="../../src/dhbw-base.css">
+  <style>
+    .concept-grid { display:grid; grid-template-columns:1fr; gap:var(--sp-6); margin-top:var(--sp-5); }
+    .concept-card { background:var(--surface); border:1px solid var(--border); border-top:4px solid var(--red); border-radius:var(--r-card); padding:var(--sp-5) var(--sp-6); box-shadow:var(--shadow-card); }
+    .concept-card__name { font-family:var(--dhbw-font-mono); font-size:var(--fs-lg); font-weight:var(--dhbw-fw-bold); color:var(--red); margin-bottom:var(--sp-2); }
+    .dhbw-code { background:var(--code-bg); color:var(--code-text); font-family:var(--dhbw-font-mono); font-size:0.9rem; line-height:var(--lh-code); padding:var(--sp-4) var(--sp-5); border-radius:var(--r-base); overflow-x:auto; margin:var(--sp-3) 0; white-space:pre; }
+    .kw  { color:#F97316; font-weight:600; }
+    .str { color:#22C55E; }
+    .num { color:#A78BFA; }
+    .cmt { color:#7A9CB3; font-style:italic; }
+    .fn  { color:#60A5FA; }
+    .var { color:#E8EFF5; }
+    .fsl { color:#F0C060; }
+    .syntax-box { background:var(--code-bg-in); border-left:3px solid var(--red); border-radius:0 var(--r-base) var(--r-base) 0; padding:var(--sp-3) var(--sp-4); margin:var(--sp-3) 0; font-family:var(--dhbw-font-mono); font-size:0.92rem; color:var(--text); }
+    .syntax-box strong { color:var(--red); }
+    .game-box { background:#0F1E2B; border:2px solid #2A4A6B; border-radius:var(--r-card); padding:var(--sp-5) var(--sp-6); margin-top:var(--sp-6); }
+    .game-box__header { display:flex; align-items:center; gap:var(--sp-3); margin-bottom:var(--sp-4); }
+    .game-box__icon { font-size:1.5rem; }
+    .game-box__title { font-size:var(--fs-md); font-weight:var(--dhbw-fw-bold); color:#60A5FA; margin:0; }
+    .game-box__subtitle { font-size:var(--fs-sm); color:#7A9CB3; margin-top:var(--sp-1); }
+    .quick-ref { width:100%; border-collapse:collapse; margin-top:var(--sp-4); font-size:var(--fs-sm); }
+    .quick-ref th { background:var(--red); color:#fff; padding:var(--sp-2) var(--sp-4); text-align:left; }
+    .quick-ref td { padding:var(--sp-2) var(--sp-4); border-bottom:1px solid var(--border); vertical-align:top; }
+    .quick-ref tr:nth-child(even) td { background:var(--canvas); }
+    .quick-ref code { font-family:var(--dhbw-font-mono); font-size:0.85rem; background:var(--code-bg-in); padding:1px 5px; border-radius:var(--r-sm); color:var(--red); }
+    .mt-4 { margin-top:var(--sp-4); } .mt-5 { margin-top:var(--sp-5); } .mt-6 { margin-top:var(--sp-6); }
+    .dhbw-footer { background:var(--text); color:#9CA3AF; text-align:center; padding:var(--sp-5) var(--gutter); font-size:var(--fs-sm); }
+    @media print {
+      @page { size:A4; margin:15mm 18mm; }
+      .dhbw-header,.dhbw-footer { display:none; }
+      .dhbw-hero,.dhbw-slide,.dhbw-code,.dhbw-callout,.concept-card,.game-box { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+      .dhbw-hero { padding:12mm 0 10mm; } .dhbw-slide { padding:8mm 0; }
+      .concept-card,.game-box { break-inside:avoid; }
+      .dhbw-code { font-size:0.78rem; }
+      .page-break { page-break-before:always; }
+    }
+  </style>
+</head>
+<body>
+  <header class="dhbw-header">
+    <div class="dhbw-header__inner">
+      <a href="#" class="dhbw-header__logo"><span class="dhbw-header__logo-text">DHBW Stuttgart</span></a>
+      <nav class="dhbw-header__nav">
+        <a href="V11-GPTs-LLMs-KI_skript.html" class="dhbw-header__nav-link">Theorie</a>
+        <a href="#" class="dhbw-header__nav-link dhbw-header__nav-link--active">Python Praxis</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="dhbw-hero">
+    <div class="dhbw-hero__inner">
+      <p class="dhbw-hero__label">Vorlesung 11 · Python Praxis · Maschinenbau</p>
+      <h1 class="dhbw-hero__title">Funktionen</h1>
+      <p class="dhbw-hero__subtitle">def, return, Parameter, Standardwerte – Code wiederverwendbar machen</p>
+      <p class="dhbw-hero__meta">WS 2025/26 &nbsp;·&nbsp; DHBW Stuttgart &nbsp;·&nbsp; Nachschlagewerk Python-Praxis</p>
+    </div>
+  </section>
+
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">01</span><h2 class="dhbw-slide__title">Das kannst du danach</h2></div>
+      <div class="dhbw-goals">
+        <p class="dhbw-goals__title">📌 Nach dieser Einheit kannst du …</p>
+        <ul>
+          <li>eigene Funktionen mit <strong>def</strong> definieren und mit <strong>return</strong> Werte zurückgeben.</li>
+          <li>Parameter und Standardwerte (Defaultwerte) richtig einsetzen.</li>
+          <li>mehrere Werte aus einer Funktion zurückgeben.</li>
+          <li>Funktionen sinnvoll benennen und Aufgaben damit aufteilen (SRP aus V07).</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- SVG: Funktion Anatomie -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">02</span><h2 class="dhbw-slide__title">Aufbau einer Funktion</h2></div>
+
+      <!-- SVG: Funktion Anatomie -->
+      <svg viewBox="0 0 560 80" width="100%" style="max-width:560px; display:block; margin:var(--sp-4) auto;"
+           role="img" aria-label="Anatomie einer Python-Funktion: def-Schlüsselwort, Name, Parameter, Doppelpunkt, Einrückung, return">
+        <rect x="5" y="10" width="550" height="56" rx="6" fill="#1E2936"/>
+        <!-- def keyword -->
+        <rect x="5" y="10" width="42" height="56" rx="6" fill="#E2001A"/>
+        <text x="26" y="43" text-anchor="middle" font-family="'Fira Code', monospace" font-size="16" font-weight="700" fill="#fff">def</text>
+        <!-- Funktionsname -->
+        <text x="62" y="43" font-family="'Fira Code', monospace" font-size="16" fill="#60A5FA">berechne_mw</text>
+        <!-- Klammer und Parameter -->
+        <text x="182" y="43" font-family="'Fira Code', monospace" font-size="16" fill="#E8EFF5">(</text>
+        <text x="194" y="43" font-family="'Fira Code', monospace" font-size="16" fill="#A78BFA">werte</text>
+        <text x="234" y="43" font-family="'Fira Code', monospace" font-size="16" fill="#E8EFF5">,</text>
+        <text x="246" y="43" font-family="'Fira Code', monospace" font-size="16" fill="#A78BFA">einheit</text>
+        <text x="296" y="43" font-family="'Fira Code', monospace" font-size="16" fill="#E8EFF5">=</text>
+        <text x="307" y="43" font-family="'Fira Code', monospace" font-size="16" fill="#22C55E">"°C"</text>
+        <text x="337" y="43" font-family="'Fira Code', monospace" font-size="16" fill="#E8EFF5">):</text>
+
+        <!-- Beschriftungen unten -->
+        <text x="26"  y="75" text-anchor="middle" font-family="'Source Sans 3', Arial, sans-serif" font-size="10" fill="#E2001A">Schlüssel-wort</text>
+        <text x="120" y="75" text-anchor="middle" font-family="'Source Sans 3', Arial, sans-serif" font-size="10" fill="#60A5FA">Funktions-name</text>
+        <text x="218" y="75" text-anchor="middle" font-family="'Source Sans 3', Arial, sans-serif" font-size="10" fill="#A78BFA">Parameter 1</text>
+        <text x="308" y="75" text-anchor="middle" font-family="'Source Sans 3', Arial, sans-serif" font-size="10" fill="#A78BFA">Param. 2 + Standardwert</text>
+      </svg>
+    </div>
+  </section>
+
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">03</span><h2 class="dhbw-slide__title">Funktionen im Detail</h2></div>
+
+      <div class="concept-grid">
+
+        <div class="concept-card">
+          <div class="concept-card__name">def + return – Grundaufbau</div>
+          <p><code class="dhbw-inline">def</code> definiert eine Funktion. <code class="dhbw-inline">return</code> gibt einen Wert zurück. Ohne <code class="dhbw-inline">return</code> gibt die Funktion <code class="dhbw-inline">None</code> zurück.</p>
+          <div class="syntax-box">
+<strong>def</strong> funktionsname<strong>(</strong>parameter<strong>):</strong>
+    <span style="color:var(--text-sec);"># Eingerückter Code-Block</span>
+    <strong>return</strong> ergebnis
+          </div>
+          <div class="dhbw-code"><span class="cmt"># Funktion definieren</span>
+<span class="kw">def</span> <span class="fn">celsius_zu_kelvin</span>(<span class="var">celsius</span>):
+    <span class="var">kelvin</span> = <span class="var">celsius</span> + <span class="num">273.15</span>
+    <span class="kw">return</span> <span class="var">kelvin</span>
+
+<span class="cmt"># Funktion aufrufen</span>
+<span class="var">temp_k</span> = <span class="fn">celsius_zu_kelvin</span>(<span class="num">23.5</span>)
+<span class="fn">print</span>(<span class="fsl">f</span><span class="str">"<span class="fsl">{temp_k:.2f}</span> K"</span>)   <span class="cmt"># → 296.65 K</span>
+
+<span class="cmt"># Funktion mehrmals aufrufen – das ist der Vorteil!</span>
+<span class="kw">for</span> <span class="var">t</span> <span class="kw">in</span> [<span class="num">0</span>, <span class="num">20</span>, <span class="num">100</span>]:
+    <span class="fn">print</span>(<span class="fsl">f</span><span class="str">"<span class="fsl">{t}</span> °C = <span class="fsl">{celsius_zu_kelvin(t):.2f}</span> K"</span>)</div>
+        </div>
+
+        <div class="concept-card">
+          <div class="concept-card__name">Parameter & Standardwerte</div>
+          <p>Parameter mit Standardwert müssen beim Aufruf nicht angegeben werden – der Standardwert wird dann verwendet. Parameter ohne Standardwert sind Pflichtparameter.</p>
+          <div class="dhbw-code"><span class="kw">def</span> <span class="fn">berechne_mittelwert</span>(<span class="var">werte</span>, <span class="var">einheit</span>=<span class="str">"°C"</span>):
+    <span class="var">mw</span> = <span class="fn">sum</span>(<span class="var">werte</span>) / <span class="fn">len</span>(<span class="var">werte</span>)
+    <span class="fn">print</span>(<span class="fsl">f</span><span class="str">"Mittelwert: <span class="fsl">{mw:.2f}</span> <span class="fsl">{einheit}</span>"</span>)
+    <span class="kw">return</span> <span class="var">mw</span>
+
+<span class="var">temps</span> = [<span class="num">22.1</span>, <span class="num">24.5</span>, <span class="num">23.8</span>]
+
+<span class="cmt"># Ohne optionalen Parameter – Standardwert "°C" gilt</span>
+<span class="fn">berechne_mittelwert</span>(<span class="var">temps</span>)
+
+<span class="cmt"># Mit eigenem Parameter – überschreibt Standardwert</span>
+<span class="fn">berechne_mittelwert</span>(<span class="var">temps</span>, <span class="str">"K"</span>)</div>
+        </div>
+
+        <div class="concept-card">
+          <div class="concept-card__name">Mehrere Rückgabewerte</div>
+          <p>Python kann mehrere Werte gleichzeitig zurückgeben – als Tupel. Das ist sehr praktisch für Auswertungsfunktionen.</p>
+          <div class="dhbw-code"><span class="kw">def</span> <span class="fn">auswerten</span>(<span class="var">messwerte</span>):
+    <span class="var">minimum</span> = <span class="fn">min</span>(<span class="var">messwerte</span>)
+    <span class="var">maximum</span> = <span class="fn">max</span>(<span class="var">messwerte</span>)
+    <span class="var">mittel</span>  = <span class="fn">sum</span>(<span class="var">messwerte</span>) / <span class="fn">len</span>(<span class="var">messwerte</span>)
+    <span class="kw">return</span> <span class="var">minimum</span>, <span class="var">maximum</span>, <span class="var">mittel</span>   <span class="cmt"># gibt Tupel zurück</span>
+
+<span class="var">werte</span>  = [<span class="num">22.1</span>, <span class="num">24.5</span>, <span class="num">87.3</span>, <span class="num">23.8</span>]
+<span class="var">mn</span>, <span class="var">mx</span>, <span class="var">avg</span> = <span class="fn">auswerten</span>(<span class="var">werte</span>)      <span class="cmt"># Tuple-Unpacking</span>
+<span class="fn">print</span>(<span class="fsl">f</span><span class="str">"Min: <span class="fsl">{mn:.1f}</span>  Max: <span class="fsl">{mx:.1f}</span>  Ø: <span class="fsl">{avg:.1f}</span>"</span>)</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- SCHIFFEVERSENKEN -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">04</span><h2 class="dhbw-slide__title">Im Schiffe-Versenken-Spiel</h2></div>
+      <p>In <code class="dhbw-inline">spiellogik.py</code> wurden Funktionen eingeführt um den Code zu strukturieren (SRP!):</p>
+      <div class="game-box">
+        <div class="game-box__header">
+          <span class="game-box__icon">🚢</span>
+          <div>
+            <h3 class="game-box__title">spiellogik.py – Funktionen aus dem Spiel</h3>
+            <p class="game-box__subtitle">def + return für Spielfeld-Aufbau</p>
+          </div>
+        </div>
+        <div class="dhbw-code"><span class="cmt"># spiellogik.py</span>
+<span class="kw">def</span> <span class="fn">erstelle_spielfeld</span>():
+    <span class="var">feld</span> = []
+    <span class="kw">for</span> <span class="var">i</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+        <span class="var">feld</span>.<span class="fn">append</span>([<span class="str">"~"</span>] * <span class="num">5</span>)
+    <span class="kw">return</span> <span class="var">feld</span>    <span class="cmt"># gibt fertiges 5×5-Feld zurück</span>
+
+<span class="kw">def</span> <span class="fn">spielfeld_ausgeben</span>(<span class="var">spielfeld</span>):
+    <span class="fn">print</span>(<span class="str">"   A B C D E"</span>)
+    <span class="kw">for</span> <span class="var">i</span>, <span class="var">zeile</span> <span class="kw">in</span> <span class="fn">enumerate</span>(<span class="var">spielfeld</span>):
+        <span class="fn">print</span>(<span class="fsl">f</span><span class="str">"<span class="fsl">{i+1}</span>  "</span>, end=<span class="str">""</span>)
+        <span class="fn">print</span>(<span class="str">" "</span>.<span class="fn">join</span>(<span class="var">zeile</span>))
+
+<span class="cmt"># Verwendung im Hauptprogramm</span>
+<span class="var">feld</span> = <span class="fn">erstelle_spielfeld</span>()   <span class="cmt"># Rückgabewert nutzen</span>
+<span class="fn">spielfeld_ausgeben</span>(<span class="var">feld</span>)      <span class="cmt"># kein Rückgabewert nötig</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="dhbw-slide page-break">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">05</span><h2 class="dhbw-slide__title">Quick-Reference</h2></div>
+      <table class="quick-ref">
+        <thead><tr><th style="width:30%">Syntax</th><th>Bedeutung</th></tr></thead>
+        <tbody>
+          <tr><td><code>def name(param):</code></td><td>Funktion definieren – Pflichtparameter</td></tr>
+          <tr><td><code>def name(p, q="std"):</code></td><td>Parameter mit Standardwert (optional)</td></tr>
+          <tr><td><code>return wert</code></td><td>Wert zurückgeben und Funktion beenden</td></tr>
+          <tr><td><code>return a, b, c</code></td><td>Mehrere Werte als Tupel zurückgeben</td></tr>
+          <tr><td><code>x, y = funktion()</code></td><td>Mehrere Rückgabewerte auslesen (Unpacking)</td></tr>
+          <tr><td>Kein return</td><td>Funktion gibt implizit None zurück</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer class="dhbw-footer">DHBW Stuttgart · Maschinenbau · Informatik-Grundlagen · WS 2025/26 · Python Praxis Nachschlagewerk</footer>
+</body>
+</html>

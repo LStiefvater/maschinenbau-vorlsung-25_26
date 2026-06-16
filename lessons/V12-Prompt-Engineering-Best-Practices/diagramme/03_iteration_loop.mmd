@@ -1,6 +1,0 @@
-flowchart TD
-    S(["Start: grober Prompt"]) --> A["Antwort der KI lesen"]
-    A --> Q{"Passt die Antwort?"}
-    Q -- "ja" --> E(["Fertig"])
-    Q -- "nein" --> V["Prompt praezisieren:<br/>Kontext, Format,<br/>Beispiele ergaenzen"]
-    V --> A

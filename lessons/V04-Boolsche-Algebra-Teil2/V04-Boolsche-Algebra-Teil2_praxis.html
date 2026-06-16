@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>V04 – Python Praxis: Vergleichsoperatoren & Logik | DHBW Stuttgart</title>
+  <link rel="stylesheet" href="../../src/dhbw-base.css">
+  <style>
+    .concept-grid { display:grid; grid-template-columns:1fr; gap:var(--sp-6); margin-top:var(--sp-5); }
+    .concept-card { background:var(--surface); border:1px solid var(--border); border-top:4px solid var(--red); border-radius:var(--r-card); padding:var(--sp-5) var(--sp-6); box-shadow:var(--shadow-card); }
+    .concept-card__name { font-family:var(--dhbw-font-mono); font-size:var(--fs-lg); font-weight:var(--dhbw-fw-bold); color:var(--red); margin-bottom:var(--sp-2); }
+    .dhbw-code { background:var(--code-bg); color:var(--code-text); font-family:var(--dhbw-font-mono); font-size:0.9rem; line-height:var(--lh-code); padding:var(--sp-4) var(--sp-5); border-radius:var(--r-base); overflow-x:auto; margin:var(--sp-3) 0; white-space:pre; }
+    .kw  { color:#F97316; font-weight:600; }
+    .str { color:#22C55E; }
+    .num { color:#A78BFA; }
+    .cmt { color:#7A9CB3; font-style:italic; }
+    .fn  { color:#60A5FA; }
+    .var { color:#E8EFF5; }
+    .fsl { color:#F0C060; }
+    .syntax-box { background:var(--code-bg-in); border-left:3px solid var(--red); border-radius:0 var(--r-base) var(--r-base) 0; padding:var(--sp-3) var(--sp-4); margin:var(--sp-3) 0; font-family:var(--dhbw-font-mono); font-size:0.95rem; color:var(--text); }
+    .syntax-box strong { color:var(--red); }
+    .game-box { background:#0F1E2B; border:2px solid #2A4A6B; border-radius:var(--r-card); padding:var(--sp-5) var(--sp-6); margin-top:var(--sp-6); }
+    .game-box__header { display:flex; align-items:center; gap:var(--sp-3); margin-bottom:var(--sp-4); }
+    .game-box__icon { font-size:1.5rem; }
+    .game-box__title { font-size:var(--fs-md); font-weight:var(--dhbw-fw-bold); color:#60A5FA; margin:0; }
+    .game-box__subtitle { font-size:var(--fs-sm); color:#7A9CB3; margin-top:var(--sp-1); }
+    .quick-ref { width:100%; border-collapse:collapse; margin-top:var(--sp-4); font-size:var(--fs-sm); }
+    .quick-ref th { background:var(--red); color:#fff; padding:var(--sp-2) var(--sp-4); text-align:left; }
+    .quick-ref td { padding:var(--sp-2) var(--sp-4); border-bottom:1px solid var(--border); vertical-align:top; }
+    .quick-ref tr:nth-child(even) td { background:var(--canvas); }
+    .quick-ref code { font-family:var(--dhbw-font-mono); font-size:0.85rem; background:var(--code-bg-in); padding:1px 5px; border-radius:var(--r-sm); color:var(--red); }
+    .op-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:var(--sp-3); margin-top:var(--sp-4); }
+    .op-card { background:var(--canvas); border:1px solid var(--border); border-radius:var(--r-base); padding:var(--sp-3) var(--sp-4); text-align:center; }
+    .op-card .op { font-family:var(--dhbw-font-mono); font-size:1.4rem; font-weight:700; color:var(--red); display:block; }
+    .op-card .op-name { font-size:var(--fs-sm); color:var(--text-sec); }
+    .mt-4 { margin-top:var(--sp-4); } .mt-5 { margin-top:var(--sp-5); } .mt-6 { margin-top:var(--sp-6); }
+    .dhbw-footer { background:var(--text); color:#9CA3AF; text-align:center; padding:var(--sp-5) var(--gutter); font-size:var(--fs-sm); }
+    @media print {
+      @page { size:A4; margin:15mm 18mm; }
+      .dhbw-header,.dhbw-footer { display:none; }
+      .dhbw-hero,.dhbw-slide,.dhbw-code,.dhbw-callout,.concept-card,.game-box { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+      .dhbw-hero { padding:12mm 0 10mm; } .dhbw-slide { padding:8mm 0; }
+      .concept-card,.game-box { break-inside:avoid; }
+      .dhbw-code { font-size:0.78rem; }
+      .page-break { page-break-before:always; }
+    }
+  </style>
+</head>
+<body>
+  <header class="dhbw-header">
+    <div class="dhbw-header__inner">
+      <a href="#" class="dhbw-header__logo"><span class="dhbw-header__logo-text">DHBW Stuttgart</span></a>
+      <nav class="dhbw-header__nav">
+        <a href="V04-Boolsche-Algebra-Teil2_skript.html" class="dhbw-header__nav-link">Theorie</a>
+        <a href="#" class="dhbw-header__nav-link dhbw-header__nav-link--active">Python Praxis</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="dhbw-hero">
+    <div class="dhbw-hero__inner">
+      <p class="dhbw-hero__label">Vorlesung 04 · Python Praxis · Maschinenbau</p>
+      <h1 class="dhbw-hero__title">Vergleichsoperatoren &amp; Logische Operatoren</h1>
+      <p class="dhbw-hero__subtitle">Bedingungen formulieren: kleiner als, gleich, und, oder, nicht</p>
+      <p class="dhbw-hero__meta">WS 2025/26 &nbsp;·&nbsp; DHBW Stuttgart &nbsp;·&nbsp; Nachschlagewerk Python-Praxis</p>
+    </div>
+  </section>
+
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">01</span><h2 class="dhbw-slide__title">Das kannst du danach</h2></div>
+      <div class="dhbw-goals">
+        <p class="dhbw-goals__title">📌 Nach dieser Einheit kannst du …</p>
+        <ul>
+          <li>Werte mit <strong>Vergleichsoperatoren</strong> (<code class="dhbw-inline">==</code>, <code class="dhbw-inline">!=</code>, <code class="dhbw-inline">&lt;</code>, <code class="dhbw-inline">&gt;</code>, <code class="dhbw-inline">&lt;=</code>, <code class="dhbw-inline">&gt;=</code>) vergleichen.</li>
+          <li>Bedingungen mit <strong>and</strong>, <strong>or</strong>, <strong>not</strong> kombinieren.</li>
+          <li>Grenzwertüberwachungen in Python formulieren (z.&nbsp;B. Alarmgrenzen).</li>
+          <li>den Unterschied zwischen <code class="dhbw-inline">=</code> (Zuweisung) und <code class="dhbw-inline">==</code> (Vergleich) erklären.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Operatoren Übersicht SVG -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">02</span><h2 class="dhbw-slide__title">Operatoren im Überblick</h2></div>
+
+      <h3 class="dhbw-section-title">Vergleichsoperatoren – Ergebnis ist immer True oder False</h3>
+      <div class="op-grid">
+        <div class="op-card"><span class="op">==</span><span class="op-name">ist gleich</span></div>
+        <div class="op-card"><span class="op">!=</span><span class="op-name">ungleich</span></div>
+        <div class="op-card"><span class="op">&lt;</span><span class="op-name">kleiner als</span></div>
+        <div class="op-card"><span class="op">&gt;</span><span class="op-name">größer als</span></div>
+        <div class="op-card"><span class="op">&lt;=</span><span class="op-name">kleiner oder gleich</span></div>
+        <div class="op-card"><span class="op">&gt;=</span><span class="op-name">größer oder gleich</span></div>
+      </div>
+
+      <h3 class="dhbw-section-title">Logische Operatoren – Bedingungen verknüpfen</h3>
+      <div class="op-grid">
+        <div class="op-card"><span class="op" style="color:#60A5FA;">and</span><span class="op-name">beide wahr → wahr</span></div>
+        <div class="op-card"><span class="op" style="color:#22C55E;">or</span><span class="op-name">mind. eine wahr → wahr</span></div>
+        <div class="op-card"><span class="op" style="color:#F97316;">not</span><span class="op-name">Wahrheitswert umkehren</span></div>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--merksatz mt-5">
+        <span class="dhbw-callout__label">= vs. == – der häufigste Anfängerfehler</span>
+        <p><code class="dhbw-inline">=</code> ist eine <strong>Zuweisung</strong>: <code class="dhbw-inline">temperatur = 23.5</code> – speichert den Wert.<br>
+        <code class="dhbw-inline">==</code> ist ein <strong>Vergleich</strong>: <code class="dhbw-inline">temperatur == 23.5</code> – prüft, ob der Wert gleich ist.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- KONZEPTKARTEN -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">03</span><h2 class="dhbw-slide__title">Operatoren im Detail</h2></div>
+
+      <div class="concept-grid">
+
+        <div class="concept-card">
+          <div class="concept-card__name">Vergleichsoperatoren</div>
+          <p>Jeder Vergleich ergibt <code class="dhbw-inline">True</code> oder <code class="dhbw-inline">False</code>. Das Ergebnis kann in einer Variable gespeichert oder direkt in einer Bedingung verwendet werden.</p>
+          <div class="dhbw-code"><span class="var">temperatur</span> = <span class="num">85.3</span>
+<span class="var">grenzwert</span>  = <span class="num">80.0</span>
+
+<span class="fn">print</span>(<span class="var">temperatur</span> &gt; <span class="var">grenzwert</span>)   <span class="cmt"># → True</span>
+<span class="fn">print</span>(<span class="var">temperatur</span> == <span class="num">80.0</span>)        <span class="cmt"># → False</span>
+<span class="fn">print</span>(<span class="var">temperatur</span> != <span class="num">80.0</span>)        <span class="cmt"># → True</span>
+<span class="fn">print</span>(<span class="var">temperatur</span> &lt;= <span class="num">100.0</span>)       <span class="cmt"># → True</span>
+
+<span class="cmt"># Ergebnis in Variable speichern</span>
+<span class="var">alarm</span> = <span class="var">temperatur</span> &gt; <span class="var">grenzwert</span>  <span class="cmt"># True</span>
+<span class="fn">print</span>(<span class="str">"Alarm:"</span>, <span class="var">alarm</span>)
+
+<span class="cmt"># Wertebereich prüfen (Python-Besonderheit)</span>
+<span class="var">in_bereich</span> = <span class="num">0</span> &lt;= <span class="var">temperatur</span> &lt;= <span class="num">100</span>  <span class="cmt"># True</span></div>
+        </div>
+
+        <div class="concept-card">
+          <div class="concept-card__name">and · or · not</div>
+          <p>Mit <code class="dhbw-inline">and</code> und <code class="dhbw-inline">or</code> verknüpfst du mehrere Bedingungen. <code class="dhbw-inline">not</code> kehrt einen Wahrheitswert um.</p>
+          <div class="dhbw-code"><span class="var">temp</span>     = <span class="num">85.3</span>
+<span class="var">druck</span>    = <span class="num">1.05</span>
+<span class="var">notaus</span>   = <span class="kw">False</span>
+
+<span class="cmt"># and: beide Bedingungen müssen wahr sein</span>
+<span class="var">alarm</span> = <span class="var">temp</span> &gt; <span class="num">80</span> <span class="kw">and</span> <span class="var">druck</span> &gt; <span class="num">1.0</span>
+<span class="fn">print</span>(<span class="str">"Druckalarm + Temperaturalarm:"</span>, <span class="var">alarm</span>)  <span class="cmt"># True</span>
+
+<span class="cmt"># or: mindestens eine Bedingung muss wahr sein</span>
+<span class="var">irgendein_alarm</span> = <span class="var">temp</span> &gt; <span class="num">100</span> <span class="kw">or</span> <span class="var">druck</span> &gt; <span class="num">1.0</span>
+<span class="fn">print</span>(<span class="str">"Irgendein Alarm:"</span>, <span class="var">irgendein_alarm</span>)     <span class="cmt"># True</span>
+
+<span class="cmt"># not: Wahrheitswert umkehren</span>
+<span class="var">motor_kann_starten</span> = <span class="kw">not</span> <span class="var">notaus</span>
+<span class="fn">print</span>(<span class="str">"Motor kann starten:"</span>, <span class="var">motor_kann_starten</span>)  <span class="cmt"># True</span>
+
+<span class="cmt"># Komplexe Bedingung</span>
+<span class="var">sicher</span> = <span class="kw">not</span> <span class="var">notaus</span> <span class="kw">and</span> <span class="var">temp</span> &lt; <span class="num">100</span> <span class="kw">and</span> <span class="var">druck</span> &lt; <span class="num">2.0</span></div>
+
+          <div class="dhbw-callout dhbw-callout--tip mt-4">
+            <span class="dhbw-callout__label">Klammern für Lesbarkeit</span>
+            <p>Bei komplexen Bedingungen helfen Klammern: <code class="dhbw-inline">(temp &gt; 80) and (druck &gt; 1.0)</code> ist genauso korrekt wie ohne Klammern – aber deutlich leichter zu lesen.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- SCHIFFEVERSENKEN -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">04</span><h2 class="dhbw-slide__title">Im Schiffe-Versenken-Spiel</h2></div>
+      <p>Vergleiche entscheiden, ob ein Schuss ein Treffer ist:</p>
+      <div class="game-box">
+        <div class="game-box__header">
+          <span class="game-box__icon">🚢</span>
+          <div>
+            <h3 class="game-box__title">Treffer-Erkennung</h3>
+            <p class="game-box__subtitle">Vergleichsoperatoren und in-Operator</p>
+          </div>
+        </div>
+        <div class="dhbw-code"><span class="var">schiff</span>     = [(<span class="num">0</span>,<span class="num">1</span>), (<span class="num">0</span>,<span class="num">2</span>), (<span class="num">0</span>,<span class="num">3</span>)]
+<span class="var">koordinate</span> = (<span class="num">0</span>, <span class="num">2</span>)   <span class="cmt"># Schuss auf B1</span>
+
+<span class="cmt"># Vergleich: ist die Koordinate im Schiff?</span>
+<span class="var">ist_treffer</span> = <span class="var">koordinate</span> <span class="kw">in</span> <span class="var">schiff</span>       <span class="cmt"># → True</span>
+
+<span class="cmt"># Spielfeld-Grenzen prüfen</span>
+<span class="var">zeile</span>   = <span class="num">2</span>
+<span class="var">spalte</span>  = <span class="num">5</span>   <span class="cmt"># ungültig!</span>
+<span class="var">gueltig</span> = <span class="num">0</span> &lt;= <span class="var">zeile</span> &lt;= <span class="num">4</span> <span class="kw">and</span> <span class="num">0</span> &lt;= <span class="var">spalte</span> &lt;= <span class="num">4</span>
+<span class="fn">print</span>(<span class="str">"Gültiger Schuss:"</span>, <span class="var">gueltig</span>)             <span class="cmt"># → False</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUICK-REFERENCE -->
+  <section class="dhbw-slide page-break">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">05</span><h2 class="dhbw-slide__title">Quick-Reference</h2></div>
+      <table class="quick-ref">
+        <thead><tr><th>Operator</th><th>Bedeutung</th><th>Beispiel</th><th>Ergebnis</th></tr></thead>
+        <tbody>
+          <tr><td><code>==</code></td><td>gleich</td><td><code>5 == 5</code></td><td><code>True</code></td></tr>
+          <tr><td><code>!=</code></td><td>ungleich</td><td><code>5 != 3</code></td><td><code>True</code></td></tr>
+          <tr><td><code>&lt;</code></td><td>kleiner als</td><td><code>3 &lt; 5</code></td><td><code>True</code></td></tr>
+          <tr><td><code>&gt;</code></td><td>größer als</td><td><code>5 &gt; 3</code></td><td><code>True</code></td></tr>
+          <tr><td><code>&lt;=</code></td><td>kleiner oder gleich</td><td><code>5 &lt;= 5</code></td><td><code>True</code></td></tr>
+          <tr><td><code>&gt;=</code></td><td>größer oder gleich</td><td><code>6 &gt;= 5</code></td><td><code>True</code></td></tr>
+          <tr><td><code>and</code></td><td>beide wahr → wahr</td><td><code>True and False</code></td><td><code>False</code></td></tr>
+          <tr><td><code>or</code></td><td>mind. eine wahr → wahr</td><td><code>True or False</code></td><td><code>True</code></td></tr>
+          <tr><td><code>not</code></td><td>umkehren</td><td><code>not True</code></td><td><code>False</code></td></tr>
+          <tr><td><code>in</code></td><td>Element enthalten?</td><td><code>(0,1) in schiff</code></td><td><code>True/False</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer class="dhbw-footer">DHBW Stuttgart · Maschinenbau · Informatik-Grundlagen · WS 2025/26 · Python Praxis Nachschlagewerk</footer>
+</body>
+</html>

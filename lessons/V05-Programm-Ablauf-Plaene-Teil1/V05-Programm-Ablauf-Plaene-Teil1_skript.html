@@ -1,0 +1,476 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>V05 – Programm-Ablauf-Pläne Teil 1 | DHBW Stuttgart</title>
+  <link rel="stylesheet" href="../../src/dhbw-base.css">
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════════════════════
+       1. HEADER
+  ══════════════════════════════════════════════════════════ -->
+  <header class="dhbw-header">
+    <div class="dhbw-header__inner">
+      <a href="#" class="dhbw-header__logo">
+        <span class="dhbw-header__logo-text">DHBW Stuttgart</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════════════════════════════
+       2. HERO
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-hero">
+    <div class="dhbw-hero__inner">
+      <p class="dhbw-hero__label">Vorlesung 05 · Informatik-Grundlagen · Maschinenbau</p>
+      <h1 class="dhbw-hero__title">Programm-Ablauf-Pläne – Teil 1</h1>
+      <p class="dhbw-hero__subtitle">Algorithmen visuell darstellen – verstehen, bevor man umsetzt</p>
+      <p class="dhbw-hero__meta">WS 2025/26 &nbsp;·&nbsp; DHBW Stuttgart</p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       3. LERNZIELE
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">01</span>
+        <h2 class="dhbw-slide__title">Lernziele</h2>
+      </div>
+
+      <div class="dhbw-goals">
+        <p class="dhbw-goals__title">📌 Nach dieser Vorlesung kannst du …</p>
+        <ul>
+          <li>erklären, was ein <strong>Programm-Ablauf-Plan</strong> (PAP) ist und warum er als Kommunikationswerkzeug zwischen Fachbereichen eingesetzt wird.</li>
+          <li>die 6 wichtigsten PAP-Symbole nach <strong>DIN 66001 / ISO 5807</strong> benennen und ihre Bedeutung beschreiben.</li>
+          <li>einfache Algorithmen als PAP darstellen, der Sequenz, Verzweigung und Schleife enthält.</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       4. WAS IST EIN PAP?
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">02</span>
+        <h2 class="dhbw-slide__title">Was ist ein Programm-Ablauf-Plan?</h2>
+      </div>
+
+      <p>Ein <strong>Programm-Ablauf-Plan</strong> (PAP) ist eine grafische Darstellung eines Algorithmus oder eines Prozesses. Er zeigt Schritt für Schritt, welche Aktionen in welcher Reihenfolge ausgeführt werden und welche Entscheidungen an welchen Stellen getroffen werden. Das Besondere: Ein PAP ist <em>sprachunabhängig</em> – er beschreibt die Logik, ohne eine bestimmte Programmiersprache zu verwenden.</p>
+
+      <p class="mt-5">PAPs sind normiert nach <strong>DIN 66001</strong> (Deutschland) und der internationalen Norm <strong>ISO 5807</strong>. Diese Normierung stellt sicher, dass ein PAP in Deutschland, Japan oder den USA gleich verstanden wird – eine wichtige Eigenschaft in internationalen Engineering-Teams.</p>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">Wozu brauchen wir PAPs?</p>
+            <p>PAPs ermöglichen es, einen Algorithmus zu verstehen und zu diskutieren, <em>bevor</em> eine einzige Zeile Code geschrieben wird. Fehler in der Logik lassen sich im Diagramm viel leichter finden und korrigieren als im fertigen Programm.</p>
+        </div>
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">Wer nutzt PAPs?</p>
+            <p>PAPs werden von Softwareentwicklern, Maschinenbauingenieuren, Prozessplanern und Qualitätssicherungs-Teams gleichermaßen verwendet. Auch in der SPS-Programmierung und in technischen Dokumentationen sind Ablaufdiagramme Standard.</p>
+        </div>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--tip mt-5">
+        <span class="dhbw-callout__label">Merkhilfe</span>
+        <p>Ein PAP ist wie ein Bauplan: Bevor ein Haus gebaut wird, zeichnet der Architekt den Plan. Bevor ein Algorithmus umgesetzt wird, zeichnet der Entwickler den PAP. Beide Pläne helfen, Fehler frühzeitig zu entdecken und das Vorhaben kommunizierbar zu machen.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       5. DIE 6 WICHTIGSTEN SYMBOLE
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">03</span>
+        <h2 class="dhbw-slide__title">Die 6 wichtigsten Symbole (DIN 66001 / ISO 5807)</h2>
+      </div>
+
+      <p>DIN 66001 definiert eine Reihe standardisierter Symbole. Für die tägliche Praxis genügen die folgenden sechs Symbole, um nahezu jeden Algorithmus vollständig darzustellen.</p>
+
+      <!-- Symbol-Übersicht als SVG -->
+      <svg viewBox="0 0 560 290" width="560" height="290" class="mt-5"
+           role="img" aria-label="Übersicht der 6 PAP-Symbole nach DIN 66001: Start-Ende, Prozess, Entscheidung, Ein-Ausgabe, Verbinder, Pfeil">
+
+        <!-- ── ZEILE 1 ───────────────────────────────── -->
+
+        <!-- Symbol 1: Start / Ende (Oval) -->
+        <ellipse cx="80" cy="45" rx="65" ry="28" fill="#E2001A" stroke="#B50016" stroke-width="2"/>
+        <text x="80" y="49" text-anchor="middle" dominant-baseline="middle"
+              font-family="'Source Sans 3',Arial,sans-serif" font-size="13" font-weight="700" fill="#FFFFFF">Start / Ende</text>
+        <text x="80" y="88" text-anchor="middle"
+              font-family="'Source Sans 3',Arial,sans-serif" font-size="12" fill="#1A1A1A" font-weight="600">Terminator</text>
+        <text x="80" y="104" text-anchor="middle"
+              font-family="'Source Sans 3',Arial,sans-serif" font-size="11" fill="#6B7280">Oval / Ellipse</text>
+
+        <!-- Symbol 2: Prozess (Rechteck) -->
+        <rect x="210" y="17" width="130" height="56" rx="3" fill="#F5F5F5" stroke="#1A1A1A" stroke-width="2"/>
+        <text x="275" y="49" text-anchor="middle" dominant-baseline="middle"
+              font-family="'Source Sans 3',Arial,sans-serif" font-size="13" fill="#1A1A1A">Berechnung / Aktion</text>
+        <text x="275" y="88" text-anchor="middle"
+              font-family="'Source Sans 3',Arial,sans-serif" font-size="12" fill="#1A1A1A" font-weight="600">Prozess</text>
+        <text x="275" y="104" text-anchor="middle"
+              font-family="'Source Sans 3',Arial,sans-serif" font-size="11" fill="#6B7280">Rechteck</text>
+
+        <!-- Symbol 3: Entscheidung (Raute) -->
+        <polygon points="470,17 530,45 470,73 410,45" fill="#FAE5E8" stroke="#E2001A" stroke-width="2"/>
+        <text x="470" y="49" text-anchor="middle" dominant-baseline="middle"
+              font-family="'Source Sans 3',Arial,sans-serif" font-size="12" fill="#1A1A1A">Bedingung?</text>
+        <text x="470" y="88" text-anchor="middle"
+              font-family="'Source Sans 3',Arial,sans-serif" font-size="12" fill="#1A1A1A" font-weight="600">Entscheidung</text>
+        <text x="470" y="104" text-anchor="middle"
+              font-family="'Source Sans 3',Arial,sans-serif" font-size="11" fill="#6B7280">Raute (Rhombus)</text>
+
+        <!-- Trennlinie -->
+        <line x1="0" y1="118" x2="560" y2="118" stroke="#D1D5DB" stroke-width="1"/>
+
+        <!-- ── ZEILE 2 ───────────────────────────────── -->
+
+        <!-- Symbol 4: Ein-/Ausgabe (Parallelogramm) -->
+        <polygon points="30,150 150,150 135,196 15,196" fill="#F5F5F5" stroke="#1A1A1A" stroke-width="2"/>
+        <text x="80" y="177" text-anchor="middle" dominant-baseline="middle"
+              font-family="'Source Sans 3',Arial,sans-serif" font-size="12" fill="#1A1A1A">Eingabe / Ausgabe</text>
+        <text x="80" y="218" text-anchor="middle"
+              font-family="'Source Sans 3',Arial,sans-serif" font-size="12" fill="#1A1A1A" font-weight="600">Ein-/Ausgabe</text>
+        <text x="80" y="234" text-anchor="middle"
+              font-family="'Source Sans 3',Arial,sans-serif" font-size="11" fill="#6B7280">Parallelogramm</text>
+
+        <!-- Symbol 5: Verbinder (Kreis) -->
+        <circle cx="275" cy="170" r="28" fill="#F5F5F5" stroke="#1A1A1A" stroke-width="2"/>
+        <text x="275" y="175" text-anchor="middle" dominant-baseline="middle"
+              font-family="'Source Sans 3',Arial,sans-serif" font-size="16" font-weight="700" fill="#1A1A1A">1</text>
+        <text x="275" y="218" text-anchor="middle"
+              font-family="'Source Sans 3',Arial,sans-serif" font-size="12" fill="#1A1A1A" font-weight="600">Verbinder</text>
+        <text x="275" y="234" text-anchor="middle"
+              font-family="'Source Sans 3',Arial,sans-serif" font-size="11" fill="#6B7280">Kreis (mit Nummer)</text>
+
+        <!-- Symbol 6: Pfeil (Flussrichtung) -->
+        <defs>
+          <marker id="arr-pap5" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#1A1A1A"/>
+          </marker>
+        </defs>
+        <line x1="410" y1="170" x2="530" y2="170" stroke="#1A1A1A" stroke-width="3" marker-end="url(#arr-pap5)"/>
+        <text x="470" y="218" text-anchor="middle"
+              font-family="'Source Sans 3',Arial,sans-serif" font-size="12" fill="#1A1A1A" font-weight="600">Flussrichtung</text>
+        <text x="470" y="234" text-anchor="middle"
+              font-family="'Source Sans 3',Arial,sans-serif" font-size="11" fill="#6B7280">Pfeil (Verbindungslinie)</text>
+
+      </svg>
+
+      <div class="dhbw-callout dhbw-callout--tip mt-5">
+        <span class="dhbw-callout__label">Wichtig</span>
+        <p>Jedes PAP hat genau <strong>einen</strong> Start und <strong>ein oder mehrere</strong> Enden. Die Pfeile zeigen immer die Flussrichtung an – von oben nach unten ist der Standard, Schleifen gehen zurück nach oben. Rauten (Entscheidungen) haben immer genau zwei ausgehende Pfeile: einen für „Ja" und einen für „Nein".</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       6. GRUNDSTRUKTUR: SEQUENZ
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">04</span>
+        <h2 class="dhbw-slide__title">Grundstruktur 1: Sequenz</h2>
+      </div>
+
+      <p>Die <strong>Sequenz</strong> ist die einfachste Ablaufstruktur: Schritte werden einer nach dem anderen, in einer fest definierten Reihenfolge ausgeführt. Es gibt keine Verzweigung und keine Wiederholung – einfach Schritt 1, dann Schritt 2, dann Schritt 3.</p>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+          <p>Die Sequenz entspricht einer einfachen Checkliste, die von oben nach unten abgehakt wird. Jede Aktion folgt zwingend auf die vorherige. Ein Prozess ohne Entscheidungen oder Schleifen ist eine reine Sequenz.</p>
+          <p class="mt-4"><strong>Alltagsbeispiel:</strong> Kaffee kochen – Wasser einschalten, Kaffeepulver einfüllen, Tasse bereitstellen, fertig. Kein Wenn-Dann, keine Wiederholung.</p>
+          <p class="mt-4">In einem PAP erkennt man eine Sequenz daran, dass alle Rechtecke in einer geraden Linie von oben nach unten angeordnet sind, verbunden durch gerade Pfeile.</p>
+        </div>
+        <div class="dhbw-columns__item">
+          <svg viewBox="0 0 180 260" width="180" height="260"
+               role="img" aria-label="Sequenz-PAP: Drei Prozessschritte nacheinander">
+            <defs>
+              <marker id="arr-seq" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                <polygon points="0 0, 8 3, 0 6" fill="#1A1A1A"/>
+              </marker>
+            </defs>
+            <!-- Schritt 1 -->
+            <rect x="25" y="10" width="130" height="45" rx="3" fill="#F5F5F5" stroke="#1A1A1A" stroke-width="2"/>
+            <text x="90" y="37" text-anchor="middle" dominant-baseline="middle"
+                  font-family="'Source Sans 3',Arial,sans-serif" font-size="12" fill="#1A1A1A">Schritt 1</text>
+            <line x1="90" y1="55" x2="90" y2="77" stroke="#1A1A1A" stroke-width="2" marker-end="url(#arr-seq)"/>
+            <!-- Schritt 2 -->
+            <rect x="25" y="79" width="130" height="45" rx="3" fill="#F5F5F5" stroke="#1A1A1A" stroke-width="2"/>
+            <text x="90" y="106" text-anchor="middle" dominant-baseline="middle"
+                  font-family="'Source Sans 3',Arial,sans-serif" font-size="12" fill="#1A1A1A">Schritt 2</text>
+            <line x1="90" y1="124" x2="90" y2="146" stroke="#1A1A1A" stroke-width="2" marker-end="url(#arr-seq)"/>
+            <!-- Schritt 3 -->
+            <rect x="25" y="148" width="130" height="45" rx="3" fill="#F5F5F5" stroke="#1A1A1A" stroke-width="2"/>
+            <text x="90" y="175" text-anchor="middle" dominant-baseline="middle"
+                  font-family="'Source Sans 3',Arial,sans-serif" font-size="12" fill="#1A1A1A">Schritt 3</text>
+            <line x1="90" y1="193" x2="90" y2="215" stroke="#1A1A1A" stroke-width="2" marker-end="url(#arr-seq)"/>
+            <!-- Schritt 4 -->
+            <rect x="25" y="217" width="130" height="35" rx="3" fill="#FAE5E8" stroke="#E2001A" stroke-width="1.5"/>
+            <text x="90" y="234" text-anchor="middle" dominant-baseline="middle"
+                  font-family="'Source Sans 3',Arial,sans-serif" font-size="11" fill="#6B7280">… und so weiter</text>
+          </svg>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       7. GRUNDSTRUKTUR: VERZWEIGUNG
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">05</span>
+        <h2 class="dhbw-slide__title">Grundstruktur 2: Verzweigung (IF-THEN-ELSE)</h2>
+      </div>
+
+      <p>Die <strong>Verzweigung</strong> erlaubt es einem Algorithmus, je nach Bedingung unterschiedliche Wege einzuschlagen. Sie entspricht einem „Wenn … dann … sonst …" und wird im PAP durch eine Raute dargestellt. Aus der Raute führen genau zwei Pfeile: einer für „Ja" und einer für „Nein".</p>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+          <p>Die Raute enthält eine Frage oder Bedingung, die nur mit Ja oder Nein beantwortet werden kann. Abhängig von der Antwort wird ein anderer Zweig durchlaufen. Nach den Zweigen können die Pfade wieder zusammenführen und gemeinsam weitergeführt werden.</p>
+          <p class="mt-4"><strong>Alltagsbeispiel:</strong> Die Ampel: „Ist die Ampel grün?" → Ja: fahren. Nein: warten. Danach – unabhängig vom Ergebnis – weiterfahren.</p>
+        </div>
+        <div class="dhbw-columns__item">
+          <svg viewBox="0 0 240 220" width="240" height="220"
+               role="img" aria-label="Verzweigung-PAP: Raute mit Ja- und Nein-Zweig, die wieder zusammenführen">
+            <defs>
+              <marker id="arr-br" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                <polygon points="0 0, 8 3, 0 6" fill="#1A1A1A"/>
+              </marker>
+            </defs>
+            <!-- Arrow in -->
+            <line x1="120" y1="5" x2="120" y2="27" stroke="#1A1A1A" stroke-width="2" marker-end="url(#arr-br)"/>
+            <!-- Decision diamond -->
+            <polygon points="120,29 175,60 120,91 65,60" fill="#FAE5E8" stroke="#E2001A" stroke-width="2"/>
+            <text x="120" y="64" text-anchor="middle" dominant-baseline="middle"
+                  font-family="'Source Sans 3',Arial,sans-serif" font-size="11" fill="#1A1A1A">Bedingung?</text>
+            <!-- JA arrow down-left -->
+            <line x1="65" y1="60" x2="35" y2="60" stroke="#1A1A1A" stroke-width="2" marker-end="url(#arr-br)"/>
+            <text x="47" y="55" font-family="'Source Sans 3',Arial,sans-serif" font-size="11" fill="#1A1A1A">Ja</text>
+            <line x1="35" y1="60" x2="35" y2="112" stroke="#1A1A1A" stroke-width="2" marker-end="url(#arr-br)"/>
+            <!-- NEIN arrow right -->
+            <line x1="175" y1="60" x2="205" y2="60" stroke="#1A1A1A" stroke-width="2" marker-end="url(#arr-br)"/>
+            <text x="178" y="55" font-family="'Source Sans 3',Arial,sans-serif" font-size="11" fill="#1A1A1A">Nein</text>
+            <line x1="205" y1="60" x2="205" y2="112" stroke="#1A1A1A" stroke-width="2" marker-end="url(#arr-br)"/>
+            <!-- JA box -->
+            <rect x="5" y="112" width="60" height="38" rx="3" fill="#F5F5F5" stroke="#1A1A1A" stroke-width="2"/>
+            <text x="35" y="134" text-anchor="middle" dominant-baseline="middle"
+                  font-family="'Source Sans 3',Arial,sans-serif" font-size="11" fill="#1A1A1A">Ja-Zweig</text>
+            <!-- NEIN box -->
+            <rect x="175" y="112" width="60" height="38" rx="3" fill="#F5F5F5" stroke="#1A1A1A" stroke-width="2"/>
+            <text x="205" y="134" text-anchor="middle" dominant-baseline="middle"
+                  font-family="'Source Sans 3',Arial,sans-serif" font-size="11" fill="#1A1A1A">Nein-Zweig</text>
+            <!-- Join -->
+            <line x1="35" y1="150" x2="35" y2="175" stroke="#1A1A1A" stroke-width="2"/>
+            <line x1="205" y1="150" x2="205" y2="175" stroke="#1A1A1A" stroke-width="2"/>
+            <line x1="35" y1="175" x2="205" y2="175" stroke="#1A1A1A" stroke-width="2"/>
+            <line x1="120" y1="175" x2="120" y2="197" stroke="#1A1A1A" stroke-width="2" marker-end="url(#arr-br)"/>
+            <text x="120" y="213" text-anchor="middle"
+                  font-family="'Source Sans 3',Arial,sans-serif" font-size="11" fill="#6B7280">weiter …</text>
+          </svg>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       8. GRUNDSTRUKTUR: SCHLEIFE
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">06</span>
+        <h2 class="dhbw-slide__title">Grundstruktur 3: Schleife (kopfgesteuert)</h2>
+      </div>
+
+      <p>Eine <strong>Schleife</strong> wiederholt einen Codeblock so lange, wie eine bestimmte Bedingung erfüllt ist. Bei der <strong>kopfgesteuerten Schleife</strong> steht die Bedingung <em>vor</em> dem Schleifenkörper – die Bedingung wird geprüft, <em>bevor</em> der wiederholte Schritt ausgeführt wird. Ist die Bedingung schon beim ersten Aufruf falsch, wird der Schleifenkörper überhaupt nicht ausgeführt.</p>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+          <p>Im PAP erkennt man eine Schleife daran, dass ein Pfeil von unterhalb der Verarbeitungsschritte zurück nach oben zur Bedingungsraute führt. Diese rückwärts laufende Verbindung macht die Wiederholung sichtbar.</p>
+          <p class="mt-4"><strong>Alltagsbeispiel:</strong> Solange die Waschmaschine läuft, wartest du. Die Bedingung „läuft noch?" wird vor dem Warten geprüft – ist sie fertig, wartest du gar nicht erst.</p>
+        </div>
+        <div class="dhbw-columns__item">
+          <svg viewBox="0 0 220 280" width="220" height="280"
+               role="img" aria-label="Kopfgesteuerte Schleife im PAP: Bedingungsraute am Kopf, Schleifenkörper darunter, Rückpfeil nach oben">
+            <defs>
+              <marker id="arr-loop" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                <polygon points="0 0, 8 3, 0 6" fill="#1A1A1A"/>
+              </marker>
+            </defs>
+            <!-- Arrow in -->
+            <line x1="110" y1="5" x2="110" y2="27" stroke="#1A1A1A" stroke-width="2" marker-end="url(#arr-loop)"/>
+            <!-- Decision -->
+            <polygon points="110,29 170,60 110,91 50,60" fill="#FAE5E8" stroke="#E2001A" stroke-width="2"/>
+            <text x="110" y="64" text-anchor="middle" dominant-baseline="middle"
+                  font-family="'Source Sans 3',Arial,sans-serif" font-size="11" fill="#1A1A1A">Bedingung?</text>
+            <!-- JA down -->
+            <text x="94" y="109" font-family="'Source Sans 3',Arial,sans-serif" font-size="11" fill="#1A1A1A">Ja</text>
+            <line x1="110" y1="91" x2="110" y2="115" stroke="#1A1A1A" stroke-width="2" marker-end="url(#arr-loop)"/>
+            <!-- NEIN right → exit -->
+            <text x="173" y="55" font-family="'Source Sans 3',Arial,sans-serif" font-size="11" fill="#1A1A1A">Nein</text>
+            <line x1="170" y1="60" x2="205" y2="60" stroke="#1A1A1A" stroke-width="2" marker-end="url(#arr-loop)"/>
+            <text x="210" y="64" font-family="'Source Sans 3',Arial,sans-serif" font-size="11" fill="#6B7280">…</text>
+            <!-- Loop body -->
+            <rect x="45" y="117" width="130" height="45" rx="3" fill="#F5F5F5" stroke="#1A1A1A" stroke-width="2"/>
+            <text x="110" y="143" text-anchor="middle" dominant-baseline="middle"
+                  font-family="'Source Sans 3',Arial,sans-serif" font-size="12" fill="#1A1A1A">Schleifenkörper</text>
+            <!-- Loop back -->
+            <line x1="110" y1="162" x2="110" y2="187" stroke="#1A1A1A" stroke-width="2"/>
+            <line x1="110" y1="187" x2="25" y2="187" stroke="#1A1A1A" stroke-width="2"/>
+            <line x1="25" y1="187" x2="25" y2="60" stroke="#1A1A1A" stroke-width="2"/>
+            <line x1="25" y1="60" x2="48" y2="60" stroke="#1A1A1A" stroke-width="2" marker-end="url(#arr-loop)"/>
+            <!-- Label Rückpfeil -->
+            <text x="14" y="130" text-anchor="middle" font-family="'Source Sans 3',Arial,sans-serif" font-size="10" fill="#6B7280" transform="rotate(-90, 14, 130)">wiederholen</text>
+          </svg>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       9. PRAXISBEISPIEL: MORGENROUTINE PAP
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">07</span>
+        <h2 class="dhbw-slide__title">Praxisbeispiel: Morgenroutine als PAP</h2>
+      </div>
+
+      <p>Das folgende PAP zeigt eine einfache Morgenroutine. Es enthält alle drei Grundstrukturen: eine <strong>Sequenz</strong> (Aufwachen, Kaffee kochen), eine <strong>Verzweigung</strong> (Ist es kalt? → Jacke anziehen oder nicht) und führt danach die Schritte wieder zusammen. Das PAP lässt sich von jedem lesen – ohne Programmierkenntnisse.</p>
+
+      <!-- Morgenroutine PAP -->
+      <svg viewBox="0 0 310 510" width="310" height="510" class="mt-5"
+           role="img" aria-label="PAP Morgenroutine: Start, Aufwachen, Kaffee kochen, Entscheidung kalt, Jacke anziehen (Ja-Zweig), Haus verlassen, Ende">
+        <defs>
+          <marker id="arr-mr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#1A1A1A"/>
+          </marker>
+        </defs>
+
+        <!-- START -->
+        <ellipse cx="140" cy="35" rx="70" ry="26" fill="#E2001A" stroke="#B50016" stroke-width="2"/>
+        <text x="140" y="39" text-anchor="middle" dominant-baseline="middle"
+              font-family="'Source Sans 3',Arial,sans-serif" font-size="14" font-weight="700" fill="#FFFFFF">START</text>
+
+        <!-- START → Aufwachen -->
+        <line x1="140" y1="61" x2="140" y2="83" stroke="#1A1A1A" stroke-width="2" marker-end="url(#arr-mr)"/>
+
+        <!-- Prozess: Aufwachen -->
+        <rect x="75" y="85" width="130" height="45" rx="3" fill="#F5F5F5" stroke="#1A1A1A" stroke-width="2"/>
+        <text x="140" y="111" text-anchor="middle" dominant-baseline="middle"
+              font-family="'Source Sans 3',Arial,sans-serif" font-size="13" fill="#1A1A1A">Aufwachen</text>
+
+        <!-- Aufwachen → Kaffee -->
+        <line x1="140" y1="130" x2="140" y2="152" stroke="#1A1A1A" stroke-width="2" marker-end="url(#arr-mr)"/>
+
+        <!-- Prozess: Kaffee kochen -->
+        <rect x="75" y="154" width="130" height="45" rx="3" fill="#F5F5F5" stroke="#1A1A1A" stroke-width="2"/>
+        <text x="140" y="180" text-anchor="middle" dominant-baseline="middle"
+              font-family="'Source Sans 3',Arial,sans-serif" font-size="13" fill="#1A1A1A">Kaffee kochen</text>
+
+        <!-- Kaffee → Decision -->
+        <line x1="140" y1="199" x2="140" y2="221" stroke="#1A1A1A" stroke-width="2" marker-end="url(#arr-mr)"/>
+
+        <!-- Decision: Ist es kalt? -->
+        <polygon points="140,223 205,255 140,287 75,255" fill="#FAE5E8" stroke="#E2001A" stroke-width="2"/>
+        <text x="140" y="258" text-anchor="middle" dominant-baseline="middle"
+              font-family="'Source Sans 3',Arial,sans-serif" font-size="12" fill="#1A1A1A">Ist es kalt?</text>
+
+        <!-- JA label + arrow down -->
+        <text x="124" y="305" font-family="'Source Sans 3',Arial,sans-serif" font-size="12" fill="#1A1A1A">Ja</text>
+        <line x1="140" y1="287" x2="140" y2="310" stroke="#1A1A1A" stroke-width="2" marker-end="url(#arr-mr)"/>
+
+        <!-- NEIN label + line right → bypass Jacke, joins before Haus verlassen -->
+        <text x="208" y="250" font-family="'Source Sans 3',Arial,sans-serif" font-size="12" fill="#1A1A1A">Nein</text>
+        <polyline points="205,255 270,255 270,405 205,405"
+                  fill="none" stroke="#1A1A1A" stroke-width="2" marker-end="url(#arr-mr)"/>
+
+        <!-- Prozess: Jacke anziehen -->
+        <rect x="75" y="312" width="130" height="45" rx="3" fill="#F5F5F5" stroke="#1A1A1A" stroke-width="2"/>
+        <text x="140" y="338" text-anchor="middle" dominant-baseline="middle"
+              font-family="'Source Sans 3',Arial,sans-serif" font-size="13" fill="#1A1A1A">Jacke anziehen</text>
+
+        <!-- Jacke → Haus -->
+        <line x1="140" y1="357" x2="140" y2="379" stroke="#1A1A1A" stroke-width="2" marker-end="url(#arr-mr)"/>
+
+        <!-- Prozess: Haus verlassen -->
+        <rect x="75" y="381" width="130" height="45" rx="3" fill="#F5F5F5" stroke="#1A1A1A" stroke-width="2"/>
+        <text x="140" y="407" text-anchor="middle" dominant-baseline="middle"
+              font-family="'Source Sans 3',Arial,sans-serif" font-size="13" fill="#1A1A1A">Haus verlassen</text>
+
+        <!-- Haus → ENDE -->
+        <line x1="140" y1="426" x2="140" y2="448" stroke="#1A1A1A" stroke-width="2" marker-end="url(#arr-mr)"/>
+
+        <!-- ENDE -->
+        <ellipse cx="140" cy="472" rx="70" ry="26" fill="#E2001A" stroke="#B50016" stroke-width="2"/>
+        <text x="140" y="476" text-anchor="middle" dominant-baseline="middle"
+              font-family="'Source Sans 3',Arial,sans-serif" font-size="14" font-weight="700" fill="#FFFFFF">ENDE</text>
+
+      </svg>
+
+      <div class="dhbw-callout dhbw-callout--example mt-5">
+        <span class="dhbw-callout__label">Wie liest man diesen PAP?</span>
+        <p>Von oben nach unten: Der Ablauf beginnt bei START. Nach dem Aufwachen und dem Kaffeeekochen kommt die Entscheidungsraute. Die Beschriftung an den Pfeilen zeigt, welcher Weg bei „Ja" und welcher bei „Nein" eingeschlagen wird. Beide Wege führen bei „Haus verlassen" wieder zusammen und laufen bis zum ENDE.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       10. ZUSAMMENFASSUNG
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">08</span>
+        <h2 class="dhbw-slide__title">Zusammenfassung</h2>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--merksatz">
+        <span class="dhbw-callout__label">Merksatz</span>
+        <p>Ein <strong>Programm-Ablauf-Plan (PAP)</strong> stellt einen Algorithmus sprachunabhängig und normiert dar. Die Symbole sind in DIN 66001 / ISO 5807 festgelegt. Die drei Grundstrukturen – <strong>Sequenz</strong> (einer nach dem anderen), <strong>Verzweigung</strong> (Wenn-Dann-Sonst) und <strong>Schleife</strong> (Wiederholung mit Bedingung) – reichen aus, um jeden möglichen Algorithmus vollständig zu beschreiben.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════════════════════════ -->
+  <footer class="dhbw-footer">
+    <div class="dhbw-footer__inner">
+      <span class="dhbw-footer__brand">DHBW Stuttgart</span>
+      <span>Informatik-Grundlagen für Maschinenbau &nbsp;·&nbsp; WS&nbsp;2025/26</span>
+      <span>V05 – Programm-Ablauf-Pläne Teil 1</span>
+    </div>
+  </footer>
+
+</body>
+</html>

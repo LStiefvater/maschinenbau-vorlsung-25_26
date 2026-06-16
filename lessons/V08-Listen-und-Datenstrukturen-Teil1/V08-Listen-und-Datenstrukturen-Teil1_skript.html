@@ -1,0 +1,512 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>V08 – Listen und Datenstrukturen Teil 1 | DHBW Stuttgart</title>
+  <link rel="stylesheet" href="../../src/dhbw-base.css">
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════════════════════
+       1. HEADER
+  ══════════════════════════════════════════════════════════ -->
+  <header class="dhbw-header">
+    <div class="dhbw-header__inner">
+      <a href="#" class="dhbw-header__logo">
+        <span class="dhbw-header__logo-text">DHBW Stuttgart</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════════════════════════════
+       2. HERO
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-hero">
+    <div class="dhbw-hero__inner">
+      <p class="dhbw-hero__label">Vorlesung 08 · Informatik-Grundlagen · Maschinenbau</p>
+      <h1 class="dhbw-hero__title">Listen und Datenstrukturen – Teil 1</h1>
+      <p class="dhbw-hero__subtitle">Array, Linked List, Stack und Queue – die vier wichtigsten Bausteine für die Organisation von Daten</p>
+      <p class="dhbw-hero__meta">WS 2025/26 &nbsp;·&nbsp; DHBW Stuttgart</p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       3. LERNZIELE
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">01</span>
+        <h2 class="dhbw-slide__title">Lernziele</h2>
+      </div>
+
+      <div class="dhbw-goals">
+        <p class="dhbw-goals__title">📌 Nach dieser Vorlesung kannst du …</p>
+        <ul>
+          <li>erklären, warum <strong>Datenstrukturen</strong> existieren und welchen Vorteil sie gegenüber einzelnen Variablen bieten.</li>
+          <li>den Unterschied zwischen <strong>Array</strong>, <strong>Linked List</strong>, <strong>Stack</strong> und <strong>Queue</strong> beschreiben.</li>
+          <li>die Prinzipien <strong>LIFO</strong> und <strong>FIFO</strong> erklären und für eine gegebene Situation die passende Datenstruktur wählen.</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       4. WARUM DATENSTRUKTUREN?
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">02</span>
+        <h2 class="dhbw-slide__title">Warum brauchen wir Datenstrukturen?</h2>
+      </div>
+
+      <p>Stell dir vor, du schreibst ein Programm, das die Messwerte von 100 Temperatursensoren verwaltet. Ohne Datenstruktur bräuchtest du 100 einzelne Variablen: <code class="dhbw-inline">sensor1</code>, <code class="dhbw-inline">sensor2</code>, … <code class="dhbw-inline">sensor100</code>. Das ist nicht nur mühsam zu schreiben – es lässt sich auch nicht automatisch verarbeiten. Kommt ein 101. Sensor dazu, muss der gesamte Code manuell erweitert werden.</p>
+
+      <p class="mt-5">Eine <strong>Datenstruktur</strong> löst dieses Problem: Sie fasst mehrere Datenwerte in einem einzigen, strukturierten Behälter zusammen. Die Auswahl der richtigen Datenstruktur entscheidet darüber, ob Operationen wie Einfügen, Suchen oder Löschen schnell und einfach oder langsam und fehleranfällig sind.</p>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">Ohne Datenstruktur</p>
+            <p>100 einzelne Variablen. Für jede Berechnung muss jede Variable einzeln angefasst werden. Eine Schleife ist nicht möglich. Wartung ist ein Albtraum.</p>
+        </div>
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">Mit Datenstruktur</p>
+            <p>Alle 100 Werte in einer einzigen Struktur. Eine Schleife verarbeitet sie automatisch. 1000 Werte funktionieren mit demselben Code. Erweiterung ist trivial.</p>
+        </div>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--tip mt-5">
+        <span class="dhbw-callout__label">Praxisbezug Maschinenbau</span>
+        <p>In der Maschinenüberwachung (Condition Monitoring) werden kontinuierlich Sensorwerte gesammelt und ausgewertet. Eine Warteschlange (Queue) speichert die zuletzt gemessenen Werte, ein Array hält die Referenzwerte vor – ohne die richtigen Datenstrukturen wäre moderne Maschinendiagnose nicht realisierbar.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       5. ARRAY / LISTE
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">03</span>
+        <h2 class="dhbw-slide__title">Array / Liste – Nummerierte Ablagefächer</h2>
+      </div>
+
+      <p>Ein <strong>Array</strong> (oder Liste) ist die grundlegendste Datenstruktur. Sie speichert eine Folge von Elementen an direkt aufeinanderfolgenden Speicherplätzen. Jedes Element besitzt einen <strong>Index</strong> – eine Nummer, über die es direkt angesprochen werden kann. Der Index beginnt in den meisten Systemen bei 0.</p>
+
+      <h3 class="dhbw-section-title">Visualisierung: Ein Array mit 5 Elementen</h3>
+      <svg viewBox="0 0 500 110" width="500" height="110" class="mt-4"
+           role="img" aria-label="Array mit 5 Elementen, jedes Element hat einen Index von 0 bis 4">
+        <!-- Element 0 -->
+        <rect x="10"  y="20" width="85" height="60" rx="3" fill="#FAE5E8" stroke="#E2001A" stroke-width="2"/>
+        <text x="52"  y="46" text-anchor="middle" dominant-baseline="middle"
+              font-family="'Source Sans 3',Arial,sans-serif" font-size="18" font-weight="700" fill="#E2001A">42</text>
+        <text x="52"  y="95" text-anchor="middle"
+              font-family="'Source Sans 3',Arial,sans-serif" font-size="12" fill="#6B7280">Index 0</text>
+
+        <!-- Element 1 -->
+        <rect x="105" y="20" width="85" height="60" rx="3" fill="#F5F5F5" stroke="#D1D5DB" stroke-width="2"/>
+        <text x="147" y="46" text-anchor="middle" dominant-baseline="middle"
+              font-family="'Source Sans 3',Arial,sans-serif" font-size="18" font-weight="700" fill="#1A1A1A">17</text>
+        <text x="147" y="95" text-anchor="middle"
+              font-family="'Source Sans 3',Arial,sans-serif" font-size="12" fill="#6B7280">Index 1</text>
+
+        <!-- Element 2 -->
+        <rect x="200" y="20" width="85" height="60" rx="3" fill="#F5F5F5" stroke="#D1D5DB" stroke-width="2"/>
+        <text x="242" y="46" text-anchor="middle" dominant-baseline="middle"
+              font-family="'Source Sans 3',Arial,sans-serif" font-size="18" font-weight="700" fill="#1A1A1A">89</text>
+        <text x="242" y="95" text-anchor="middle"
+              font-family="'Source Sans 3',Arial,sans-serif" font-size="12" fill="#6B7280">Index 2</text>
+
+        <!-- Element 3 -->
+        <rect x="295" y="20" width="85" height="60" rx="3" fill="#F5F5F5" stroke="#D1D5DB" stroke-width="2"/>
+        <text x="337" y="46" text-anchor="middle" dominant-baseline="middle"
+              font-family="'Source Sans 3',Arial,sans-serif" font-size="18" font-weight="700" fill="#1A1A1A">5</text>
+        <text x="337" y="95" text-anchor="middle"
+              font-family="'Source Sans 3',Arial,sans-serif" font-size="12" fill="#6B7280">Index 3</text>
+
+        <!-- Element 4 -->
+        <rect x="390" y="20" width="85" height="60" rx="3" fill="#F5F5F5" stroke="#D1D5DB" stroke-width="2"/>
+        <text x="432" y="46" text-anchor="middle" dominant-baseline="middle"
+              font-family="'Source Sans 3',Arial,sans-serif" font-size="18" font-weight="700" fill="#1A1A1A">63</text>
+        <text x="432" y="95" text-anchor="middle"
+              font-family="'Source Sans 3',Arial,sans-serif" font-size="12" fill="#6B7280">Index 4</text>
+      </svg>
+
+      <p class="mt-4 text-sec">Das rot markierte Element an Index 0 hat den Wert 42 und ist über seinen Index direkt erreichbar – unabhängig davon, wie groß das Array ist.</p>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+          <h3>Vorteile des Arrays</h3>
+          <ul class="mt-4">
+            <li>Direkter Zugriff über Index – sehr schnell, egal ob Element 1 oder Element 1.000.000.</li>
+            <li>Einfache Iteration: Alle Elemente können mit einer Schleife durchlaufen werden.</li>
+            <li>Speichereffizient: Elemente liegen direkt nebeneinander im Arbeitsspeicher.</li>
+          </ul>
+        </div>
+        <div class="dhbw-columns__item">
+          <h3>Nachteile des Arrays</h3>
+          <ul class="mt-4">
+            <li>Einfügen in der Mitte ist aufwendig: Alle nachfolgenden Elemente müssen verschoben werden.</li>
+            <li>Die Größe kann je nach Systemimplementierung fest vorgegeben sein.</li>
+            <li>Löschen erzeugt „Lücken", die verwaltet werden müssen.</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       6. LINKED LIST
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">04</span>
+        <h2 class="dhbw-slide__title">Linked List – Die verkettete Liste</h2>
+      </div>
+
+      <p>Eine <strong>Linked List</strong> (verkettete Liste) speichert Elemente nicht an aufeinanderfolgenden Speicherplätzen, sondern als unabhängige „Knoten". Jeder Knoten enthält seinen Datenwert <em>und</em> einen Verweis (Zeiger) auf den nächsten Knoten. Die Elemente sind durch diese Verweise miteinander verkettet – wie Waggons eines Zuges, die durch Kupplungen verbunden sind.</p>
+
+      <div class="dhbw-callout dhbw-callout--example mt-5">
+        <span class="dhbw-callout__label">Analogie: Der Zug</span>
+        <p>Stell dir einen Zug vor: Jeder Waggon ist eigenständig und enthält Passagiere (Daten). Über die Kupplung weiß er, welcher Waggon als nächstes kommt. Du kannst einen neuen Waggon einfach in der Mitte einkoppeln, ohne den Rest des Zuges zu verschieben. Beim Array müsstest du dagegen alle dahinterliegenden Waggons physisch nach hinten rücken.</p>
+      </div>
+
+      <!-- Linked List SVG -->
+      <svg viewBox="0 0 560 90" width="560" height="90" class="mt-5"
+           role="img" aria-label="Linked List: vier Knoten mit Datenwert und Zeiger auf nächsten Knoten">
+        <defs>
+          <marker id="arr-ll" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#1A1A1A"/>
+          </marker>
+        </defs>
+
+        <!-- Knoten 1 -->
+        <rect x="10"  y="15" width="55" height="55" rx="3" fill="#FAE5E8" stroke="#E2001A" stroke-width="2"/>
+        <text x="37"  y="46" text-anchor="middle" dominant-baseline="middle"
+              font-family="'Source Sans 3',Arial,sans-serif" font-size="16" font-weight="700" fill="#E2001A">42</text>
+        <rect x="65"  y="15" width="30" height="55" rx="3" fill="#F5F5F5" stroke="#1A1A1A" stroke-width="2"/>
+        <text x="80"  y="46" text-anchor="middle" dominant-baseline="middle"
+              font-family="'Source Sans 3',Arial,sans-serif" font-size="10" fill="#6B7280">→</text>
+        <text x="52"  y="82" text-anchor="middle"
+              font-family="'Source Sans 3',Arial,sans-serif" font-size="10" fill="#6B7280">Knoten 1</text>
+
+        <!-- Pfeil 1→2 -->
+        <line x1="95" y1="42" x2="140" y2="42" stroke="#1A1A1A" stroke-width="2" marker-end="url(#arr-ll)"/>
+
+        <!-- Knoten 2 -->
+        <rect x="140" y="15" width="55" height="55" rx="3" fill="#F5F5F5" stroke="#D1D5DB" stroke-width="2"/>
+        <text x="167" y="46" text-anchor="middle" dominant-baseline="middle"
+              font-family="'Source Sans 3',Arial,sans-serif" font-size="16" font-weight="700" fill="#1A1A1A">17</text>
+        <rect x="195" y="15" width="30" height="55" rx="3" fill="#F5F5F5" stroke="#1A1A1A" stroke-width="2"/>
+        <text x="210" y="46" text-anchor="middle" dominant-baseline="middle"
+              font-family="'Source Sans 3',Arial,sans-serif" font-size="10" fill="#6B7280">→</text>
+        <text x="182" y="82" text-anchor="middle"
+              font-family="'Source Sans 3',Arial,sans-serif" font-size="10" fill="#6B7280">Knoten 2</text>
+
+        <!-- Pfeil 2→3 -->
+        <line x1="225" y1="42" x2="270" y2="42" stroke="#1A1A1A" stroke-width="2" marker-end="url(#arr-ll)"/>
+
+        <!-- Knoten 3 -->
+        <rect x="270" y="15" width="55" height="55" rx="3" fill="#F5F5F5" stroke="#D1D5DB" stroke-width="2"/>
+        <text x="297" y="46" text-anchor="middle" dominant-baseline="middle"
+              font-family="'Source Sans 3',Arial,sans-serif" font-size="16" font-weight="700" fill="#1A1A1A">89</text>
+        <rect x="325" y="15" width="30" height="55" rx="3" fill="#F5F5F5" stroke="#1A1A1A" stroke-width="2"/>
+        <text x="340" y="46" text-anchor="middle" dominant-baseline="middle"
+              font-family="'Source Sans 3',Arial,sans-serif" font-size="10" fill="#6B7280">→</text>
+        <text x="312" y="82" text-anchor="middle"
+              font-family="'Source Sans 3',Arial,sans-serif" font-size="10" fill="#6B7280">Knoten 3</text>
+
+        <!-- Pfeil 3→4 -->
+        <line x1="355" y1="42" x2="400" y2="42" stroke="#1A1A1A" stroke-width="2" marker-end="url(#arr-ll)"/>
+
+        <!-- Knoten 4 (letzter) -->
+        <rect x="400" y="15" width="55" height="55" rx="3" fill="#F5F5F5" stroke="#D1D5DB" stroke-width="2"/>
+        <text x="427" y="46" text-anchor="middle" dominant-baseline="middle"
+              font-family="'Source Sans 3',Arial,sans-serif" font-size="16" font-weight="700" fill="#1A1A1A">5</text>
+        <rect x="455" y="15" width="30" height="55" rx="3" fill="#F5F5F5" stroke="#1A1A1A" stroke-width="2"/>
+        <text x="470" y="46" text-anchor="middle" dominant-baseline="middle"
+              font-family="'Source Sans 3',Arial,sans-serif" font-size="13" font-weight="700" fill="#6B7280">∅</text>
+        <text x="442" y="82" text-anchor="middle"
+              font-family="'Source Sans 3',Arial,sans-serif" font-size="10" fill="#6B7280">Knoten 4 (Ende)</text>
+      </svg>
+
+      <p class="mt-4 text-sec">Jeder Knoten besteht aus einem Datenwert (linkes Feld) und einem Zeiger auf den nächsten Knoten (rechtes Feld). Der letzte Knoten zeigt auf ∅ (Null / kein Nachfolger).</p>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+          <h3>Vorteile der Linked List</h3>
+          <ul class="mt-4">
+            <li>Einfügen und Löschen in der Mitte ist schnell: Nur die Zeiger müssen angepasst werden, keine Elemente müssen verschoben werden.</li>
+            <li>Flexible Größe: Die Liste kann beliebig wachsen, solange Arbeitsspeicher verfügbar ist.</li>
+          </ul>
+        </div>
+        <div class="dhbw-columns__item">
+          <h3>Nachteile der Linked List</h3>
+          <ul class="mt-4">
+            <li>Kein direkter Zugriff über Index: Um das 50. Element zu finden, muss man von vorne durch die ganze Kette laufen.</li>
+            <li>Jeder Knoten benötigt zusätzlichen Speicher für den Zeiger.</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       7. STACK
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">05</span>
+        <h2 class="dhbw-slide__title">Stack – Der Tellerstapel (LIFO)</h2>
+      </div>
+
+      <p>Ein <strong>Stack</strong> (Stapel) ist eine Datenstruktur, bei der Elemente immer <em>oben</em> hinzugefügt und <em>oben</em> wieder entnommen werden. Das zuletzt hinzugefügte Element wird als erstes wieder herausgenommen. Dieses Prinzip heißt <strong>LIFO</strong> – <em>Last In, First Out</em> (Zuletzt rein, zuerst raus).</p>
+
+      <p class="mt-5">Die beiden einzigen erlaubten Operationen auf einem Stack lauten: <strong>push</strong> (Element oben auflegen) und <strong>pop</strong> (oberstes Element entnehmen).</p>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+          <h3>Visualisierung: Tellerstapel</h3>
+          <!-- Stack SVG -->
+          <svg viewBox="0 0 200 280" width="200" height="280"
+               role="img" aria-label="Stack als Tellerstapel: PUSH Pfeil von oben, POP Pfeil nach oben, drei Teller übereinander">
+            <defs>
+              <marker id="arr-push" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                <polygon points="0 0, 8 3, 0 6" fill="#E2001A"/>
+              </marker>
+              <marker id="arr-pop" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                <polygon points="0 0, 8 3, 0 6" fill="#1A1A1A"/>
+              </marker>
+            </defs>
+
+            <!-- PUSH label und Pfeil von oben -->
+            <text x="35" y="22" font-family="'Source Sans 3',Arial,sans-serif" font-size="13" font-weight="700" fill="#E2001A">PUSH</text>
+            <line x1="75" y1="28" x2="75" y2="50" stroke="#E2001A" stroke-width="2.5" marker-end="url(#arr-push)"/>
+
+            <!-- Teller 3 (oben / zuletzt hinzugefügt) -->
+            <rect x="30" y="52" width="90" height="42" rx="4" fill="#FAE5E8" stroke="#E2001A" stroke-width="2"/>
+            <text x="75" y="77" text-anchor="middle" dominant-baseline="middle"
+                  font-family="'Source Sans 3',Arial,sans-serif" font-size="12" fill="#E2001A">Element C</text>
+            <text x="125" y="77" font-family="'Source Sans 3',Arial,sans-serif" font-size="10" fill="#E2001A">← TOP</text>
+
+            <!-- Teller 2 -->
+            <rect x="30" y="98" width="90" height="42" rx="4" fill="#F5F5F5" stroke="#D1D5DB" stroke-width="2"/>
+            <text x="75" y="123" text-anchor="middle" dominant-baseline="middle"
+                  font-family="'Source Sans 3',Arial,sans-serif" font-size="12" fill="#1A1A1A">Element B</text>
+
+            <!-- Teller 1 (unten / zuerst hinzugefügt) -->
+            <rect x="30" y="144" width="90" height="42" rx="4" fill="#F5F5F5" stroke="#D1D5DB" stroke-width="2"/>
+            <text x="75" y="169" text-anchor="middle" dominant-baseline="middle"
+                  font-family="'Source Sans 3',Arial,sans-serif" font-size="12" fill="#1A1A1A">Element A</text>
+
+            <!-- Boden -->
+            <rect x="20" y="186" width="110" height="10" rx="2" fill="#D1D5DB"/>
+
+            <!-- POP Pfeil nach oben -->
+            <line x1="155" y1="90" x2="155" y2="30" stroke="#1A1A1A" stroke-width="2" marker-end="url(#arr-pop)"/>
+            <text x="162" y="65" font-family="'Source Sans 3',Arial,sans-serif" font-size="13" font-weight="700" fill="#1A1A1A">POP</text>
+
+            <!-- LIFO Label -->
+            <text x="75" y="225" text-anchor="middle" font-family="'Source Sans 3',Arial,sans-serif" font-size="12" fill="#6B7280">Prinzip: LIFO</text>
+            <text x="75" y="242" text-anchor="middle" font-family="'Source Sans 3',Arial,sans-serif" font-size="11" fill="#6B7280">Last In, First Out</text>
+          </svg>
+        </div>
+        <div class="dhbw-columns__item">
+          <h3>Stack in der Praxis</h3>
+          <p class="mt-4">Der Stack ist überall dort die richtige Wahl, wo die <em>Reihenfolge umgekehrt werden soll</em> oder wo man die <em>letzte Aktion rückgängig machen</em> muss.</p>
+
+          <div class="dhbw-callout dhbw-callout--praxis mt-4">
+            <span class="dhbw-callout__label">Praxisbeispiel: Undo im Texteditor</span>
+            <p>Wenn du in einem Texteditor „Rückgängig" drückst, wird die zuletzt ausgeführte Aktion als erstes rückgängig gemacht – genau das LIFO-Prinzip. Jede Aktion wird auf den Stack gelegt (push). Rückgängig bedeutet: oberstes Element entnehmen (pop).</p>
+          </div>
+
+          <div class="dhbw-callout dhbw-callout--example mt-4">
+            <span class="dhbw-callout__label">Weiteres Beispiel: Browser-Zurück-Taste</span>
+            <p>Beim Surfen wird jede besuchte Seite auf einen Stack gelegt. Drückst du „Zurück", wird die zuletzt besuchte Seite (oberstes Stack-Element) angezeigt – klassisches LIFO.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       8. QUEUE
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">06</span>
+        <h2 class="dhbw-slide__title">Queue – Die Warteschlange (FIFO)</h2>
+      </div>
+
+      <p>Eine <strong>Queue</strong> (Warteschlange) ist eine Datenstruktur, bei der Elemente <em>hinten</em> hinzugefügt und <em>vorne</em> entnommen werden. Das zuerst hinzugefügte Element wird auch als erstes wieder herausgenommen. Dieses Prinzip heißt <strong>FIFO</strong> – <em>First In, First Out</em> (Zuerst rein, zuerst raus).</p>
+
+      <p class="mt-5">Die zwei Operationen heißen <strong>enqueue</strong> (Hinten einreihen) und <strong>dequeue</strong> (Vorne entnehmen). Das entspricht der natürlichen Warteschlange: Wer zuerst ansteht, wird auch zuerst bedient.</p>
+
+      <h3 class="dhbw-section-title mt-5">Visualisierung: Warteschlange am Bäcker</h3>
+      <!-- Queue SVG -->
+      <svg viewBox="0 0 560 130" width="560" height="130"
+           role="img" aria-label="Queue als Warteschlange: ENQUEUE Pfeil links, vier Personen in Boxen, DEQUEUE Pfeil rechts">
+        <defs>
+          <marker id="arr-enq" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#E2001A"/>
+          </marker>
+          <marker id="arr-deq" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#1A1A1A"/>
+          </marker>
+        </defs>
+
+        <!-- ENQUEUE Pfeil von links -->
+        <text x="8" y="18" font-family="'Source Sans 3',Arial,sans-serif" font-size="12" font-weight="700" fill="#E2001A">ENQUEUE</text>
+        <line x1="40" y1="60" x2="72" y2="60" stroke="#E2001A" stroke-width="2.5" marker-end="url(#arr-enq)"/>
+        <text x="40" y="92" font-family="'Source Sans 3',Arial,sans-serif" font-size="10" fill="#6B7280">(Hinten einreihen)</text>
+
+        <!-- Element 4 (neustes, hinten) -->
+        <rect x="74"  y="30" width="95" height="60" rx="3" fill="#FAE5E8" stroke="#E2001A" stroke-width="2"/>
+        <text x="121" y="55" text-anchor="middle" dominant-baseline="middle"
+              font-family="'Source Sans 3',Arial,sans-serif" font-size="12" fill="#E2001A">Person D</text>
+        <text x="121" y="72" text-anchor="middle"
+              font-family="'Source Sans 3',Arial,sans-serif" font-size="10" fill="#6B7280">(neu)</text>
+
+        <!-- Element 3 -->
+        <rect x="172" y="30" width="95" height="60" rx="3" fill="#F5F5F5" stroke="#D1D5DB" stroke-width="2"/>
+        <text x="219" y="63" text-anchor="middle" dominant-baseline="middle"
+              font-family="'Source Sans 3',Arial,sans-serif" font-size="12" fill="#1A1A1A">Person C</text>
+
+        <!-- Element 2 -->
+        <rect x="270" y="30" width="95" height="60" rx="3" fill="#F5F5F5" stroke="#D1D5DB" stroke-width="2"/>
+        <text x="317" y="63" text-anchor="middle" dominant-baseline="middle"
+              font-family="'Source Sans 3',Arial,sans-serif" font-size="12" fill="#1A1A1A">Person B</text>
+
+        <!-- Element 1 (ältestes, vorne) -->
+        <rect x="368" y="30" width="95" height="60" rx="3" fill="#F5F5F5" stroke="#D1D5DB" stroke-width="2"/>
+        <text x="415" y="55" text-anchor="middle" dominant-baseline="middle"
+              font-family="'Source Sans 3',Arial,sans-serif" font-size="12" fill="#1A1A1A">Person A</text>
+        <text x="415" y="72" text-anchor="middle"
+              font-family="'Source Sans 3',Arial,sans-serif" font-size="10" fill="#6B7280">(als nächste)</text>
+
+        <!-- DEQUEUE Pfeil nach rechts -->
+        <line x1="463" y1="60" x2="510" y2="60" stroke="#1A1A1A" stroke-width="2.5" marker-end="url(#arr-deq)"/>
+        <text x="480" y="18" font-family="'Source Sans 3',Arial,sans-serif" font-size="12" font-weight="700" fill="#1A1A1A">DEQUEUE</text>
+        <text x="458" y="92" font-family="'Source Sans 3',Arial,sans-serif" font-size="10" fill="#6B7280">(Vorne entnehmen)</text>
+
+        <!-- FIFO Label -->
+        <text x="280" y="118" text-anchor="middle" font-family="'Source Sans 3',Arial,sans-serif" font-size="12" fill="#6B7280">Prinzip: FIFO – First In, First Out</text>
+      </svg>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+          <div class="dhbw-callout dhbw-callout--praxis">
+            <span class="dhbw-callout__label">Praxisbeispiel: Druckerwarteschlange</span>
+            <p>In einem Büro werden Druckaufträge nacheinander in eine Queue gelegt. Der erste Auftrag, der ankam, wird auch als erster gedruckt – unabhängig davon, wer ihn abgeschickt hat. Das ist FIFO im Einsatz: fair und geordnet.</p>
+          </div>
+        </div>
+        <div class="dhbw-columns__item">
+          <div class="dhbw-callout dhbw-callout--example">
+            <span class="dhbw-callout__label">Weiteres Beispiel: Datenübertragung</span>
+            <p>In Netzwerken werden Datenpakete in Queues gepuffert. Das erste ankommende Paket wird als erstes weitergeleitet. Ohne Queue würden Pakete durcheinander kommen und die Daten korrumpiert.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       9. WELCHE STRUKTUR WÄHLEN?
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">07</span>
+        <h2 class="dhbw-slide__title">Welche Datenstruktur für welche Situation?</h2>
+      </div>
+
+      <p>Die Wahl der richtigen Datenstruktur ist eine der wichtigsten Designentscheidungen in der Softwareentwicklung. Die folgende Entscheidungshilfe fasst die vier Strukturen aus dieser Vorlesung zusammen.</p>
+
+      <div class="dhbw-table-wrap mt-5">
+        <table class="dhbw-table">
+          <thead>
+            <tr><th>Datenstruktur</th><th>Prinzip</th><th>Stärke</th><th>Wenn du …</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Array / Liste</strong></td>
+              <td>Direkter Index-Zugriff</td>
+              <td>Schnelles Lesen über Index</td>
+              <td>… viele Werte speichern und häufig über Index zugreifen willst.</td>
+            </tr>
+            <tr>
+              <td><strong>Linked List</strong></td>
+              <td>Verkettete Zeiger</td>
+              <td>Schnelles Einfügen / Löschen in der Mitte</td>
+              <td>… häufig Elemente mitten in der Liste einfügst oder entfernst.</td>
+            </tr>
+            <tr>
+              <td><strong>Stack</strong></td>
+              <td>LIFO (Letzter rein, erster raus)</td>
+              <td>Letzte Aktion rückgängig machen</td>
+              <td>… Aktionen aufzeichnest und in umgekehrter Reihenfolge verarbeitest (Undo, Browser-History).</td>
+            </tr>
+            <tr>
+              <td><strong>Queue</strong></td>
+              <td>FIFO (Erster rein, erster raus)</td>
+              <td>Aufgaben in Ankunftsreihenfolge abarbeiten</td>
+              <td>… Aufgaben fair in der Reihenfolge ihres Eintreffens verarbeitest (Druckerwarteschlange, Netzwerkpuffer).</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       10. ZUSAMMENFASSUNG
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">08</span>
+        <h2 class="dhbw-slide__title">Zusammenfassung</h2>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--merksatz">
+        <span class="dhbw-callout__label">Merksatz</span>
+        <p>Ein <strong>Array</strong> speichert Elemente nebeneinander und erlaubt direkten Zugriff über den Index. Eine <strong>Linked List</strong> verkettet Knoten über Zeiger und ermöglicht flexibles Einfügen und Löschen. Der <strong>Stack</strong> arbeitet nach dem <strong>LIFO</strong>-Prinzip (letztes Element zuerst raus) – push und pop. Die <strong>Queue</strong> arbeitet nach dem <strong>FIFO</strong>-Prinzip (erstes Element zuerst raus) – enqueue und dequeue. Die richtige Wahl der Datenstruktur ist eine Frage des <em>Verwendungszwecks</em>.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════════════════════════ -->
+  <footer class="dhbw-footer">
+    <div class="dhbw-footer__inner">
+      <span class="dhbw-footer__brand">DHBW Stuttgart</span>
+      <span>Informatik-Grundlagen für Maschinenbau &nbsp;·&nbsp; WS&nbsp;2025/26</span>
+      <span>V08 – Listen und Datenstrukturen Teil 1</span>
+    </div>
+  </footer>
+
+</body>
+</html>

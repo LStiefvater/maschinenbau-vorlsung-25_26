@@ -1,6 +1,0 @@
-flowchart TD
-    S(["Start"]) --> R["df = pd.read_csv('produkte_katalog.csv')"]
-    R --> G["mittel = df.groupby('Kategorie')['Preis_Euro'].mean()"]
-    G --> X["teuerste_kategorie = mittel.idxmax()"]
-    X --> P["Ausgabe teuerste_kategorie"]
-    P --> E(["Ende"])

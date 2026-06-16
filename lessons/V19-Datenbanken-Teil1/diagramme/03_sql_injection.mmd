@@ -1,9 +1,0 @@
-flowchart LR
-    subgraph Unsicher["Unsicher: String-Konkatenation"]
-        U1["Eingabe: ' OR '1'='1"] --> U2["SQL: SELECT ... WHERE name='' OR '1'='1'"]
-        U2 --> U3["Alle Zeilen werden zurueckgegeben"]
-    end
-    subgraph Sicher["Sicher: Parameter-Binding"]
-        S1["Eingabe: ' OR '1'='1"] --> S2["cursor.execute('... WHERE name=?', (eingabe,))"]
-        S2 --> S3["Treiber escaped automatisch"]
-    end

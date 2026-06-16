@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>V08 – Python Praxis: Listen & Tupel | DHBW Stuttgart</title>
+  <link rel="stylesheet" href="../../src/dhbw-base.css">
+  <style>
+    .concept-grid { display:grid; grid-template-columns:1fr; gap:var(--sp-6); margin-top:var(--sp-5); }
+    .concept-card { background:var(--surface); border:1px solid var(--border); border-top:4px solid var(--red); border-radius:var(--r-card); padding:var(--sp-5) var(--sp-6); box-shadow:var(--shadow-card); }
+    .concept-card__name { font-family:var(--dhbw-font-mono); font-size:var(--fs-lg); font-weight:var(--dhbw-fw-bold); color:var(--red); margin-bottom:var(--sp-2); }
+    .dhbw-code { background:var(--code-bg); color:var(--code-text); font-family:var(--dhbw-font-mono); font-size:0.9rem; line-height:var(--lh-code); padding:var(--sp-4) var(--sp-5); border-radius:var(--r-base); overflow-x:auto; margin:var(--sp-3) 0; white-space:pre; }
+    .kw  { color:#F97316; font-weight:600; }
+    .str { color:#22C55E; }
+    .num { color:#A78BFA; }
+    .cmt { color:#7A9CB3; font-style:italic; }
+    .fn  { color:#60A5FA; }
+    .var { color:#E8EFF5; }
+    .fsl { color:#F0C060; }
+    .syntax-box { background:var(--code-bg-in); border-left:3px solid var(--red); border-radius:0 var(--r-base) var(--r-base) 0; padding:var(--sp-3) var(--sp-4); margin:var(--sp-3) 0; font-family:var(--dhbw-font-mono); font-size:0.92rem; color:var(--text); }
+    .syntax-box strong { color:var(--red); }
+    .game-box { background:#0F1E2B; border:2px solid #2A4A6B; border-radius:var(--r-card); padding:var(--sp-5) var(--sp-6); margin-top:var(--sp-6); }
+    .game-box__header { display:flex; align-items:center; gap:var(--sp-3); margin-bottom:var(--sp-4); }
+    .game-box__icon { font-size:1.5rem; }
+    .game-box__title { font-size:var(--fs-md); font-weight:var(--dhbw-fw-bold); color:#60A5FA; margin:0; }
+    .game-box__subtitle { font-size:var(--fs-sm); color:#7A9CB3; margin-top:var(--sp-1); }
+    .quick-ref { width:100%; border-collapse:collapse; margin-top:var(--sp-4); font-size:var(--fs-sm); }
+    .quick-ref th { background:var(--red); color:#fff; padding:var(--sp-2) var(--sp-4); text-align:left; }
+    .quick-ref td { padding:var(--sp-2) var(--sp-4); border-bottom:1px solid var(--border); vertical-align:top; }
+    .quick-ref tr:nth-child(even) td { background:var(--canvas); }
+    .quick-ref code { font-family:var(--dhbw-font-mono); font-size:0.85rem; background:var(--code-bg-in); padding:1px 5px; border-radius:var(--r-sm); color:var(--red); }
+    .mt-4 { margin-top:var(--sp-4); } .mt-5 { margin-top:var(--sp-5); } .mt-6 { margin-top:var(--sp-6); }
+    .dhbw-footer { background:var(--text); color:#9CA3AF; text-align:center; padding:var(--sp-5) var(--gutter); font-size:var(--fs-sm); }
+    @media print {
+      @page { size:A4; margin:15mm 18mm; }
+      .dhbw-header,.dhbw-footer { display:none; }
+      .dhbw-hero,.dhbw-slide,.dhbw-code,.dhbw-callout,.concept-card,.game-box { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+      .dhbw-hero { padding:12mm 0 10mm; } .dhbw-slide { padding:8mm 0; }
+      .concept-card,.game-box { break-inside:avoid; }
+      .dhbw-code { font-size:0.78rem; }
+      .page-break { page-break-before:always; }
+    }
+  </style>
+</head>
+<body>
+  <header class="dhbw-header">
+    <div class="dhbw-header__inner">
+      <a href="#" class="dhbw-header__logo"><span class="dhbw-header__logo-text">DHBW Stuttgart</span></a>
+      <nav class="dhbw-header__nav">
+        <a href="V08-Listen-und-Datenstrukturen-Teil1_skript.html" class="dhbw-header__nav-link">Theorie</a>
+        <a href="#" class="dhbw-header__nav-link dhbw-header__nav-link--active">Python Praxis</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="dhbw-hero">
+    <div class="dhbw-hero__inner">
+      <p class="dhbw-hero__label">Vorlesung 08 · Python Praxis · Maschinenbau</p>
+      <h1 class="dhbw-hero__title">Listen &amp; Tupel</h1>
+      <p class="dhbw-hero__subtitle">Messreihen speichern, Spielfelder aufbauen, Daten strukturieren</p>
+      <p class="dhbw-hero__meta">WS 2025/26 &nbsp;·&nbsp; DHBW Stuttgart &nbsp;·&nbsp; Nachschlagewerk Python-Praxis</p>
+    </div>
+  </section>
+
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">01</span><h2 class="dhbw-slide__title">Das kannst du danach</h2></div>
+      <div class="dhbw-goals">
+        <p class="dhbw-goals__title">📌 Nach dieser Einheit kannst du …</p>
+        <ul>
+          <li><strong>Listen</strong> erstellen, auf Elemente zugreifen und sie verändern.</li>
+          <li>mit <code class="dhbw-inline">append()</code>, <code class="dhbw-inline">insert()</code>, <code class="dhbw-inline">pop()</code> und <code class="dhbw-inline">remove()</code> Listen bearbeiten.</li>
+          <li>mit <strong>Slicing</strong> Teile einer Liste extrahieren.</li>
+          <li><strong>Tupel</strong> anlegen und den Unterschied zu Listen erklären.</li>
+          <li><strong>2D-Listen</strong> (Listen in Listen) für Tabellen und Spielfelder verwenden.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- SVG: Listen-Index Visualisierung -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">02</span><h2 class="dhbw-slide__title">Indexierung in einer Liste</h2></div>
+
+      <p>Jedes Element in einer Liste hat einen <strong>Index</strong> – eine Position, beginnend bei <strong>0</strong>. Python erlaubt auch negative Indizes: <code class="dhbw-inline">-1</code> ist das letzte Element.</p>
+
+      <!-- SVG: Liste mit Indizes -->
+      <svg viewBox="0 0 580 120" width="100%" style="max-width:580px; display:block; margin:var(--sp-5) auto;"
+           role="img" aria-label="Liste messwerte mit 5 Elementen und deren positive und negative Indizes">
+        <!-- Titel -->
+        <text x="10" y="18" font-family="'Fira Code', monospace" font-size="13" fill="#60A5FA">messwerte = [22.1, 24.5, 87.3, 23.8, 22.9]</text>
+
+        <!-- Zellen -->
+        <rect x="10"  y="30" width="105" height="48" rx="4" fill="#1E2936" stroke="#2A4A6B" stroke-width="1.5"/>
+        <rect x="120" y="30" width="105" height="48" rx="4" fill="#1E2936" stroke="#2A4A6B" stroke-width="1.5"/>
+        <rect x="230" y="30" width="105" height="48" rx="4" fill="#1E2936" stroke="#E2001A" stroke-width="2"/>
+        <rect x="340" y="30" width="105" height="48" rx="4" fill="#1E2936" stroke="#2A4A6B" stroke-width="1.5"/>
+        <rect x="450" y="30" width="110" height="48" rx="4" fill="#1E2936" stroke="#2A4A6B" stroke-width="1.5"/>
+
+        <!-- Werte -->
+        <text x="62"  y="59" text-anchor="middle" font-family="'Fira Code', monospace" font-size="17" font-weight="700" fill="#A78BFA">22.1</text>
+        <text x="172" y="59" text-anchor="middle" font-family="'Fira Code', monospace" font-size="17" font-weight="700" fill="#A78BFA">24.5</text>
+        <text x="282" y="59" text-anchor="middle" font-family="'Fira Code', monospace" font-size="17" font-weight="700" fill="#F97316">87.3</text>
+        <text x="392" y="59" text-anchor="middle" font-family="'Fira Code', monospace" font-size="17" font-weight="700" fill="#A78BFA">23.8</text>
+        <text x="505" y="59" text-anchor="middle" font-family="'Fira Code', monospace" font-size="17" font-weight="700" fill="#A78BFA">22.9</text>
+
+        <!-- Positive Indizes -->
+        <text x="62"  y="92" text-anchor="middle" font-family="'Source Sans 3', Arial, sans-serif" font-size="12" fill="#22C55E">[0]</text>
+        <text x="172" y="92" text-anchor="middle" font-family="'Source Sans 3', Arial, sans-serif" font-size="12" fill="#22C55E">[1]</text>
+        <text x="282" y="92" text-anchor="middle" font-family="'Source Sans 3', Arial, sans-serif" font-size="12" fill="#E2001A" font-weight="700">[2]</text>
+        <text x="392" y="92" text-anchor="middle" font-family="'Source Sans 3', Arial, sans-serif" font-size="12" fill="#22C55E">[3]</text>
+        <text x="505" y="92" text-anchor="middle" font-family="'Source Sans 3', Arial, sans-serif" font-size="12" fill="#22C55E">[4]</text>
+
+        <!-- Negative Indizes -->
+        <text x="62"  y="110" text-anchor="middle" font-family="'Source Sans 3', Arial, sans-serif" font-size="11" fill="#7A9CB3">[-5]</text>
+        <text x="172" y="110" text-anchor="middle" font-family="'Source Sans 3', Arial, sans-serif" font-size="11" fill="#7A9CB3">[-4]</text>
+        <text x="282" y="110" text-anchor="middle" font-family="'Source Sans 3', Arial, sans-serif" font-size="11" fill="#7A9CB3">[-3]</text>
+        <text x="392" y="110" text-anchor="middle" font-family="'Source Sans 3', Arial, sans-serif" font-size="11" fill="#7A9CB3">[-2]</text>
+        <text x="505" y="110" text-anchor="middle" font-family="'Source Sans 3', Arial, sans-serif" font-size="11" fill="#7A9CB3">[-1]</text>
+      </svg>
+
+      <p><code class="dhbw-inline">messwerte[2]</code> → <strong>87.3</strong> (roter Alarm-Wert) &nbsp;|&nbsp; <code class="dhbw-inline">messwerte[-1]</code> → <strong>22.9</strong> (letztes Element)</p>
+    </div>
+  </section>
+
+  <!-- KONZEPTKARTEN -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">03</span><h2 class="dhbw-slide__title">Listen im Detail</h2></div>
+
+      <div class="concept-grid">
+
+        <div class="concept-card">
+          <div class="concept-card__name">Erstellen, Zugreifen, Ändern</div>
+          <div class="dhbw-code"><span class="cmt"># Liste erstellen</span>
+<span class="var">temperaturen</span> = [<span class="num">22.1</span>, <span class="num">24.5</span>, <span class="num">23.8</span>]
+<span class="var">leere_liste</span>  = []
+
+<span class="cmt"># Zugriff per Index</span>
+<span class="fn">print</span>(<span class="var">temperaturen</span>[<span class="num">0</span>])    <span class="cmt"># → 22.1 (erstes Element)</span>
+<span class="fn">print</span>(<span class="var">temperaturen</span>[-<span class="num">1</span>])   <span class="cmt"># → 23.8 (letztes Element)</span>
+<span class="fn">print</span>(<span class="fn">len</span>(<span class="var">temperaturen</span>))  <span class="cmt"># → 3 (Anzahl Elemente)</span>
+
+<span class="cmt"># Element ändern</span>
+<span class="var">temperaturen</span>[<span class="num">1</span>] = <span class="num">25.0</span>   <span class="cmt"># 24.5 → 25.0</span>
+
+<span class="cmt"># Slicing: Teilliste extrahieren [start:stop]</span>
+<span class="fn">print</span>(<span class="var">temperaturen</span>[<span class="num">0</span>:<span class="num">2</span>])  <span class="cmt"># → [22.1, 25.0] (stop exklusiv!)</span>
+<span class="fn">print</span>(<span class="var">temperaturen</span>[<span class="num">1</span>:])   <span class="cmt"># → [25.0, 23.8] (bis Ende)</span></div>
+        </div>
+
+        <div class="concept-card">
+          <div class="concept-card__name">append() · insert() · pop() · remove()</div>
+          <p>Die wichtigsten Methoden zum Bearbeiten von Listen:</p>
+          <div class="dhbw-code"><span class="var">messwerte</span> = [<span class="num">22.1</span>, <span class="num">24.5</span>]
+
+<span class="cmt"># append(): Element ans Ende anfügen</span>
+<span class="var">messwerte</span>.<span class="fn">append</span>(<span class="num">23.8</span>)         <span class="cmt"># → [22.1, 24.5, 23.8]</span>
+
+<span class="cmt"># insert(index, wert): an Position einfügen</span>
+<span class="var">messwerte</span>.<span class="fn">insert</span>(<span class="num">0</span>, <span class="num">20.0</span>)       <span class="cmt"># → [20.0, 22.1, 24.5, 23.8]</span>
+
+<span class="cmt"># pop(): letztes Element entfernen und zurückgeben</span>
+<span class="var">letzter</span> = <span class="var">messwerte</span>.<span class="fn">pop</span>()       <span class="cmt"># letzter = 23.8</span>
+
+<span class="cmt"># pop(index): Element an Position entfernen</span>
+<span class="var">erster</span>  = <span class="var">messwerte</span>.<span class="fn">pop</span>(<span class="num">0</span>)       <span class="cmt"># erster = 20.0</span>
+
+<span class="cmt"># remove(wert): ersten passenden Wert entfernen</span>
+<span class="var">messwerte</span>.<span class="fn">remove</span>(<span class="num">22.1</span>)
+
+<span class="cmt"># Hilfsfunktionen</span>
+<span class="fn">print</span>(<span class="fn">sum</span>(<span class="var">messwerte</span>))    <span class="cmt"># Summe aller Werte</span>
+<span class="fn">print</span>(<span class="fn">max</span>(<span class="var">messwerte</span>))    <span class="cmt"># Maximalwert</span>
+<span class="fn">print</span>(<span class="fn">min</span>(<span class="var">messwerte</span>))    <span class="cmt"># Minimalwert</span></div>
+        </div>
+
+        <div class="concept-card">
+          <div class="concept-card__name">Tupel – unveränderliche Liste</div>
+          <p>Tupel sind wie Listen, können aber <strong>nicht verändert</strong> werden (immutable). Sie werden mit runden Klammern <code class="dhbw-inline">( )</code> erstellt. Ideal für Koordinaten, Farben und andere feste Wertepaare.</p>
+          <div class="dhbw-code"><span class="cmt"># Tupel erstellen</span>
+<span class="var">koordinate</span>   = (<span class="num">0</span>, <span class="num">2</span>)          <span class="cmt"># Zeile 0, Spalte 2</span>
+<span class="var">dhbw_farbe</span>   = (<span class="num">226</span>, <span class="num">0</span>, <span class="num">26</span>)   <span class="cmt"># RGB: #E2001A</span>
+<span class="var">sensor_info</span>  = (<span class="str">"K-Typ"</span>, <span class="num">23.5</span>, <span class="str">"°C"</span>)
+
+<span class="cmt"># Zugriff wie bei Listen</span>
+<span class="fn">print</span>(<span class="var">koordinate</span>[<span class="num">0</span>])   <span class="cmt"># → 0</span>
+<span class="fn">print</span>(<span class="var">koordinate</span>[<span class="num">1</span>])   <span class="cmt"># → 2</span>
+
+<span class="cmt"># Tuple-Unpacking: Werte direkt auslesen</span>
+<span class="var">zeile</span>, <span class="var">spalte</span> = <span class="var">koordinate</span>
+<span class="fn">print</span>(<span class="fsl">f</span><span class="str">"Zeile: <span class="fsl">{zeile}</span>, Spalte: <span class="fsl">{spalte}</span>"</span>)
+
+<span class="cmt"># Ändern nicht möglich – führt zu TypeError:</span>
+<span class="cmt"># koordinate[0] = 1  ← ❌ TypeError!</span></div>
+        </div>
+
+        <div class="concept-card">
+          <div class="concept-card__name">2D-Listen – Listen in Listen</div>
+          <p>Eine Liste kann andere Listen als Elemente enthalten. Damit lassen sich Tabellen und 2D-Spielfelder darstellen.</p>
+          <div class="dhbw-code"><span class="cmt"># 5×5 Spielfeld als 2D-Liste</span>
+<span class="var">spielfeld</span> = []
+<span class="kw">for</span> <span class="var">i</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+    <span class="var">spielfeld</span>.<span class="fn">append</span>([<span class="str">"~"</span>] * <span class="num">5</span>)   <span class="cmt"># 5 Zeilen je 5 "~"</span>
+
+<span class="cmt"># Zugriff: spielfeld[zeile][spalte]</span>
+<span class="fn">print</span>(<span class="var">spielfeld</span>[<span class="num">0</span>][<span class="num">2</span>])    <span class="cmt"># → "~" (Zeile 0, Spalte 2)</span>
+
+<span class="cmt"># Element setzen</span>
+<span class="var">spielfeld</span>[<span class="num">0</span>][<span class="num">2</span>] = <span class="str">"X"</span>    <span class="cmt"># Treffer markieren</span>
+
+<span class="cmt"># Messdaten-Tabelle: Zeilen = Messzeitpunkte</span>
+<span class="var">messreihe</span> = [
+    [<span class="num">1</span>, <span class="num">22.1</span>, <span class="str">"OK"</span>],
+    [<span class="num">2</span>, <span class="num">87.3</span>, <span class="str">"ALARM"</span>],
+    [<span class="num">3</span>, <span class="num">23.8</span>, <span class="str">"OK"</span>],
+]
+<span class="kw">for</span> <span class="var">nr</span>, <span class="var">temp</span>, <span class="var">status</span> <span class="kw">in</span> <span class="var">messreihe</span>:
+    <span class="fn">print</span>(<span class="fsl">f</span><span class="str">"Messung <span class="fsl">{nr}</span>: <span class="fsl">{temp:.1f}</span> °C – <span class="fsl">{status}</span>"</span>)</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- SCHIFFEVERSENKEN -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">04</span><h2 class="dhbw-slide__title">Im Schiffe-Versenken-Spiel</h2></div>
+      <div class="game-box">
+        <div class="game-box__header">
+          <span class="game-box__icon">🚢</span>
+          <div>
+            <h3 class="game-box__title">Spielfeld als 2D-Liste · Schiff als Tupel-Liste</h3>
+            <p class="game-box__subtitle">Das Herzstück des Spiels</p>
+          </div>
+        </div>
+        <div class="dhbw-code"><span class="cmt"># Spielfeld: 2D-Liste, 5×5, gefüllt mit "~" (Wasser)</span>
+<span class="var">spielfeld</span> = []
+<span class="kw">for</span> <span class="var">i</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+    <span class="var">spielfeld</span>.<span class="fn">append</span>([<span class="str">"~"</span>] * <span class="num">5</span>)
+
+<span class="cmt"># Schiff: Liste von Koordinaten-Tupeln</span>
+<span class="var">schiff</span> = [(<span class="num">0</span>, <span class="num">1</span>), (<span class="num">0</span>, <span class="num">2</span>), (<span class="num">0</span>, <span class="num">3</span>)]
+
+<span class="cmt"># Treffer markieren</span>
+<span class="var">zeile</span>, <span class="var">spalte</span> = <span class="num">0</span>, <span class="num">2</span>
+<span class="kw">if</span> (<span class="var">zeile</span>, <span class="var">spalte</span>) <span class="kw">in</span> <span class="var">schiff</span>:
+    <span class="var">spielfeld</span>[<span class="var">zeile</span>][<span class="var">spalte</span>] = <span class="str">"X"</span>   <span class="cmt"># Treffer</span>
+<span class="kw">else</span>:
+    <span class="var">spielfeld</span>[<span class="var">zeile</span>][<span class="var">spalte</span>] = <span class="str">"O"</span>   <span class="cmt"># Wasser</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUICK-REFERENCE -->
+  <section class="dhbw-slide page-break">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">05</span><h2 class="dhbw-slide__title">Quick-Reference</h2></div>
+      <table class="quick-ref">
+        <thead><tr><th style="width:28%">Operation</th><th style="width:28%">Beispiel</th><th>Ergebnis / Bedeutung</th></tr></thead>
+        <tbody>
+          <tr><td><code>liste[i]</code></td><td><code>messwerte[0]</code></td><td>Element an Index i (ab 0)</td></tr>
+          <tr><td><code>liste[-1]</code></td><td><code>messwerte[-1]</code></td><td>Letztes Element</td></tr>
+          <tr><td><code>liste[a:b]</code></td><td><code>messwerte[1:3]</code></td><td>Slicing: Index a bis b-1</td></tr>
+          <tr><td><code>len(liste)</code></td><td><code>len(messwerte)</code></td><td>Anzahl Elemente</td></tr>
+          <tr><td><code>liste.append(x)</code></td><td><code>messwerte.append(25.0)</code></td><td>x ans Ende anfügen</td></tr>
+          <tr><td><code>liste.insert(i, x)</code></td><td><code>messwerte.insert(0, 20.0)</code></td><td>x an Position i einfügen</td></tr>
+          <tr><td><code>liste.pop()</code></td><td><code>messwerte.pop()</code></td><td>Letztes Element entfernen &amp; zurückgeben</td></tr>
+          <tr><td><code>liste.remove(x)</code></td><td><code>messwerte.remove(22.1)</code></td><td>Ersten Wert x entfernen</td></tr>
+          <tr><td><code>sum/min/max(liste)</code></td><td><code>max(messwerte)</code></td><td>Summe / Minimum / Maximum</td></tr>
+          <tr><td><code>(a, b)</code></td><td><code>koordinate = (0, 2)</code></td><td>Tupel – unveränderlich</td></tr>
+          <tr><td><code>a, b = tupel</code></td><td><code>zeile, spalte = koordinate</code></td><td>Tuple-Unpacking</td></tr>
+          <tr><td><code>liste[z][s]</code></td><td><code>spielfeld[0][2]</code></td><td>2D-Liste: Zeile z, Spalte s</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer class="dhbw-footer">DHBW Stuttgart · Maschinenbau · Informatik-Grundlagen · WS 2025/26 · Python Praxis Nachschlagewerk</footer>
+</body>
+</html>

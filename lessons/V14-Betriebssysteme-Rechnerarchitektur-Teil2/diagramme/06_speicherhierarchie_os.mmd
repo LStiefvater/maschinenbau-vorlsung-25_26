@@ -1,8 +1,0 @@
-flowchart TD
-    CPU[CPU] --> REG[Register ns]
-    REG --> L1[L1-Cache ~1 ns]
-    L1 --> L2[L2-Cache ~3 ns]
-    L2 --> L3[L3-Cache ~10 ns]
-    L3 --> RAM[RAM ~100 ns]
-    RAM --> SSD[SSD ~50 us]
-    SSD --> HDD[HDD ~5 ms]

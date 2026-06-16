@@ -1,7 +1,0 @@
-flowchart LR
-    ETH["Ethernet-Header<br/>MAC-Adressen"]
-    IP["IP-Header<br/>Quell-/Ziel-IP"]
-    TCP["TCP-/UDP-Header<br/>Ports"]
-    DATA["Nutzdaten<br/>z.B. Modbus-Befehl"]
-    CRC["CRC<br/>Pruefsumme"]
-    ETH --> IP --> TCP --> DATA --> CRC

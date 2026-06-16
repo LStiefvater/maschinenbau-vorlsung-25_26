@@ -1,8 +1,0 @@
-flowchart TD
-    Start(["Start: ziel_hash bekannt"]) --> L["Lade Wortliste<br/>z.B. rockyou.txt"]
-    L --> F{{"Fuer jedes Wort<br/>in Wortliste"}}
-    F --> H["h = sha256(wort)"]
-    H --> V{"h == ziel_hash?"}
-    V -- "Ja" --> G(["Gefunden:<br/>Passwort = wort"])
-    V -- "Nein" --> F
-    F -- "Ende der Liste" --> N(["Nicht gefunden"])

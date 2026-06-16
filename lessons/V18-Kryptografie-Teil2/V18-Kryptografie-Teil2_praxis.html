@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>V18 – Python Praxis: hashlib & Datei-Integrität | DHBW Stuttgart</title>
+  <link rel="stylesheet" href="../../src/dhbw-base.css">
+  <style>
+    .concept-grid { display:grid; grid-template-columns:1fr; gap:var(--sp-6); margin-top:var(--sp-5); }
+    .concept-card { background:var(--surface); border:1px solid var(--border); border-top:4px solid var(--red); border-radius:var(--r-card); padding:var(--sp-5) var(--sp-6); box-shadow:var(--shadow-card); }
+    .concept-card__name { font-family:var(--dhbw-font-mono); font-size:var(--fs-lg); font-weight:var(--dhbw-fw-bold); color:var(--red); margin-bottom:var(--sp-2); }
+    .dhbw-code { background:var(--code-bg); color:var(--code-text); font-family:var(--dhbw-font-mono); font-size:0.9rem; line-height:var(--lh-code); padding:var(--sp-4) var(--sp-5); border-radius:var(--r-base); overflow-x:auto; margin:var(--sp-3) 0; white-space:pre; }
+    .kw  { color:#F97316; font-weight:600; }
+    .str { color:#22C55E; }
+    .num { color:#A78BFA; }
+    .cmt { color:#7A9CB3; font-style:italic; }
+    .fn  { color:#60A5FA; }
+    .var { color:#E8EFF5; }
+    .fsl { color:#F0C060; }
+    .game-box { background:#0F1E2B; border:2px solid #2A4A6B; border-radius:var(--r-card); padding:var(--sp-5) var(--sp-6); margin-top:var(--sp-6); }
+    .game-box__header { display:flex; align-items:center; gap:var(--sp-3); margin-bottom:var(--sp-4); }
+    .game-box__icon { font-size:1.5rem; }
+    .game-box__title { font-size:var(--fs-md); font-weight:var(--dhbw-fw-bold); color:#60A5FA; margin:0; }
+    .game-box__subtitle { font-size:var(--fs-sm); color:#7A9CB3; margin-top:var(--sp-1); }
+    .quick-ref { width:100%; border-collapse:collapse; margin-top:var(--sp-4); font-size:var(--fs-sm); }
+    .quick-ref th { background:var(--red); color:#fff; padding:var(--sp-2) var(--sp-4); text-align:left; }
+    .quick-ref td { padding:var(--sp-2) var(--sp-4); border-bottom:1px solid var(--border); vertical-align:top; }
+    .quick-ref tr:nth-child(even) td { background:var(--canvas); }
+    .quick-ref code { font-family:var(--dhbw-font-mono); font-size:0.85rem; background:var(--code-bg-in); padding:1px 5px; border-radius:var(--r-sm); color:var(--red); }
+    .mt-4 { margin-top:var(--sp-4); } .mt-5 { margin-top:var(--sp-5); }
+    .dhbw-footer { background:var(--text); color:#9CA3AF; text-align:center; padding:var(--sp-5) var(--gutter); font-size:var(--fs-sm); }
+    @media print {
+      @page { size:A4; margin:15mm 18mm; }
+      .dhbw-header,.dhbw-footer { display:none; }
+      .dhbw-hero,.dhbw-slide,.dhbw-code,.dhbw-callout,.concept-card,.game-box { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+      .dhbw-hero { padding:12mm 0 10mm; } .dhbw-slide { padding:8mm 0; }
+      .concept-card,.game-box { break-inside:avoid; }
+      .dhbw-code { font-size:0.78rem; }
+      .page-break { page-break-before:always; }
+    }
+  </style>
+</head>
+<body>
+  <header class="dhbw-header">
+    <div class="dhbw-header__inner">
+      <a href="#" class="dhbw-header__logo"><span class="dhbw-header__logo-text">DHBW Stuttgart</span></a>
+      <nav class="dhbw-header__nav">
+        <a href="V18-Kryptografie-Teil2_skript.html" class="dhbw-header__nav-link">Theorie</a>
+        <a href="#" class="dhbw-header__nav-link dhbw-header__nav-link--active">Python Praxis</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="dhbw-hero">
+    <div class="dhbw-hero__inner">
+      <p class="dhbw-hero__label">Vorlesung 18 · Python Praxis · Maschinenbau</p>
+      <h1 class="dhbw-hero__title">Hashwerte &amp; Datei-Integrität</h1>
+      <p class="dhbw-hero__subtitle">hashlib – Prüfsummen für Messdaten und Firmware</p>
+      <p class="dhbw-hero__meta">WS 2025/26 &nbsp;·&nbsp; DHBW Stuttgart &nbsp;·&nbsp; Nachschlagewerk Python-Praxis</p>
+    </div>
+  </section>
+
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">01</span><h2 class="dhbw-slide__title">Das kannst du danach</h2></div>
+      <div class="dhbw-goals">
+        <p class="dhbw-goals__title">📌 Nach dieser Einheit kannst du …</p>
+        <ul>
+          <li>mit <strong>hashlib</strong> SHA-256 Hashwerte von Texten und Dateien berechnen.</li>
+          <li>erklären, warum Hashwerte zur Integritätsprüfung eingesetzt werden.</li>
+          <li>prüfen, ob eine Datei nach dem Download oder Transfer unverändert ist.</li>
+          <li>den Unterschied zwischen Strings (str) und Bytes (bytes) verstehen.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- SVG: Hash-Funktion Datenfluss -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">02</span><h2 class="dhbw-slide__title">Wie Hashing funktioniert</h2></div>
+
+      <!-- SVG: Hash Pipeline -->
+      <svg viewBox="0 0 560 80" width="100%" style="max-width:560px; display:block; margin:var(--sp-4) auto;"
+           role="img" aria-label="Hash-Pipeline: Beliebige Datei oder Text → SHA-256 Funktion → fester 64-Zeichen Hashwert">
+        <!-- Eingabe -->
+        <rect x="5" y="15" width="120" height="50" rx="6" fill="#1E2936" stroke="#E2001A" stroke-width="2"/>
+        <text x="65" y="37" text-anchor="middle" font-family="'Source Sans 3', Arial, sans-serif" font-size="12" fill="#7A9CB3">Beliebige Datei</text>
+        <text x="65" y="55" text-anchor="middle" font-family="'Fira Code', monospace" font-size="12" fill="#E8EFF5">firmware.bin</text>
+
+        <!-- Pfeil -->
+        <line x1="126" y1="40" x2="168" y2="40" stroke="#D1D5DB" stroke-width="2"/>
+        <polygon points="168,35 178,40 168,45" fill="#D1D5DB"/>
+
+        <!-- Hash-Funktion -->
+        <rect x="179" y="15" width="120" height="50" rx="6" fill="#E2001A"/>
+        <text x="239" y="37" text-anchor="middle" font-family="'Source Sans 3', Arial, sans-serif" font-size="12" font-weight="700" fill="#fff">SHA-256</text>
+        <text x="239" y="55" text-anchor="middle" font-family="'Source Sans 3', Arial, sans-serif" font-size="11" fill="#FAE5E8">Hashfunktion</text>
+
+        <!-- Pfeil -->
+        <line x1="300" y1="40" x2="342" y2="40" stroke="#D1D5DB" stroke-width="2"/>
+        <polygon points="342,35 352,40 342,45" fill="#D1D5DB"/>
+
+        <!-- Ergebnis -->
+        <rect x="353" y="15" width="200" height="50" rx="6" fill="#1E2936" stroke="#22C55E" stroke-width="2"/>
+        <text x="453" y="35" text-anchor="middle" font-family="'Source Sans 3', Arial, sans-serif" font-size="11" fill="#7A9CB3">Hashwert (64 Zeichen)</text>
+        <text x="453" y="54" text-anchor="middle" font-family="'Fira Code', monospace" font-size="10" fill="#22C55E">a3f1c2d9e8b7...</text>
+      </svg>
+
+      <div class="dhbw-callout mt-4">
+        <span class="dhbw-callout__label">Eigenschaft</span>
+        <p>Eine minimale Änderung an der Datei (ein Bit!) ergibt einen komplett anderen Hashwert. Zwei Dateien mit gleichem Hashwert sind <em>garantiert</em> identisch.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">03</span><h2 class="dhbw-slide__title">hashlib im Detail</h2></div>
+
+      <div class="concept-grid">
+
+        <div class="concept-card">
+          <div class="concept-card__name">hashlib – Text hashen</div>
+          <p><code class="dhbw-inline">hashlib</code> ist Teil der Python-Standardbibliothek. Wichtig: die Funktion erwartet <code class="dhbw-inline">bytes</code>, keine Strings. Texte müssen mit <code class="dhbw-inline">.encode()</code> umgewandelt werden.</p>
+          <div class="dhbw-code"><span class="kw">import</span> <span class="fn">hashlib</span>
+
+<span class="cmt"># Text hashen</span>
+<span class="var">text</span>    = <span class="str">"Messwert: 23.5 °C"</span>
+<span class="var">als_bytes</span> = <span class="var">text</span>.<span class="fn">encode</span>(<span class="str">"utf-8"</span>)    <span class="cmt"># str → bytes (Pflicht!)</span>
+<span class="var">hashwert</span>  = <span class="fn">hashlib.sha256</span>(<span class="var">als_bytes</span>).<span class="fn">hexdigest</span>()
+
+<span class="fn">print</span>(<span class="var">hashwert</span>)
+<span class="cmt"># → "a3f1c2d9e8b7..." (64 Hexadezimalzeichen)</span>
+
+<span class="cmt"># Gleicher Text → immer gleicher Hash</span>
+<span class="var">h1</span> = <span class="fn">hashlib.sha256</span>(<span class="str">b"Test"</span>).<span class="fn">hexdigest</span>()
+<span class="var">h2</span> = <span class="fn">hashlib.sha256</span>(<span class="str">b"Test"</span>).<span class="fn">hexdigest</span>()
+<span class="fn">print</span>(<span class="var">h1</span> == <span class="var">h2</span>)    <span class="cmt"># → True (immer!)</span>
+
+<span class="cmt"># Minimale Änderung → völlig anderer Hash</span>
+<span class="var">h3</span> = <span class="fn">hashlib.sha256</span>(<span class="str">b"test"</span>).<span class="fn">hexdigest</span>()  <span class="cmt"># Kleinbuchstabe!</span>
+<span class="fn">print</span>(<span class="var">h1</span> == <span class="var">h3</span>)    <span class="cmt"># → False (komplett anders)</span></div>
+        </div>
+
+        <div class="concept-card">
+          <div class="concept-card__name">Datei-Integrität prüfen</div>
+          <p>Praktischer Anwendungsfall: nach dem Herunterladen einer Firmware oder Messdaten-Datei prüfen, ob die Datei vollständig und unverändert übertragen wurde.</p>
+          <div class="dhbw-code"><span class="kw">import</span> <span class="fn">hashlib</span>
+
+<span class="kw">def</span> <span class="fn">datei_hash</span>(<span class="var">dateipfad</span>):
+    <span class="var">sha256</span> = <span class="fn">hashlib.sha256</span>()
+    <span class="kw">with</span> <span class="fn">open</span>(<span class="var">dateipfad</span>, <span class="str">"rb"</span>) <span class="kw">as</span> <span class="var">f</span>:  <span class="cmt"># "rb" = binär lesen!</span>
+        <span class="kw">while</span> <span class="kw">True</span>:
+            <span class="var">block</span> = <span class="var">f</span>.<span class="fn">read</span>(<span class="num">65536</span>)   <span class="cmt"># 64 KB-Blöcke</span>
+            <span class="kw">if</span> <span class="kw">not</span> <span class="var">block</span>:
+                <span class="kw">break</span>
+            <span class="var">sha256</span>.<span class="fn">update</span>(<span class="var">block</span>)
+    <span class="kw">return</span> <span class="var">sha256</span>.<span class="fn">hexdigest</span>()
+
+<span class="cmt"># Bekannter Referenz-Hash (z.B. vom Hersteller)</span>
+<span class="var">referenz</span> = <span class="str">"abc123def456..."</span>
+<span class="var">aktuell</span>  = <span class="fn">datei_hash</span>(<span class="str">"firmware_v2.bin"</span>)
+
+<span class="kw">if</span> <span class="var">aktuell</span> == <span class="var">referenz</span>:
+    <span class="fn">print</span>(<span class="str">"✅ Datei unverändert – sicher!"</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">"⚠ WARNUNG: Datei wurde verändert!"</span>)</div>
+        </div>
+
+        <div class="concept-card">
+          <div class="concept-card__name">str vs. bytes – der Unterschied</div>
+          <p>Hashlib arbeitet immer mit <code class="dhbw-inline">bytes</code>. Der Unterschied ist wichtig zu kennen.</p>
+          <div class="dhbw-code"><span class="cmt"># str (Text): in Python intern Unicode</span>
+<span class="var">text</span>  = <span class="str">"Hallo"</span>
+<span class="fn">print</span>(<span class="fn">type</span>(<span class="var">text</span>))      <span class="cmt"># → &lt;class 'str'&gt;</span>
+
+<span class="cmt"># bytes: Rohdaten (Zahlen 0-255)</span>
+<span class="var">roh</span>   = <span class="str">b"Hallo"</span>          <span class="cmt"># b-Prefix = bytes</span>
+<span class="fn">print</span>(<span class="fn">type</span>(<span class="var">roh</span>))         <span class="cmt"># → &lt;class 'bytes'&gt;</span>
+
+<span class="cmt"># Umwandlung str ↔ bytes</span>
+<span class="var">als_bytes</span> = <span class="str">"Hallo"</span>.<span class="fn">encode</span>(<span class="str">"utf-8"</span>)   <span class="cmt"># str → bytes</span>
+<span class="var">als_str</span>   = <span class="str">b"Hallo"</span>.<span class="fn">decode</span>(<span class="str">"utf-8"</span>)   <span class="cmt"># bytes → str</span>
+
+<span class="cmt"># Dateien im binären Modus lesen</span>
+<span class="kw">with</span> <span class="fn">open</span>(<span class="str">"bild.png"</span>, <span class="str">"rb"</span>) <span class="kw">as</span> <span class="var">f</span>:   <span class="cmt"># "rb" = read binary</span>
+    <span class="var">inhalt</span> = <span class="var">f</span>.<span class="fn">read</span>()   <span class="cmt"># → bytes</span></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">04</span><h2 class="dhbw-slide__title">Im Schiffe-Versenken-Spiel</h2></div>
+      <div class="game-box">
+        <div class="game-box__header">
+          <span class="game-box__icon">🚢</span>
+          <div>
+            <h3 class="game-box__title">Spielstand-Integrität prüfen</h3>
+            <p class="game-box__subtitle">Wurde der Spielstand manipuliert?</p>
+          </div>
+        </div>
+        <div class="dhbw-code"><span class="kw">import</span> <span class="fn">hashlib</span>
+
+<span class="kw">def</span> <span class="fn">spielstand_hash</span>(<span class="var">schüsse</span>, <span class="var">treffer</span>):
+    <span class="var">inhalt</span> = <span class="fsl">f</span><span class="str">"<span class="fsl">{schüsse}</span>,<span class="fsl">{treffer}</span>"</span>
+    <span class="kw">return</span> <span class="fn">hashlib.sha256</span>(<span class="var">inhalt</span>.<span class="fn">encode</span>()).<span class="fn">hexdigest</span>()
+
+<span class="cmt"># Beim Speichern: Hash mitspeichern</span>
+<span class="var">schuesse</span>, <span class="var">treffer</span> = <span class="num">12</span>, <span class="num">7</span>
+<span class="var">pruefsumme</span> = <span class="fn">spielstand_hash</span>(<span class="var">schuesse</span>, <span class="var">treffer</span>)
+
+<span class="cmt"># Beim Laden: Hash verifizieren</span>
+<span class="kw">if</span> <span class="fn">spielstand_hash</span>(<span class="var">schuesse</span>, <span class="var">treffer</span>) == <span class="var">pruefsumme</span>:
+    <span class="fn">print</span>(<span class="str">"Spielstand authentisch."</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">"⚠ Spielstand wurde manipuliert!"</span>)</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="dhbw-slide page-break">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">05</span><h2 class="dhbw-slide__title">Quick-Reference</h2></div>
+      <table class="quick-ref">
+        <thead><tr><th style="width:32%">Syntax</th><th>Bedeutung</th></tr></thead>
+        <tbody>
+          <tr><td><code>import hashlib</code></td><td>Modul laden (kein Install nötig)</td></tr>
+          <tr><td><code>hashlib.sha256(daten)</code></td><td>SHA-256 Hashobjekt erstellen (daten muss bytes sein)</td></tr>
+          <tr><td><code>.hexdigest()</code></td><td>Hashwert als 64-Zeichen Hex-String</td></tr>
+          <tr><td><code>"text".encode("utf-8")</code></td><td>str → bytes</td></tr>
+          <tr><td><code>b"bytes".decode("utf-8")</code></td><td>bytes → str</td></tr>
+          <tr><td><code>open("f", "rb")</code></td><td>Binärmodus lesen (für Bilder, PDFs, Executables)</td></tr>
+          <tr><td><code>h1 == h2</code></td><td>Hash-Vergleich – prüft Dateiidentität</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer class="dhbw-footer">DHBW Stuttgart · Maschinenbau · Informatik-Grundlagen · WS 2025/26 · Python Praxis Nachschlagewerk</footer>
+</body>
+</html>

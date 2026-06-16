@@ -1,0 +1,441 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>V03 – Boolesche Algebra Teil 1 | DHBW Stuttgart</title>
+  <link rel="stylesheet" href="../../src/dhbw-base.css">
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════════════════════
+       1. HEADER
+  ══════════════════════════════════════════════════════════ -->
+  <header class="dhbw-header">
+    <div class="dhbw-header__inner">
+      <a href="#" class="dhbw-header__logo">
+        <span class="dhbw-header__logo-text">DHBW Stuttgart</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════════════════════════════
+       2. HERO
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-hero">
+    <div class="dhbw-hero__inner">
+      <p class="dhbw-hero__label">Vorlesung 03 · Informatik-Grundlagen · Maschinenbau</p>
+      <h1 class="dhbw-hero__title">Boolesche Algebra – Teil 1</h1>
+      <p class="dhbw-hero__subtitle">Logik mit Nullen und Einsen – die Grundlage jeder digitalen Schaltung</p>
+      <p class="dhbw-hero__meta">WS 2025/26 &nbsp;·&nbsp; DHBW Stuttgart</p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       3. LERNZIELE
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">01</span>
+        <h2 class="dhbw-slide__title">Lernziele</h2>
+      </div>
+
+      <div class="dhbw-goals">
+        <p class="dhbw-goals__title">📌 Nach dieser Vorlesung kannst du …</p>
+        <ul>
+          <li>die drei fundamentalen logischen Operatoren <strong>AND</strong>, <strong>OR</strong> und <strong>NOT</strong> erklären und auf konkrete Situationen anwenden.</li>
+          <li><strong>Wahrheitstabellen</strong> lesen und selbstständig für beliebige Ausdrücke mit zwei Eingaben erstellen.</li>
+          <li>logische Ausdrücke kombinieren und mit Hilfe der <strong>Prioritätsregeln</strong> korrekt schrittweise auswerten.</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       4. WAS IST BOOLESCHE ALGEBRA?
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">02</span>
+        <h2 class="dhbw-slide__title">Was ist Boolesche Algebra?</h2>
+      </div>
+
+      <p>Im Jahr 1847 veröffentlichte der britische Mathematiker <strong>George Boole</strong> ein Werk, in dem er Logik in ein mathematisches System überführte. Seine zentrale Idee lautet: Jede Aussage kann genau zwei Zustände annehmen – <strong>wahr</strong> (1) oder <strong>falsch</strong> (0). Dieses System wird heute als <strong>Boolesche Algebra</strong> bezeichnet.</p>
+
+      <p class="mt-5">Für die Informatik und Elektrotechnik besitzt diese Idee fundamentale Bedeutung: Transistoren in einem Prozessor verhalten sich genau nach diesem Prinzip. Sie sind entweder eingeschaltet (1) oder ausgeschaltet (0). Mit Boolescher Algebra lässt sich daher beschreiben, wann eine elektronische Schaltung einen bestimmten Ausgang liefern soll.</p>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">In der Logik</p>
+            <p>Die Aussage „17 ist eine Primzahl" ist entweder wahr oder falsch – es gibt kein Dazwischen. Boole erkannte, dass man solche Aussagen wie Zahlen verknüpfen und berechnen kann.</p>
+        </div>
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">Im Computer</p>
+            <p>Jedes Bit ist 0 oder 1. Logikgatter kombinieren diese Bits nach denselben Regeln, die Boole beschrieb – in modernen Prozessoren mehrere Milliarden Mal pro Sekunde.</p>
+        </div>
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">In der Steuerungstechnik</p>
+            <p>In der SPS-Programmierung (Speicherprogrammierbare Steuerungen) steuern boolesche Ausdrücke Maschinen: „Schalte Motor ein, WENN Tür geschlossen UND Starttaster gedrückt."</p>
+        </div>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--tip mt-5">
+        <span class="dhbw-callout__label">Merkhilfe</span>
+        <p>Boolesche Algebra ist das Einmaleins der Digitalelektronik. Wer die drei Grundoperationen beherrscht, versteht das Fundament jedes Mikrocontrollers und jeder programmierbaren Steuerung – beides ist für Maschinenbauingenieure täglich relevant.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       5. NOT-OPERATOR
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">03</span>
+        <h2 class="dhbw-slide__title">Der NOT-Operator (¬)</h2>
+      </div>
+
+      <p>Der <strong>NOT-Operator</strong> (Negation, Symbol: ¬ oder ein Strich über der Variable: Ā) dreht den Wahrheitswert einer Aussage um. Aus wahr (1) wird falsch (0), aus falsch (0) wird wahr (1). NOT ist ein <em>einstelliger</em> Operator, weil er genau auf eine Eingabe wirkt.</p>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+          <h3>Wahrheitstabelle</h3>
+          <p class="mt-4">Eine <strong>Wahrheitstabelle</strong> listet für jede mögliche Eingabe-Kombination das dazugehörige Ergebnis auf. Bei NOT mit einer Eingabe gibt es genau zwei Zeilen.</p>
+          <div class="dhbw-table-wrap mt-4">
+            <table class="dhbw-table">
+              <thead>
+                <tr><th>A</th><th>¬A &nbsp;(NOT A)</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>0</td><td class="text-red font-semi">1</td></tr>
+                <tr><td>1</td><td>0</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="dhbw-columns__item">
+          <h3>Schaltsymbol (DIN/IEC)</h3>
+          <p class="mt-4">Das NOT-Gatter wird als Dreieck dargestellt. Der kleine Kreis am Ausgang ist das universelle Symbol für Negation – überall in der Schaltungstechnik erkennbar.</p>
+          <svg viewBox="0 0 170 100" width="170" height="100"
+               role="img" aria-label="NOT-Gatter: Dreieck mit Inversionskreis am Ausgang, Eingang A grau, Ausgang Y rot">
+            <defs>
+              <marker id="arr-not" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                <polygon points="0 0, 8 3, 0 6" fill="#E2001A"/>
+              </marker>
+            </defs>
+            <line x1="12" y1="45" x2="38" y2="45" stroke="#6B7280" stroke-width="2"/>
+            <polygon points="38,18 38,72 83,45" fill="#F5F5F5" stroke="#1A1A1A" stroke-width="2"/>
+            <circle cx="91" cy="45" r="8" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="2"/>
+            <line x1="99" y1="45" x2="130" y2="45" stroke="#E2001A" stroke-width="2.5" marker-end="url(#arr-not)"/>
+            <text x="6" y="50" font-family="'Source Sans 3',Arial,sans-serif" font-size="14" fill="#6B7280">A</text>
+            <text x="134" y="50" font-family="'Source Sans 3',Arial,sans-serif" font-size="14" fill="#E2001A">Y</text>
+            <text x="76" y="95" text-anchor="middle" font-family="'Source Sans 3',Arial,sans-serif" font-size="11" fill="#6B7280">NOT-Gatter</text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--example mt-5">
+        <span class="dhbw-callout__label">Beispiel aus der Praxis</span>
+        <p>Sei A = „Die Schutztür ist geschlossen" (1 = geschlossen, 0 = offen). Dann ist ¬A = „Die Schutztür ist <em>nicht</em> geschlossen" – also offen. Eine Presse darf nur bei ¬A = 0 starten, d.&nbsp;h. nur wenn die Tür wirklich geschlossen ist.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       6. AND-OPERATOR
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">04</span>
+        <h2 class="dhbw-slide__title">Der AND-Operator (∧)</h2>
+      </div>
+
+      <p>Der <strong>AND-Operator</strong> (Konjunktion, Symbol: ∧ oder ·) liefert das Ergebnis 1 nur dann, wenn <em>alle</em> Eingaben gleichzeitig den Wert 1 haben. Sobald auch nur eine Eingabe 0 ist, ergibt AND den Wert 0. Im Alltag entspricht das einem „sowohl … als auch".</p>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+          <h3>Wahrheitstabelle</h3>
+          <p class="mt-4">Bei zwei Eingaben gibt es vier mögliche Kombinationen. Nur die letzte Zeile liefert das Ergebnis 1 – wenn A <em>und</em> B beide aktiv sind.</p>
+          <div class="dhbw-table-wrap mt-4">
+            <table class="dhbw-table">
+              <thead>
+                <tr><th>A</th><th>B</th><th>A ∧ B</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>0</td><td>0</td><td>0</td></tr>
+                <tr><td>0</td><td>1</td><td>0</td></tr>
+                <tr><td>1</td><td>0</td><td>0</td></tr>
+                <tr><td>1</td><td>1</td><td class="text-red font-semi">1</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="dhbw-columns__item">
+          <h3>Schaltsymbol (DIN/IEC)</h3>
+          <p class="mt-4">Das AND-Gatter wird als abgerundetes D-förmiges Symbol dargestellt. Die beiden Eingänge kommen von links, der einzige Ausgang verlässt das Symbol rechts.</p>
+          <svg viewBox="0 0 170 110" width="170" height="110"
+               role="img" aria-label="AND-Gatter: D-förmiges Symbol mit Eingängen A und B sowie Ausgang Y">
+            <defs>
+              <marker id="arr-and" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                <polygon points="0 0, 8 3, 0 6" fill="#E2001A"/>
+              </marker>
+            </defs>
+            <line x1="12" y1="35" x2="44" y2="35" stroke="#6B7280" stroke-width="2"/>
+            <line x1="12" y1="67" x2="44" y2="67" stroke="#6B7280" stroke-width="2"/>
+            <path d="M44,18 L44,84 Q98,84 98,51 Q98,18 44,18 Z" fill="#F5F5F5" stroke="#1A1A1A" stroke-width="2"/>
+            <line x1="98" y1="51" x2="130" y2="51" stroke="#E2001A" stroke-width="2.5" marker-end="url(#arr-and)"/>
+            <text x="5" y="40" font-family="'Source Sans 3',Arial,sans-serif" font-size="14" fill="#6B7280">A</text>
+            <text x="5" y="72" font-family="'Source Sans 3',Arial,sans-serif" font-size="14" fill="#6B7280">B</text>
+            <text x="134" y="56" font-family="'Source Sans 3',Arial,sans-serif" font-size="14" fill="#E2001A">Y</text>
+            <text x="72" y="105" text-anchor="middle" font-family="'Source Sans 3',Arial,sans-serif" font-size="11" fill="#6B7280">AND-Gatter</text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--example mt-5">
+        <span class="dhbw-callout__label">Beispiel aus der Praxis</span>
+        <p>Ein Hydrauliksystem startet (Y=1) nur dann, wenn die Schutztür geschlossen ist (A=1) <em>und</em> der Drucksensor ausreichend Druck meldet (B=1). Fehlt eine der Bedingungen, bleibt das System gesperrt – ein typisches Sicherheitsprinzip in der Maschinenbau-Steuerungstechnik.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       7. OR-OPERATOR
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">05</span>
+        <h2 class="dhbw-slide__title">Der OR-Operator (∨)</h2>
+      </div>
+
+      <p>Der <strong>OR-Operator</strong> (Disjunktion, Symbol: ∨ oder +) liefert das Ergebnis 1, wenn <em>mindestens eine</em> Eingabe den Wert 1 hat. OR ergibt nur dann 0, wenn beide Eingaben gleichzeitig 0 sind. Im Alltag entspricht das einem „entweder … oder … – oder beides".</p>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+          <h3>Wahrheitstabelle</h3>
+          <p class="mt-4">Drei von vier Kombinationen liefern das Ergebnis 1. Nur wenn beide Eingaben gleichzeitig inaktiv sind, ist das Ergebnis 0.</p>
+          <div class="dhbw-table-wrap mt-4">
+            <table class="dhbw-table">
+              <thead>
+                <tr><th>A</th><th>B</th><th>A ∨ B</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>0</td><td>0</td><td>0</td></tr>
+                <tr><td>0</td><td>1</td><td class="text-red font-semi">1</td></tr>
+                <tr><td>1</td><td>0</td><td class="text-red font-semi">1</td></tr>
+                <tr><td>1</td><td>1</td><td class="text-red font-semi">1</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="dhbw-columns__item">
+          <h3>Schaltsymbol (DIN/IEC)</h3>
+          <p class="mt-4">Das OR-Gatter hat eine geschwungene linke Seite. Diese Kurve unterscheidet es vom AND-Gatter und symbolisiert die „weichere" Bedingung: eines von beidem reicht.</p>
+          <svg viewBox="0 0 170 110" width="170" height="110"
+               role="img" aria-label="OR-Gatter: geschwungenes Symbol mit Eingängen A und B sowie Ausgang Y">
+            <defs>
+              <marker id="arr-or" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                <polygon points="0 0, 8 3, 0 6" fill="#E2001A"/>
+              </marker>
+            </defs>
+            <line x1="12" y1="35" x2="42" y2="35" stroke="#6B7280" stroke-width="2"/>
+            <line x1="12" y1="67" x2="42" y2="67" stroke="#6B7280" stroke-width="2"/>
+            <path d="M32,18 Q50,51 32,84 Q68,84 93,51 Q68,18 32,18 Z" fill="#F5F5F5" stroke="#1A1A1A" stroke-width="2"/>
+            <line x1="93" y1="51" x2="130" y2="51" stroke="#E2001A" stroke-width="2.5" marker-end="url(#arr-or)"/>
+            <text x="5" y="40" font-family="'Source Sans 3',Arial,sans-serif" font-size="14" fill="#6B7280">A</text>
+            <text x="5" y="72" font-family="'Source Sans 3',Arial,sans-serif" font-size="14" fill="#6B7280">B</text>
+            <text x="134" y="56" font-family="'Source Sans 3',Arial,sans-serif" font-size="14" fill="#E2001A">Y</text>
+            <text x="65" y="105" text-anchor="middle" font-family="'Source Sans 3',Arial,sans-serif" font-size="11" fill="#6B7280">OR-Gatter</text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--example mt-5">
+        <span class="dhbw-callout__label">Beispiel aus der Praxis</span>
+        <p>Eine Notfallabschaltung wird ausgelöst (Y=1), wenn der Überdrucksensor anschlägt (A=1) <em>oder</em> ein Bediener den Notaus-Knopf drückt (B=1). Eines der beiden Signale genügt, um die Anlage sofort zu stoppen.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       8. KOMBINIERTE AUSDRÜCKE & PRIORITÄTEN
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">06</span>
+        <h2 class="dhbw-slide__title">Kombinierte Ausdrücke und Prioritätsregeln</h2>
+      </div>
+
+      <p>Genau wie in der normalen Algebra lassen sich die drei Operatoren zu komplexeren Ausdrücken kombinieren. Um solche Ausdrücke eindeutig auswerten zu können, gelten klare <strong>Prioritätsregeln</strong>, die die Reihenfolge der Berechnung festlegen.</p>
+
+      <h3 class="dhbw-section-title">Auswertungs-Reihenfolge (von stärkster zu schwächster Bindung)</h3>
+      <div class="dhbw-columns mt-4">
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">1. Klammern ( )</p>
+            <p>Alles in Klammern wird zuerst ausgewertet – genauso wie in der normalen Arithmetik.</p>
+        </div>
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">2. NOT (¬)</p>
+            <p>Die Negation bindet am stärksten und wirkt sofort auf das nachfolgende Einzelelement.</p>
+        </div>
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">3. AND (∧)</p>
+            <p>AND wird vor OR ausgewertet – wie Punkt-vor-Strich in der Mathematik.</p>
+        </div>
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">4. OR (∨)</p>
+            <p>OR hat die schwächste Bindung und wird zuletzt berechnet, sofern keine Klammern vorhanden sind.</p>
+        </div>
+      </div>
+
+      <h3 class="dhbw-section-title mt-6">Schrittweise Auswertung: A ∨ B ∧ ¬C</h3>
+      <p>Gegeben sind die Werte: A = 1,&nbsp; B = 0,&nbsp; C = 1.</p>
+      <p class="mt-4"><strong>Schritt 1</strong> &nbsp;(NOT zuerst):&nbsp;&nbsp;&nbsp; ¬C = ¬1 = <strong>0</strong></p>
+      <p class="mt-4"><strong>Schritt 2</strong> &nbsp;(AND vor OR):&nbsp;&nbsp; B ∧ ¬C = 0 ∧ 0 = <strong>0</strong></p>
+      <p class="mt-4"><strong>Schritt 3</strong> &nbsp;(OR zuletzt):&nbsp;&nbsp;&nbsp;&nbsp; A ∨ 0 = 1 ∨ 0 = <strong class="text-red">1</strong></p>
+
+      <div class="dhbw-callout dhbw-callout--tip mt-5">
+        <span class="dhbw-callout__label">Merkhilfe</span>
+        <p>NOT vor AND vor OR – die Analogie zur normalen Algebra lautet: Potenz vor Punkt vor Strich. Im Zweifelsfall Klammern setzen und damit jede Mehrdeutigkeit vermeiden.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       9. PRAXISBEISPIEL: ALARMANLAGE
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">07</span>
+        <h2 class="dhbw-slide__title">Praxisbeispiel: Alarmanlage</h2>
+      </div>
+
+      <p>Boolesche Ausdrücke beschreiben in der Steuerungstechnik präzise, unter welchen Bedingungen ein Ausgang aktiviert werden soll. Das folgende Beispiel zeigt eine einfache Alarmanlage für eine Werkstatttür – ein realistisches Szenario für Industrieanlagen.</p>
+
+      <h3 class="dhbw-section-title">Anforderung der Anlage</h3>
+      <p>Der Alarm soll auslösen, wenn die Tür geöffnet wird <em>und</em> gleichzeitig kein autorisierter Schlüssel gesteckt ist. Mit gültigem Schlüssel darf man jederzeit eintreten, ohne dass Alarm ausgelöst wird.</p>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+          <h3>Variablendefinition</h3>
+          <p class="mt-4"><strong>T</strong> = „Tür ist offen" &nbsp;(1 = offen, 0 = geschlossen)</p>
+          <p class="mt-4"><strong>S</strong> = „Schlüssel ist gesteckt" &nbsp;(1 = ja, 0 = nein)</p>
+          <p class="mt-4"><strong>A</strong> = „Alarm auslösen" &nbsp;(1 = Alarm, 0 = kein Alarm)</p>
+        </div>
+        <div class="dhbw-columns__item">
+          <h3>Logischer Ausdruck</h3>
+          <p class="mt-4 font-semi" style="font-size:1.4rem;">A = T ∧ ¬S</p>
+          <p class="mt-4">Der Alarm ist aktiv, wenn die Tür offen ist (T = 1) <em>und</em> kein Schlüssel gesteckt ist (¬S = ¬0 = 1). Ist ein Schlüssel gesteckt (S = 1), dann gilt ¬S = 0 und damit A = 0 – kein Alarm.</p>
+        </div>
+      </div>
+
+      <h3 class="dhbw-section-title mt-5">Vollständige Wahrheitstabelle</h3>
+      <div class="dhbw-table-wrap">
+        <table class="dhbw-table">
+          <thead>
+            <tr>
+              <th>T (Tür offen?)</th>
+              <th>S (Schlüssel?)</th>
+              <th>¬S</th>
+              <th>A = T ∧ ¬S</th>
+              <th>Situation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>0</td><td>0</td><td>1</td><td>0</td><td>Tür zu – alles ruhig</td></tr>
+            <tr><td>0</td><td>1</td><td>0</td><td>0</td><td>Tür zu, Schlüssel gesteckt – kein Alarm</td></tr>
+            <tr><td>1</td><td>0</td><td>1</td><td class="text-red font-semi">1</td><td>Tür auf, kein Schlüssel – <strong>ALARM!</strong></td></tr>
+            <tr><td>1</td><td>1</td><td>0</td><td>0</td><td>Tür auf, Schlüssel gesteckt – autorisierter Zutritt</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--praxis mt-5">
+        <span class="dhbw-callout__label">Praxisbezug Maschinenbau</span>
+        <p>In der SPS-Programmierung (z.&nbsp;B. nach IEC 61131-3 in der Ladder-Diagramm-Notation) werden exakt solche booleschen Ausdrücke eingesetzt, um Sicherheitsfunktionen in Anlagen zu realisieren – von der einfachen Türverriegelung bis zur komplexen Pressensteuerung mit mehreren Freigabebedingungen.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       10. ZUSAMMENFASSUNG
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">08</span>
+        <h2 class="dhbw-slide__title">Zusammenfassung</h2>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--merksatz">
+        <span class="dhbw-callout__label">Merksatz</span>
+        <p>Die Boolesche Algebra kennt nur zwei Zustände: wahr (1) und falsch (0). Die drei Grundoperatoren sind <strong>NOT</strong> (dreht den Wert um), <strong>AND</strong> (liefert 1 nur wenn <em>alle</em> Eingaben 1 sind) und <strong>OR</strong> (liefert 1 wenn <em>mindestens eine</em> Eingabe 1 ist). Die Auswertungsreihenfolge lautet: NOT vor AND vor OR. Jede digitale Schaltung – von der Alarmanlage bis zum Prozessor – basiert auf diesen drei Operationen.</p>
+      </div>
+
+      <h3 class="dhbw-section-title mt-5">Überblick: Die drei Grundoperatoren</h3>
+      <div class="dhbw-table-wrap">
+        <table class="dhbw-table">
+          <thead>
+            <tr><th>Operator</th><th>Symbol</th><th>Ergebnis 1, wenn …</th><th>Alltagsanalog</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>NOT</strong></td>
+              <td>¬A &nbsp;/&nbsp; Ā</td>
+              <td>A = 0</td>
+              <td>Lichtschalter umdrehen: an wird aus, aus wird an</td>
+            </tr>
+            <tr>
+              <td><strong>AND</strong></td>
+              <td>A ∧ B &nbsp;/&nbsp; A · B</td>
+              <td>A = 1 <em>und</em> B = 1</td>
+              <td>Beide Schlüssel gleichzeitig drehen (Sicherheitsschloss)</td>
+            </tr>
+            <tr>
+              <td><strong>OR</strong></td>
+              <td>A ∨ B &nbsp;/&nbsp; A + B</td>
+              <td>A = 1 <em>oder</em> B = 1</td>
+              <td>Tür öffnet: vordere Klingel oder hintere Klingel</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════════════════════════ -->
+  <footer class="dhbw-footer">
+    <div class="dhbw-footer__inner">
+      <span class="dhbw-footer__brand">DHBW Stuttgart</span>
+      <span>Informatik-Grundlagen für Maschinenbau &nbsp;·&nbsp; WS&nbsp;2025/26</span>
+      <span>V03 – Boolesche Algebra Teil 1</span>
+    </div>
+  </footer>
+
+</body>
+</html>

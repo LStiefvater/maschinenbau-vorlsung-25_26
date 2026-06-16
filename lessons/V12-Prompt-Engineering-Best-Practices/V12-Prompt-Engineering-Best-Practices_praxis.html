@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>V12 – Python Praxis: String-Methoden | DHBW Stuttgart</title>
+  <link rel="stylesheet" href="../../src/dhbw-base.css">
+  <style>
+    .concept-grid { display:grid; grid-template-columns:1fr; gap:var(--sp-6); margin-top:var(--sp-5); }
+    .concept-card { background:var(--surface); border:1px solid var(--border); border-top:4px solid var(--red); border-radius:var(--r-card); padding:var(--sp-5) var(--sp-6); box-shadow:var(--shadow-card); }
+    .concept-card__name { font-family:var(--dhbw-font-mono); font-size:var(--fs-lg); font-weight:var(--dhbw-fw-bold); color:var(--red); margin-bottom:var(--sp-2); }
+    .dhbw-code { background:var(--code-bg); color:var(--code-text); font-family:var(--dhbw-font-mono); font-size:0.9rem; line-height:var(--lh-code); padding:var(--sp-4) var(--sp-5); border-radius:var(--r-base); overflow-x:auto; margin:var(--sp-3) 0; white-space:pre; }
+    .kw  { color:#F97316; font-weight:600; }
+    .str { color:#22C55E; }
+    .num { color:#A78BFA; }
+    .cmt { color:#7A9CB3; font-style:italic; }
+    .fn  { color:#60A5FA; }
+    .var { color:#E8EFF5; }
+    .fsl { color:#F0C060; }
+    .game-box { background:#0F1E2B; border:2px solid #2A4A6B; border-radius:var(--r-card); padding:var(--sp-5) var(--sp-6); margin-top:var(--sp-6); }
+    .game-box__header { display:flex; align-items:center; gap:var(--sp-3); margin-bottom:var(--sp-4); }
+    .game-box__icon { font-size:1.5rem; }
+    .game-box__title { font-size:var(--fs-md); font-weight:var(--dhbw-fw-bold); color:#60A5FA; margin:0; }
+    .game-box__subtitle { font-size:var(--fs-sm); color:#7A9CB3; margin-top:var(--sp-1); }
+    .quick-ref { width:100%; border-collapse:collapse; margin-top:var(--sp-4); font-size:var(--fs-sm); }
+    .quick-ref th { background:var(--red); color:#fff; padding:var(--sp-2) var(--sp-4); text-align:left; }
+    .quick-ref td { padding:var(--sp-2) var(--sp-4); border-bottom:1px solid var(--border); vertical-align:top; }
+    .quick-ref tr:nth-child(even) td { background:var(--canvas); }
+    .quick-ref code { font-family:var(--dhbw-font-mono); font-size:0.85rem; background:var(--code-bg-in); padding:1px 5px; border-radius:var(--r-sm); color:var(--red); }
+    .mt-4 { margin-top:var(--sp-4); } .mt-5 { margin-top:var(--sp-5); }
+    .dhbw-footer { background:var(--text); color:#9CA3AF; text-align:center; padding:var(--sp-5) var(--gutter); font-size:var(--fs-sm); }
+    @media print {
+      @page { size:A4; margin:15mm 18mm; }
+      .dhbw-header,.dhbw-footer { display:none; }
+      .dhbw-hero,.dhbw-slide,.dhbw-code,.dhbw-callout,.concept-card,.game-box { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+      .dhbw-hero { padding:12mm 0 10mm; } .dhbw-slide { padding:8mm 0; }
+      .concept-card,.game-box { break-inside:avoid; }
+      .dhbw-code { font-size:0.78rem; }
+      .page-break { page-break-before:always; }
+    }
+  </style>
+</head>
+<body>
+  <header class="dhbw-header">
+    <div class="dhbw-header__inner">
+      <a href="#" class="dhbw-header__logo"><span class="dhbw-header__logo-text">DHBW Stuttgart</span></a>
+      <nav class="dhbw-header__nav">
+        <a href="V12-Prompt-Engineering-Best-Practices_skript.html" class="dhbw-header__nav-link">Theorie</a>
+        <a href="#" class="dhbw-header__nav-link dhbw-header__nav-link--active">Python Praxis</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="dhbw-hero">
+    <div class="dhbw-hero__inner">
+      <p class="dhbw-hero__label">Vorlesung 12 · Python Praxis · Maschinenbau</p>
+      <h1 class="dhbw-hero__title">String-Methoden</h1>
+      <p class="dhbw-hero__subtitle">Texte bearbeiten: strip, split, join, replace, upper, lower, startswith</p>
+      <p class="dhbw-hero__meta">WS 2025/26 &nbsp;·&nbsp; DHBW Stuttgart &nbsp;·&nbsp; Nachschlagewerk Python-Praxis</p>
+    </div>
+  </section>
+
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">01</span><h2 class="dhbw-slide__title">Das kannst du danach</h2></div>
+      <div class="dhbw-goals">
+        <p class="dhbw-goals__title">📌 Nach dieser Einheit kannst du …</p>
+        <ul>
+          <li>Texte mit <strong>strip(), upper(), lower()</strong> bereinigen und normalisieren.</li>
+          <li>mit <strong>split()</strong> Texte in Teillisten aufteilen – z.&nbsp;B. CSV-Zeilen zerlegen.</li>
+          <li>mit <strong>join()</strong> Listen zu Texten zusammenfügen.</li>
+          <li>mit <strong>replace()</strong> Texte anpassen.</li>
+          <li>mit <strong>startswith(), endswith(), in</strong> Texte durchsuchen.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- SVG: String Pipeline -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">02</span><h2 class="dhbw-slide__title">String-Methoden als Kette</h2></div>
+
+      <p>String-Methoden können <strong>verkettet</strong> (chained) werden: das Ergebnis einer Methode wird direkt an die nächste übergeben.</p>
+
+      <!-- SVG: Pipeline -->
+      <svg viewBox="0 0 560 60" width="100%" style="max-width:560px; display:block; margin:var(--sp-4) auto;"
+           role="img" aria-label="String-Methoden Pipeline: Eingabe → strip → lower → replace → Ergebnis">
+        <!-- Eingabe -->
+        <rect x="5" y="10" width="100" height="40" rx="4" fill="#1E2936" stroke="#22C55E" stroke-width="1.5"/>
+        <text x="55" y="33" text-anchor="middle" font-family="'Fira Code', monospace" font-size="11" fill="#22C55E">" A3 \n"</text>
+
+        <!-- Pfeil -->
+        <line x1="106" y1="30" x2="126" y2="30" stroke="#D1D5DB" stroke-width="2" marker-end="url(#arr)"/>
+
+        <!-- strip -->
+        <rect x="127" y="10" width="80" height="40" rx="4" fill="#1E2936" stroke="#60A5FA" stroke-width="1.5"/>
+        <text x="167" y="27" text-anchor="middle" font-family="'Fira Code', monospace" font-size="11" fill="#60A5FA">.strip()</text>
+        <text x="167" y="42" text-anchor="middle" font-family="'Source Sans 3', Arial, sans-serif" font-size="10" fill="#7A9CB3">"A3"</text>
+
+        <line x1="208" y1="30" x2="228" y2="30" stroke="#D1D5DB" stroke-width="2"/>
+
+        <!-- upper -->
+        <rect x="229" y="10" width="80" height="40" rx="4" fill="#1E2936" stroke="#60A5FA" stroke-width="1.5"/>
+        <text x="269" y="27" text-anchor="middle" font-family="'Fira Code', monospace" font-size="11" fill="#60A5FA">.upper()</text>
+        <text x="269" y="42" text-anchor="middle" font-family="'Source Sans 3', Arial, sans-serif" font-size="10" fill="#7A9CB3">"A3"</text>
+
+        <line x1="310" y1="30" x2="330" y2="30" stroke="#D1D5DB" stroke-width="2"/>
+
+        <!-- Ergebnis -->
+        <rect x="331" y="10" width="100" height="40" rx="4" fill="#1E2936" stroke="#22C55E" stroke-width="1.5"/>
+        <text x="381" y="27" text-anchor="middle" font-family="'Fira Code', monospace" font-size="11" fill="#22C55E">fertig</text>
+        <text x="381" y="42" text-anchor="middle" font-family="'Fira Code', monospace" font-size="11" fill="#22C55E">"A3"</text>
+
+        <!-- Pfeil-Marker Definition -->
+        <defs>
+          <marker id="arr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6 Z" fill="#D1D5DB"/>
+          </marker>
+        </defs>
+      </svg>
+
+      <div class="dhbw-code"><span class="cmt"># Verkettung: Leerzeichen entfernen + in Großbuchstaben</span>
+<span class="var">eingabe</span>  = <span class="str">"  a3  \n"</span>
+<span class="var">bereinigt</span> = <span class="var">eingabe</span>.<span class="fn">strip</span>().<span class="fn">upper</span>()   <span class="cmt"># → "A3"</span></div>
+    </div>
+  </section>
+
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">03</span><h2 class="dhbw-slide__title">Methoden im Detail</h2></div>
+
+      <div class="concept-grid">
+
+        <div class="concept-card">
+          <div class="concept-card__name">strip() · upper() · lower() · replace()</div>
+          <div class="dhbw-code"><span class="var">rohwert</span> = <span class="str">"  23.5 °C  \n"</span>
+
+<span class="cmt"># strip(): Leerzeichen + Sonderzeichen am Rand entfernen</span>
+<span class="fn">print</span>(<span class="var">rohwert</span>.<span class="fn">strip</span>())          <span class="cmt"># → "23.5 °C"</span>
+
+<span class="cmt"># upper() / lower(): Groß- / Kleinschreibung</span>
+<span class="fn">print</span>(<span class="str">"Alarm"</span>.<span class="fn">upper</span>())           <span class="cmt"># → "ALARM"</span>
+<span class="fn">print</span>(<span class="str">"SENSOR"</span>.<span class="fn">lower</span>())          <span class="cmt"># → "sensor"</span>
+
+<span class="cmt"># replace(alt, neu): Text ersetzen</span>
+<span class="var">zeile</span>  = <span class="str">"23.5,24.1,22.8"</span>
+<span class="var">clean</span>  = <span class="var">zeile</span>.<span class="fn">replace</span>(<span class="str">","</span>, <span class="str">" "</span>)   <span class="cmt"># → "23.5 24.1 22.8"</span>
+
+<span class="cmt"># Komma als Dezimaltrenner → Punkt (deutsches Zahlenformat)</span>
+<span class="var">wert</span>   = <span class="str">"23,5"</span>.<span class="fn">replace</span>(<span class="str">","</span>, <span class="str">"."</span>)  <span class="cmt"># → "23.5"</span>
+<span class="var">temp</span>   = <span class="fn">float</span>(<span class="var">wert</span>)               <span class="cmt"># → 23.5</span></div>
+        </div>
+
+        <div class="concept-card">
+          <div class="concept-card__name">split() · join()</div>
+          <p><code class="dhbw-inline">split()</code> zerlegt einen String in eine Liste. <code class="dhbw-inline">join()</code> verbindet eine Liste zu einem String – das Gegenteil.</p>
+          <div class="dhbw-code"><span class="cmt"># split(): String → Liste</span>
+<span class="var">csv_zeile</span> = <span class="str">"Temperatur,23.5,°C,OK"</span>
+<span class="var">teile</span>     = <span class="var">csv_zeile</span>.<span class="fn">split</span>(<span class="str">","</span>)
+<span class="fn">print</span>(<span class="var">teile</span>)       <span class="cmt"># → ['Temperatur', '23.5', '°C', 'OK']</span>
+<span class="fn">print</span>(<span class="var">teile</span>[<span class="num">1</span>])     <span class="cmt"># → '23.5'</span>
+<span class="var">wert</span> = <span class="fn">float</span>(<span class="var">teile</span>[<span class="num">1</span>])   <span class="cmt"># → 23.5 (Zahl)</span>
+
+<span class="cmt"># split() ohne Argument: trennt bei Leerzeichen</span>
+<span class="var">satz</span> = <span class="str">"Motor ist aktiv"</span>
+<span class="fn">print</span>(<span class="var">satz</span>.<span class="fn">split</span>())   <span class="cmt"># → ['Motor', 'ist', 'aktiv']</span>
+
+<span class="cmt"># join(): Liste → String</span>
+<span class="var">felder</span> = [<span class="str">"Sensor1"</span>, <span class="str">"22.1"</span>, <span class="str">"°C"</span>]
+<span class="var">zeile</span>  = <span class="str">","</span>.<span class="fn">join</span>(<span class="var">felder</span>)
+<span class="fn">print</span>(<span class="var">zeile</span>)   <span class="cmt"># → "Sensor1,22.1,°C"</span></div>
+        </div>
+
+        <div class="concept-card">
+          <div class="concept-card__name">startswith() · endswith() · in</div>
+          <p>Texte durchsuchen ohne reguläre Ausdrücke – einfach und praxisnah.</p>
+          <div class="dhbw-code"><span class="var">dateiname</span> = <span class="str">"messung_2026_01.csv"</span>
+<span class="var">meldung</span>   = <span class="str">"ALARM: Überhitzung Sensor 3"</span>
+
+<span class="cmt"># startswith() / endswith()</span>
+<span class="fn">print</span>(<span class="var">dateiname</span>.<span class="fn">startswith</span>(<span class="str">"messung"</span>))   <span class="cmt"># → True</span>
+<span class="fn">print</span>(<span class="var">dateiname</span>.<span class="fn">endswith</span>(<span class="str">".csv"</span>))         <span class="cmt"># → True</span>
+
+<span class="cmt"># in-Operator: Text enthält Teilstring?</span>
+<span class="fn">print</span>(<span class="str">"ALARM"</span> <span class="kw">in</span> <span class="var">meldung</span>)                  <span class="cmt"># → True</span>
+<span class="fn">print</span>(<span class="str">"Sensor 3"</span> <span class="kw">in</span> <span class="var">meldung</span>)               <span class="cmt"># → True</span>
+
+<span class="cmt"># Praktisch: alle Alarm-Zeilen filtern</span>
+<span class="var">log</span> = [<span class="str">"INFO: Start"</span>, <span class="str">"ALARM: Temp"</span>, <span class="str">"INFO: OK"</span>]
+<span class="kw">for</span> <span class="var">zeile</span> <span class="kw">in</span> <span class="var">log</span>:
+    <span class="kw">if</span> <span class="var">zeile</span>.<span class="fn">startswith</span>(<span class="str">"ALARM"</span>):
+        <span class="fn">print</span>(<span class="str">"⚠"</span>, <span class="var">zeile</span>)</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">04</span><h2 class="dhbw-slide__title">Im Schiffe-Versenken-Spiel</h2></div>
+      <div class="game-box">
+        <div class="game-box__header">
+          <span class="game-box__icon">🚢</span>
+          <div>
+            <h3 class="game-box__title">Eingabe "A3" parsen</h3>
+            <p class="game-box__subtitle">strip + upper für robuste Eingabeverarbeitung</p>
+          </div>
+        </div>
+        <div class="dhbw-code"><span class="var">eingabe_roh</span> = <span class="fn">input</span>(<span class="str">"Schuss (z.B. A3): "</span>)
+<span class="cmt"># Nutzer tippt "a3 " → bereinigen</span>
+<span class="var">eingabe</span> = <span class="var">eingabe_roh</span>.<span class="fn">strip</span>().<span class="fn">upper</span>()   <span class="cmt"># "a3 " → "A3"</span>
+
+<span class="cmt"># Gültigkeit prüfen: Länge 2, Buchstabe + Ziffer</span>
+<span class="kw">if</span> <span class="fn">len</span>(<span class="var">eingabe</span>) == <span class="num">2</span> <span class="kw">and</span> <span class="var">eingabe</span>[<span class="num">0</span>] <span class="kw">in</span> <span class="str">"ABCDE"</span> <span class="kw">and</span> <span class="var">eingabe</span>[<span class="num">1</span>] <span class="kw">in</span> <span class="str">"12345"</span>:
+    <span class="var">spalte</span> = <span class="str">"ABCDE"</span>.<span class="fn">index</span>(<span class="var">eingabe</span>[<span class="num">0</span>])
+    <span class="var">zeile</span>  = <span class="fn">int</span>(<span class="var">eingabe</span>[<span class="num">1</span>]) - <span class="num">1</span>
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">"Ungültige Eingabe! Bitte z.B. 'A3'"</span>)</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="dhbw-slide page-break">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">05</span><h2 class="dhbw-slide__title">Quick-Reference</h2></div>
+      <table class="quick-ref">
+        <thead><tr><th style="width:30%">Methode</th><th style="width:30%">Beispiel</th><th>Ergebnis</th></tr></thead>
+        <tbody>
+          <tr><td><code>s.strip()</code></td><td><code>"  Hallo  ".strip()</code></td><td><code>"Hallo"</code> – Rand-Leerzeichen weg</td></tr>
+          <tr><td><code>s.upper()</code></td><td><code>"abc".upper()</code></td><td><code>"ABC"</code></td></tr>
+          <tr><td><code>s.lower()</code></td><td><code>"ABC".lower()</code></td><td><code>"abc"</code></td></tr>
+          <tr><td><code>s.replace(a,b)</code></td><td><code>"23,5".replace(",",".")</code></td><td><code>"23.5"</code></td></tr>
+          <tr><td><code>s.split(trenn)</code></td><td><code>"a,b,c".split(",")</code></td><td><code>["a","b","c"]</code></td></tr>
+          <tr><td><code>trenn.join(liste)</code></td><td><code>",".join(["a","b"])</code></td><td><code>"a,b"</code></td></tr>
+          <tr><td><code>s.startswith(p)</code></td><td><code>"ALARM".startswith("AL")</code></td><td><code>True</code></td></tr>
+          <tr><td><code>s.endswith(p)</code></td><td><code>"datei.csv".endswith(".csv")</code></td><td><code>True</code></td></tr>
+          <tr><td><code>x in s</code></td><td><code>"OK" in "STATUS: OK"</code></td><td><code>True</code></td></tr>
+          <tr><td><code>len(s)</code></td><td><code>len("A3")</code></td><td><code>2</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer class="dhbw-footer">DHBW Stuttgart · Maschinenbau · Informatik-Grundlagen · WS 2025/26 · Python Praxis Nachschlagewerk</footer>
+</body>
+</html>

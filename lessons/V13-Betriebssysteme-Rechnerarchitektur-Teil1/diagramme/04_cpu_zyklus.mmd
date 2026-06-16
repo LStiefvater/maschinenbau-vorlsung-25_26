@@ -1,7 +1,0 @@
-flowchart TD
-    S(["Start"]) --> F["FETCH<br/>Befehl aus RAM holen<br/>(Adresse aus PC)"]
-    F --> D["DECODE<br/>Befehl entschluesseln<br/>(welche Operation?)"]
-    D --> E["EXECUTE<br/>Operation ausfuehren<br/>(ALU rechnet)"]
-    E --> W["WRITE-BACK<br/>Ergebnis in Register<br/>oder RAM schreiben"]
-    W --> P["PC erhoehen"]
-    P --> F

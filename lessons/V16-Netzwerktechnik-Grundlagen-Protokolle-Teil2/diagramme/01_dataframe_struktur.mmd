@@ -1,9 +1,0 @@
-flowchart TD
-    DF["DataFrame<br/>(Tabelle mit Zeilen und Spalten)"]
-    DF --> IDX["Index<br/>(0, 1, 2, ...)"]
-    DF --> COL1["Spalte 'Sensor_ID'<br/>(Series)"]
-    DF --> COL2["Spalte 'Temperatur_C'<br/>(Series)"]
-    DF --> COL3["Spalte 'Status'<br/>(Series)"]
-    COL1 --> V1["S001, S002, ..."]
-    COL2 --> V2["78.5, 45.2, ..."]
-    COL3 --> V3["Aktiv, Warnung, ..."]

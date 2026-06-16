@@ -1,6 +1,0 @@
-flowchart LR
-    VA[Virtuelle Adresse: Page 3, Offset 200] --> MMU{MMU / Page Table}
-    MMU -->|Valid=1| RAM[Physischer RAM: Frame 5]
-    MMU -->|Valid=0 Page Fault| OS[OS laedt Seite]
-    OS --> DISK[SSD / Swap]
-    DISK --> RAM

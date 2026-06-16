@@ -1,0 +1,259 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>V02 – Fließkommazahlen | DHBW Stuttgart</title>
+  <link rel="stylesheet" href="../../src/dhbw-base.css">
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════════════════════
+       1. HEADER
+  ══════════════════════════════════════════════════════════ -->
+  <header class="dhbw-header">
+    <div class="dhbw-header__inner">
+      <a href="#" class="dhbw-header__logo">
+        <span class="dhbw-header__logo-text">DHBW Stuttgart</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════════════════════════════
+       2. HERO
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-hero">
+    <div class="dhbw-hero__inner">
+      <p class="dhbw-hero__label">Vorlesung 02 · Informatik-Grundlagen · Maschinenbau</p>
+      <h1 class="dhbw-hero__title">Fließkommazahlen</h1>
+      <p class="dhbw-hero__subtitle">Wie Computer sehr große und sehr kleine Zahlen gleichzeitig speichern – und warum 0.1&nbsp;+&nbsp;0.2&nbsp;≠&nbsp;0.3</p>
+      <p class="dhbw-hero__meta">WS 2025/26 &nbsp;·&nbsp; DHBW Stuttgart</p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       3. LERNZIELE
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">01</span>
+        <h2 class="dhbw-slide__title">Lernziele</h2>
+      </div>
+
+      <div class="dhbw-goals">
+        <p class="dhbw-goals__title">📌 Nach dieser Vorlesung kannst du …</p>
+        <ul>
+          <li>erklären, warum Ganzzahlen für technisch-wissenschaftliche Berechnungen nicht ausreichen und welches Problem <strong>Fließkommazahlen</strong> lösen.</li>
+          <li>den Aufbau der <strong>wissenschaftlichen Notation</strong> benennen: Vorzeichen, Mantisse und Exponent.</li>
+          <li>erläutern, warum <strong>Rundungsfehler</strong> entstehen und was das in der Praxis bei Preisberechnungen und GPS-Koordinaten bedeutet.</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       4. WARUM FLIEßKOMMAZAHLEN?
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">02</span>
+        <h2 class="dhbw-slide__title">Warum Fließkommazahlen?</h2>
+      </div>
+
+      <p>Ganzzahlen stoßen schnell an ihre Grenzen, sobald physikalische Messgrößen sehr unterschiedliche Größenordnungen abdecken. Das Massespektrum, das Ingenieure in der Praxis antreffen, reicht von sub-atomaren Strukturen bis zu planetaren Körpern – und beides soll im selben Programm verarbeitet werden.</p>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+          <h3>Sehr kleine Zahlen</h3>
+          <p>Ein einzelnes Grippevirus hat einen Durchmesser von etwa:</p>
+          <p class="mt-4 font-semi">0,000 000 000 120 m</p>
+          <p class="mt-4">Mit einer Ganzzahl ist dieser Wert nicht darstellbar. Selbst eine naive Fließkommadarstellung müsste zehn Nullen nach dem Dezimalpunkt aufschreiben – nicht praktikabel.</p>
+        </div>
+        <div class="dhbw-columns__item">
+          <h3>Sehr große Zahlen</h3>
+          <p>Die Masse der Erde beträgt:</p>
+          <p class="mt-4 font-semi">5 970 000 000 000 000 000 000 000 kg</p>
+          <p class="mt-4">Normale Ganzzahl-Typen (die meist bis etwa 2 Milliarden reichen) können diesen Wert nicht speichern – die Zahl ist um den Faktor 10¹⁵ zu groß.</p>
+        </div>
+      </div>
+
+      <p class="mt-5">Die Lösung: eine Darstellung, die wie die aus der Physik bekannte <strong>wissenschaftliche Notation</strong> funktioniert. Anstatt alle Stellen explizit aufzuschreiben, speichert der Computer Vorzeichen, Mantisse und Exponent getrennt. So lassen sich Zahlen über viele Größenordnungen hinweg mit vertretbarem Speicheraufwand abbilden.</p>
+
+      <div class="dhbw-callout dhbw-callout--tip mt-5">
+        <span class="dhbw-callout__label">Englischer Begriff &amp; Python-Typ</span>
+        <p>Fließkommazahlen heißen auf Englisch <em>floating-point numbers</em>. In Python trägt der Datentyp den Namen <code class="dhbw-inline">float</code>. Der Name „Fließkomma" deutet darauf hin, dass die Stelle des Dezimalpunkts nicht fest ist, sondern je nach Exponent nach links oder rechts wandert.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       5. WISSENSCHAFTLICHE NOTATION (KONZEPT + SVG)
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">03</span>
+        <h2 class="dhbw-slide__title">Wissenschaftliche Notation</h2>
+      </div>
+
+      <p>Die <strong>wissenschaftliche Notation</strong> zerlegt jede Zahl in drei Teile: das <strong>Vorzeichen</strong> (+/−), die <strong>Mantisse</strong> (die signifikanten Stellen, immer mit genau einer Stelle vor dem Komma) und den <strong>Exponenten</strong> (die Größenordnung als Potenz). Das Schema lautet: ±Mantisse × Basis<sup>Exponent</sup>.</p>
+
+      <div class="dhbw-table-wrap mt-5">
+        <table class="dhbw-table">
+          <thead>
+            <tr>
+              <th>Normale Schreibweise</th>
+              <th>Wissenschaftliche Notation</th>
+              <th>Vorzeichen</th>
+              <th>Mantisse</th>
+              <th>Exponent</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>120 000 000</td><td>1,2 × 10⁸</td><td>+</td><td>1,2</td><td>8</td></tr>
+            <tr><td>0,000 000 000 120</td><td>1,2 × 10⁻¹⁰</td><td>+</td><td>1,2</td><td>−10</td></tr>
+            <tr><td>−0,0042</td><td>−4,2 × 10⁻³</td><td>−</td><td>4,2</td><td>−3</td></tr>
+            <tr><td>5 970 000 × 10¹⁸</td><td>5,97 × 10²⁴</td><td>+</td><td>5,97</td><td>24</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="dhbw-section-title">Aufbau einer Fließkommazahl im Computer</h3>
+
+      <p>Computer übertragen dieses Konzept ins Binärsystem. Statt der Basis 10 wird die Basis 2 verwendet; alle drei Teile – Vorzeichen, Exponent und Mantisse – werden separat gespeichert. Konzeptuell sieht der Aufbau so aus:</p>
+
+      <!-- SVG: Konzeptdiagramm Fließkommazahl -->
+      <svg viewBox="0 0 520 100" width="520" height="100"
+           role="img" aria-label="Konzeptdiagramm einer Fließkommazahl: Vorzeichen S (klein, grau), Exponent (mittelgroß, DHBW-Rot Rahmen) und Mantisse (groß, hellrote Füllung) nebeneinander">
+
+        <!-- S: Vorzeichen (klein, grau) -->
+        <rect x="10" y="8" width="54" height="52" rx="6" fill="#D1D5DB" stroke="#9CA3AF" stroke-width="1.5"/>
+        <text x="37" y="35" dominant-baseline="middle" text-anchor="middle"
+              font-family="'Fira Code', monospace" font-size="22" font-weight="700" fill="#374151">S</text>
+        <text x="37" y="78" dominant-baseline="middle" text-anchor="middle"
+              font-family="'Source Sans 3', Arial, sans-serif" font-size="12" fill="#6B7280">Vorzeichen</text>
+
+        <!-- Exponent (mittelgroß, DHBW-Rot Rahmen) -->
+        <rect x="76" y="8" width="130" height="52" rx="6" fill="#ffffff" stroke="#E2001A" stroke-width="2"/>
+        <text x="141" y="35" dominant-baseline="middle" text-anchor="middle"
+              font-family="'Source Sans 3', Arial, sans-serif" font-size="17" font-weight="700" fill="#E2001A">Exponent</text>
+        <text x="141" y="78" dominant-baseline="middle" text-anchor="middle"
+              font-family="'Source Sans 3', Arial, sans-serif" font-size="12" fill="#6B7280">Größenordnung</text>
+
+        <!-- Mantisse (groß, hellrot #FAE5E8) -->
+        <rect x="218" y="8" width="292" height="52" rx="6" fill="#FAE5E8" stroke="#E2001A" stroke-width="1.5"/>
+        <text x="364" y="35" dominant-baseline="middle" text-anchor="middle"
+              font-family="'Source Sans 3', Arial, sans-serif" font-size="17" font-weight="700" fill="#9B1213">Mantisse</text>
+        <text x="364" y="78" dominant-baseline="middle" text-anchor="middle"
+              font-family="'Source Sans 3', Arial, sans-serif" font-size="12" fill="#6B7280">Signifikante Stellen</text>
+
+      </svg>
+
+      <p class="mt-5 text-sec">Formel: <strong>(-1)<sup>S</sup> &times; 1.Mantisse &times; 2<sup>Exponent</sup></strong></p>
+
+      <div class="dhbw-callout dhbw-callout--example mt-5">
+        <span class="dhbw-callout__label">Beispiel: Dezimalzahl 6,75</span>
+        <p>Die Zahl 6,75 lässt sich schreiben als 1,6875 × 2² (denn 4 × 1,6875 = 6,75). Das Vorzeichen ist positiv (S&nbsp;=&nbsp;0), der Exponent ist 2, und die Mantisse enthält die Nachkommastellen 6875. Den exakten Standard für die Bit-Kodierung im Speicher legt <strong>IEEE&nbsp;754</strong> fest; das Konzept Vorzeichen / Exponent / Mantisse bleibt aber immer dasselbe.</p>
+      </div>
+
+      <div class="dhbw-callout mt-5">
+        <span class="dhbw-callout__label">Sonderwerte: NaN und Inf</span>
+        <p>Für ungültige Operationen (z.&nbsp;B. Division durch null oder Wurzel aus negativer Zahl) reserviert IEEE&nbsp;754 spezielle Bitmuster. <strong>NaN</strong> (Not a Number) signalisiert ein undefiniertes Ergebnis; <strong>Inf</strong> (Infinity) entsteht, wenn eine Zahl die darstellbare Größenordnung überschreitet. Python gibt diese Werte direkt aus, und Berechnungen damit ergeben wiederum NaN oder Inf.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       6. RUNDUNGSFEHLER
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">04</span>
+        <h2 class="dhbw-slide__title">Rundungsfehler – das unsichtbare Problem</h2>
+      </div>
+
+      <p>Der wichtigste praktische Nachteil von Fließkommazahlen ist, dass die meisten Dezimalbrüche im Binärsystem nicht exakt darstellbar sind. Das Binärsystem hat mit dem Bruch 0,1 dasselbe Problem, das das Dezimalsystem mit ⅓ hat: Der Wert lässt sich nicht mit endlich vielen Stellen exakt ausdrücken. Die Mantisse wird gerundet – und dieser Fehler ist winzig, aber real.</p>
+
+      <div class="dhbw-callout dhbw-callout--example mt-5">
+        <span class="dhbw-callout__label">Beispiel</span>
+        <p>Die Addition <strong>0,1 + 0,2</strong> ergibt im Computer nicht exakt 0,3, sondern <strong>0,30000000000000004</strong>. Ein direkter Gleichheitsvergleich schlägt daher fehl – obwohl die Zahlen mathematisch gleich sind.</p>
+      </div>
+
+      <p class="mt-5">Der Fehler von 0,000 000 000 000 000 04 klingt winzig. In den meisten technischen Anwendungen ist er das auch – ein <code class="dhbw-inline">float</code> bietet ca. 15–17 signifikante Stellen, was für Messdaten vollkommen ausreicht. In bestimmten Szenarien jedoch summieren sich diese Abweichungen zu spürbaren Fehlern:</p>
+
+      <div class="dhbw-callout dhbw-callout--praxis mt-5">
+        <span class="dhbw-callout__label">Praxisbeispiel – Online-Shop &amp; GPS-Navigation</span>
+        <p>Ein Online-Shop-System addiert in einer Schleife 1 000 Einzelpreise à 0,10&nbsp;€. Statt exakt 100,00&nbsp;€ enthält die Variable am Ende den Wert 100,00000000000001&nbsp;€ oder 99,99999999999998&nbsp;€. Für ein Buchhaltungssystem, das Cent-Genauigkeit verlangt, ist das ein realer Fehler – und tatsächlich sind Geldbetrag-Bugs durch Fließkommadarstellung ein klassisches Thema in Softwareaudits.</p>
+        <p class="mt-4">GPS-Koordinaten geben Positionen in Dezimalgrad an. Ein Unterschied von 0,0001° entspricht bereits ca. 11 Metern auf der Erdoberfläche. Wer GPS-Koordinaten mit fehlendem Verständnis für Fließkommafehler direkt mit <code class="dhbw-inline">==</code> vergleicht oder wiederholt addiert, kann sein System zur falschen Ausfahrt navigieren.</p>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--tip mt-5">
+        <span class="dhbw-callout__label">Merksatz</span>
+        <p>Zwei Fließkommazahlen sollte man nie direkt auf Gleichheit prüfen. Da Rundungsfehler unvermeidbar sind, gilt: Statt <strong>a == b</strong> immer prüfen, ob der <strong>Betrag der Differenz</strong> kleiner als eine tolerierbare Abweichung ist – z.&nbsp;B. |a − b| &lt; 0,000001.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       9. MERKSATZ / ZUSAMMENFASSUNG
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">05</span>
+        <h2 class="dhbw-slide__title">Zusammenfassung</h2>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--merksatz">
+        <span class="dhbw-callout__label">Merksätze V02</span>
+        <ul>
+          <li><strong>Fließkommazahlen</strong> (<code class="dhbw-inline">float</code>) bestehen aus Vorzeichen, Exponent und Mantisse – sie ermöglichen die Darstellung sehr großer und sehr kleiner Zahlen mit festem Speicheraufwand.</li>
+          <li>Die meisten Dezimalbrüche (z.&nbsp;B. 0,1) sind im Binärsystem nicht exakt darstellbar. Daraus entstehen <strong>Rundungsfehler</strong>, die sich bei wiederholten Berechnungen aufaddieren können und in Geldbetragsberechnungen oder Koordinatenvergleichen zu realen Fehlern führen.</li>
+          <li>Zwei Flie&szlig;kommazahlen sind fast nie bitgenau identisch &ndash; auch wenn ihr mathematischer Wert gleich erscheint. Direkter Gleichheitsvergleich mit&nbsp;== ist daher fehleranf&auml;llig.</li>
+        </ul>
+      </div>
+
+      <div class="dhbw-columns mt-6">
+        <div class="dhbw-columns__item">
+          <h3>Themen dieser Vorlesung</h3>
+          <ul>
+            <li>Motivation: extreme Größenordnungen (Virus vs. Erdmasse)</li>
+            <li>Wissenschaftliche Notation (Vorzeichen, Mantisse, Exponent)</li>
+            <li>Sonderwerte NaN und Inf</li>
+            <li>Rundungsfehler und ihre Praxisfolgen</li>
+          </ul>
+        </div>
+        <div class="dhbw-columns__item">
+          <h3>Ausblick: V03 – Boolesche Algebra</h3>
+          <p>Wie trifft ein Computer Entscheidungen? Die Antwort liegt in der <strong>Booleschen Algebra</strong>, die mit nur zwei Werten (wahr/falsch) arbeitet. Logikgatter wie AND, OR und NOT sind die Hardware-Realisierung dieser Algebra – sie bilden die Grundlage für Prozessoren, Steuerungslogik und alle Verzweigungen, die ein Programm ausführen kann.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       10. FOOTER
+  ══════════════════════════════════════════════════════════ -->
+  <footer class="dhbw-footer">
+    <div class="dhbw-footer__inner">
+      <span class="dhbw-footer__brand">DHBW Stuttgart</span>
+      <span>Informatik-Grundlagen für Maschinenbau &nbsp;·&nbsp; WS&nbsp;2025/26</span>
+      <span>V02 – Fließkommazahlen</span>
+    </div>
+  </footer>
+
+</body>
+</html>

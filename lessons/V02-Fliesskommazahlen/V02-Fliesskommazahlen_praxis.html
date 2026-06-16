@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>V02 – Python Praxis: f-Strings & Formatierung | DHBW Stuttgart</title>
+  <link rel="stylesheet" href="../../src/dhbw-base.css">
+  <style>
+    .concept-grid { display:grid; grid-template-columns:1fr; gap:var(--sp-6); margin-top:var(--sp-5); }
+    .concept-card { background:var(--surface); border:1px solid var(--border); border-top:4px solid var(--red); border-radius:var(--r-card); padding:var(--sp-5) var(--sp-6); box-shadow:var(--shadow-card); }
+    .concept-card__name { font-family:var(--dhbw-font-mono); font-size:var(--fs-lg); font-weight:var(--dhbw-fw-bold); color:var(--red); margin-bottom:var(--sp-2); }
+    .concept-card__desc { color:var(--text); margin-bottom:var(--sp-4); }
+    .dhbw-code { background:var(--code-bg); color:var(--code-text); font-family:var(--dhbw-font-mono); font-size:0.9rem; line-height:var(--lh-code); padding:var(--sp-4) var(--sp-5); border-radius:var(--r-base); overflow-x:auto; margin:var(--sp-3) 0; white-space:pre; }
+    .kw  { color:#F97316; font-weight:600; }
+    .str { color:#22C55E; }
+    .num { color:#A78BFA; }
+    .cmt { color:#7A9CB3; font-style:italic; }
+    .fn  { color:#60A5FA; }
+    .var { color:#E8EFF5; }
+    .fsl { color:#F0C060; }  /* f-string slots */
+    .syntax-box { background:var(--code-bg-in); border-left:3px solid var(--red); border-radius:0 var(--r-base) var(--r-base) 0; padding:var(--sp-3) var(--sp-4); margin:var(--sp-3) 0; font-family:var(--dhbw-font-mono); font-size:0.95rem; color:var(--text); }
+    .syntax-box strong { color:var(--red); }
+    .param-row { margin-top:var(--sp-3); }
+    .param-label { font-family:var(--dhbw-font-mono); font-size:var(--fs-sm); color:var(--red); font-weight:var(--dhbw-fw-semi); }
+    .game-box { background:#0F1E2B; border:2px solid #2A4A6B; border-radius:var(--r-card); padding:var(--sp-5) var(--sp-6); margin-top:var(--sp-6); }
+    .game-box__header { display:flex; align-items:center; gap:var(--sp-3); margin-bottom:var(--sp-4); }
+    .game-box__icon { font-size:1.5rem; }
+    .game-box__title { font-size:var(--fs-md); font-weight:var(--dhbw-fw-bold); color:#60A5FA; margin:0; }
+    .game-box__subtitle { font-size:var(--fs-sm); color:#7A9CB3; margin-top:var(--sp-1); }
+    .quick-ref { width:100%; border-collapse:collapse; margin-top:var(--sp-4); font-size:var(--fs-sm); }
+    .quick-ref th { background:var(--red); color:#fff; padding:var(--sp-2) var(--sp-4); text-align:left; font-weight:var(--dhbw-fw-semi); }
+    .quick-ref td { padding:var(--sp-2) var(--sp-4); border-bottom:1px solid var(--border); vertical-align:top; }
+    .quick-ref tr:nth-child(even) td { background:var(--canvas); }
+    .quick-ref code { font-family:var(--dhbw-font-mono); font-size:0.85rem; background:var(--code-bg-in); padding:1px 5px; border-radius:var(--r-sm); color:var(--red); }
+    .mt-4 { margin-top:var(--sp-4); } .mt-5 { margin-top:var(--sp-5); } .mt-6 { margin-top:var(--sp-6); }
+    .dhbw-footer { background:var(--text); color:#9CA3AF; text-align:center; padding:var(--sp-5) var(--gutter); font-size:var(--fs-sm); }
+    @media print {
+      @page { size:A4; margin:15mm 18mm 15mm 18mm; }
+      .dhbw-header { display:none; }
+      .dhbw-hero,.dhbw-slide,.dhbw-code,.dhbw-callout,.concept-card,.game-box { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+      .dhbw-hero { padding:12mm 0 10mm; }
+      .dhbw-slide { padding:8mm 0; }
+      .concept-card,.game-box { break-inside:avoid; }
+      .dhbw-code { font-size:0.78rem; }
+      .page-break { page-break-before:always; }
+      .dhbw-footer { display:none; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="dhbw-header">
+    <div class="dhbw-header__inner">
+      <a href="#" class="dhbw-header__logo"><span class="dhbw-header__logo-text">DHBW Stuttgart</span></a>
+      <nav class="dhbw-header__nav">
+        <a href="V02-Fliesskommazahlen_skript.html" class="dhbw-header__nav-link">Theorie</a>
+        <a href="#" class="dhbw-header__nav-link dhbw-header__nav-link--active">Python Praxis</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="dhbw-hero">
+    <div class="dhbw-hero__inner">
+      <p class="dhbw-hero__label">Vorlesung 02 · Python Praxis · Maschinenbau</p>
+      <h1 class="dhbw-hero__title">f-Strings &amp; Ausgabeformatierung</h1>
+      <p class="dhbw-hero__subtitle">Messwerte, Tabellen und Berichte professionell formatiert ausgeben</p>
+      <p class="dhbw-hero__meta">WS 2025/26 &nbsp;·&nbsp; DHBW Stuttgart &nbsp;·&nbsp; Nachschlagewerk Python-Praxis</p>
+    </div>
+  </section>
+
+  <!-- LERNZIELE -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">01</span>
+        <h2 class="dhbw-slide__title">Das kannst du danach</h2>
+      </div>
+      <div class="dhbw-goals">
+        <p class="dhbw-goals__title">📌 Nach dieser Einheit kannst du …</p>
+        <ul>
+          <li>mit <strong>f-Strings</strong> Variablen direkt in Texte einbauen.</li>
+          <li>Zahlen auf eine bestimmte Anzahl Nachkommastellen formatieren.</li>
+          <li>Ausgaben in Spalten ausrichten – z.&nbsp;B. für Messtabellen.</li>
+          <li>Sonderzeichen wie Zeilenumbruch <code class="dhbw-inline">\n</code> und Tabulator <code class="dhbw-inline">\t</code> einsetzen.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- WIE EIN F-STRING AUFGEBAUT IST (SVG) -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">02</span>
+        <h2 class="dhbw-slide__title">Aufbau eines f-Strings</h2>
+      </div>
+
+      <p>Ein <strong>f-String</strong> (formatted string literal) ist ein Text, in den du direkt Variablen oder Ausdrücke einbetten kannst. Er beginnt mit dem Buchstaben <code class="dhbw-inline">f</code> vor dem Anführungszeichen. Alles in <code class="dhbw-inline">{ }</code> wird als Python-Ausdruck ausgewertet.</p>
+
+      <!-- SVG: f-String Anatomie -->
+      <svg viewBox="0 0 580 90" width="100%" style="max-width:580px; display:block; margin:var(--sp-5) auto;"
+           role="img" aria-label="Anatomie eines f-Strings: f-Prefix, Anführungszeichen, Text, geschweifte Klammer mit Variable, Formatangabe">
+
+        <!-- Hintergrund-Box -->
+        <rect x="10" y="20" width="560" height="48" rx="6" fill="#1E2936"/>
+
+        <!-- f-Prefix -->
+        <rect x="10" y="20" width="22" height="48" rx="6" fill="#E2001A"/>
+        <text x="21" y="49" text-anchor="middle" font-family="'Fira Code', monospace" font-size="18" font-weight="700" fill="#fff">f</text>
+
+        <!-- Anführungszeichen -->
+        <text x="42" y="49" font-family="'Fira Code', monospace" font-size="18" fill="#22C55E">"</text>
+
+        <!-- Text-Teil -->
+        <text x="58" y="49" font-family="'Fira Code', monospace" font-size="18" fill="#E8EFF5">Temp: </text>
+
+        <!-- geschweifte Klammer mit Variable -->
+        <rect x="142" y="24" width="130" height="40" rx="4" fill="#2A3F55" stroke="#60A5FA" stroke-width="1.5"/>
+        <text x="207" y="49" text-anchor="middle" font-family="'Fira Code', monospace" font-size="17" fill="#60A5FA">{</text>
+        <text x="223" y="49" font-family="'Fira Code', monospace" font-size="17" fill="#A78BFA">temp</text>
+        <text x="262" y="49" font-family="'Fira Code', monospace" font-size="17" fill="#F0C060">:.2f</text>
+        <text x="282" y="49" font-family="'Fira Code', monospace" font-size="17" fill="#60A5FA">}</text>
+
+        <!-- Rest -->
+        <text x="276" y="49" font-family="'Fira Code', monospace" font-size="18" fill="#E8EFF5"> °C</text>
+        <text x="314" y="49" font-family="'Fira Code', monospace" font-size="18" fill="#22C55E">"</text>
+
+        <!-- Beschriftungen unten -->
+        <text x="21" y="82" text-anchor="middle" font-family="'Source Sans 3', Arial, sans-serif" font-size="11" fill="#E2001A">f-Prefix</text>
+        <text x="207" y="82" text-anchor="middle" font-family="'Source Sans 3', Arial, sans-serif" font-size="11" fill="#60A5FA">Variable: temp</text>
+        <text x="270" y="82" text-anchor="middle" font-family="'Source Sans 3', Arial, sans-serif" font-size="11" fill="#F0C060">Format: 2 Stellen</text>
+      </svg>
+
+      <p>Das Ergebnis: <strong>Temp: 23.50 °C</strong> – der Wert der Variable <code class="dhbw-inline">temp</code> wird auf 2 Nachkommastellen gerundet eingesetzt.</p>
+    </div>
+  </section>
+
+  <!-- KONZEPTKARTEN -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">03</span>
+        <h2 class="dhbw-slide__title">Formatierungsoptionen im Detail</h2>
+      </div>
+
+      <div class="concept-grid">
+
+        <!-- f-String Grundlagen -->
+        <div class="concept-card">
+          <div class="concept-card__name">f"...{variable}..."</div>
+          <p class="concept-card__desc">Der einfachste f-String: du schreibst <code class="dhbw-inline">f</code> vor den String und setzt Variablen oder Ausdrücke in <code class="dhbw-inline">{ }</code>. Python ersetzt die Klammern durch den Wert der Variablen.</p>
+
+          <div class="syntax-box">
+            <strong>f"</strong>Text <strong>{</strong>variable<strong>}</strong> weiterer Text<strong>"</strong>
+          </div>
+
+          <div class="dhbw-code"><span class="var">drehzahl</span> = <span class="num">1450</span>
+<span class="var">einheit</span>  = <span class="str">"RPM"</span>
+
+<span class="fn">print</span>(<span class="fsl">f</span><span class="str">"Drehzahl: <span class="fsl">{drehzahl}</span> <span class="fsl">{einheit}</span>"</span>)
+<span class="cmt"># → Drehzahl: 1450 RPM</span>
+
+<span class="cmt"># Ausdruck direkt im f-String berechnen</span>
+<span class="fn">print</span>(<span class="fsl">f</span><span class="str">"Doppelt: <span class="fsl">{drehzahl * 2}</span> RPM"</span>)
+<span class="cmt"># → Doppelt: 2900 RPM</span></div>
+        </div>
+
+        <!-- Nachkommastellen -->
+        <div class="concept-card">
+          <div class="concept-card__name">:.2f &nbsp;–&nbsp; Nachkommastellen</div>
+          <p class="concept-card__desc">Mit <code class="dhbw-inline">:.2f</code> (f für float) gibst du an, wie viele Nachkommastellen ausgegeben werden sollen. Python rundet den Wert dabei automatisch. Besonders nützlich bei Messwerten, die immer gleich viele Dezimalstellen haben sollen.</p>
+
+          <div class="syntax-box">
+            <strong>f"</strong>{wert<strong>:.2f</strong>}<strong>"</strong> &nbsp;← 2 Nachkommastellen
+          </div>
+
+          <div class="dhbw-code"><span class="var">temperatur</span> = <span class="num">23.567891</span>
+<span class="var">druck</span>      = <span class="num">1.0133</span>
+
+<span class="fn">print</span>(<span class="fsl">f</span><span class="str">"Temperatur: <span class="fsl">{temperatur:.1f}</span> °C"</span>)  <span class="cmt"># → 23.6 °C</span>
+<span class="fn">print</span>(<span class="fsl">f</span><span class="str">"Temperatur: <span class="fsl">{temperatur:.3f}</span> °C"</span>)  <span class="cmt"># → 23.568 °C</span>
+<span class="fn">print</span>(<span class="fsl">f</span><span class="str">"Druck:      <span class="fsl">{druck:.4f}</span> bar"</span>)   <span class="cmt"># → 1.0133 bar</span>
+
+<span class="cmt"># Ganze Zahl mit führenden Nullen</span>
+<span class="var">nr</span> = <span class="num">7</span>
+<span class="fn">print</span>(<span class="fsl">f</span><span class="str">"Messung-<span class="fsl">{nr:03d}</span>"</span>)               <span class="cmt"># → Messung-007</span></div>
+        </div>
+
+        <!-- Spaltenbreite / Ausrichten -->
+        <div class="concept-card">
+          <div class="concept-card__name">:10 &nbsp;–&nbsp; Spaltenbreite</div>
+          <p class="concept-card__desc">Mit <code class="dhbw-inline">:10</code> reservierst du 10 Zeichen Platz für den Wert. So entstehen saubere Tabellen. Standardmäßig wird linksbündig (Text) bzw. rechtsbündig (Zahlen) ausgerichtet. Mit <code class="dhbw-inline">&lt;</code>, <code class="dhbw-inline">^</code>, <code class="dhbw-inline">&gt;</code> kannst du die Ausrichtung steuern.</p>
+
+          <div class="syntax-box">
+            <strong>{wert:&lt;10}</strong> links &nbsp;|&nbsp; <strong>{wert:^10}</strong> mittig &nbsp;|&nbsp; <strong>{wert:&gt;10}</strong> rechts
+          </div>
+
+          <div class="dhbw-code"><span class="cmt"># Messtabelle mit gleichmäßigen Spalten</span>
+<span class="fn">print</span>(<span class="fsl">f</span><span class="str">"<span class="fsl">{'Sensor':<15}</span> <span class="fsl">{'Wert':>8}</span> <span class="fsl">{'Einheit':<8}</span>"</span>)
+<span class="fn">print</span>(<span class="str">"-" * 35</span>)
+<span class="fn">print</span>(<span class="fsl">f</span><span class="str">"<span class="fsl">{'Temperatur':<15}</span> <span class="fsl">{23.5:>8.2f}</span> <span class="fsl">{'°C':<8}</span>"</span>)
+<span class="fn">print</span>(<span class="fsl">f</span><span class="str">"<span class="fsl">{'Drehzahl':<15}</span> <span class="fsl">{1450:>8d}</span> <span class="fsl">{'RPM':<8}</span>"</span>)
+<span class="fn">print</span>(<span class="fsl">f</span><span class="str">"<span class="fsl">{'Druck':<15}</span> <span class="fsl">{1.0133:>8.4f}</span> <span class="fsl">{'bar':<8}</span>"</span>)
+<span class="cmt"># → Sensor          Wert   Einheit
+# → -----------------------------------
+# → Temperatur      23.50  °C
+# → Drehzahl          1450  RPM
+# → Druck           1.0133  bar</span></div>
+        </div>
+
+        <!-- Escape-Zeichen -->
+        <div class="concept-card">
+          <div class="concept-card__name">\n &nbsp;\t &nbsp;–&nbsp; Sonderzeichen</div>
+          <p class="concept-card__desc">Innerhalb von Strings haben bestimmte Zeichenkombinationen mit Backslash eine besondere Bedeutung. Sie heißen <em>Escape-Sequenzen</em>.</p>
+
+          <div class="dhbw-code"><span class="cmt"># Zeilenumbruch \n</span>
+<span class="fn">print</span>(<span class="str">"Zeile 1\nZeile 2\nZeile 3"</span>)
+<span class="cmt"># → Zeile 1
+# → Zeile 2
+# → Zeile 3</span>
+
+<span class="cmt"># Tabulator \t (für Ausrichtung)</span>
+<span class="fn">print</span>(<span class="str">"Sensor\tWert"</span>)
+<span class="fn">print</span>(<span class="str">"Temp\t23.5"</span>)
+
+<span class="cmt"># Anführungszeichen im String: \" oder '...'</span>
+<span class="fn">print</span>(<span class="str">'Er sagte "Treffer!"'</span>)
+
+<span class="cmt"># Backslash selbst: \\</span>
+<span class="fn">print</span>(<span class="str">"Pfad: C:\\Daten\\messung.csv"</span>)</div>
+
+          <div class="dhbw-callout dhbw-callout--tip mt-4">
+            <span class="dhbw-callout__label">Wann \t, wann Spaltenbreite?</span>
+            <p>Tabulatoren (<code class="dhbw-inline">\t</code>) springen zur nächsten Tab-Position (normalerweise alle 8 Zeichen) – das Ergebnis hängt vom Terminal ab. Für saubere Tabellen in Berichten ist die Spaltenbreite mit <code class="dhbw-inline">:{breite}</code> zuverlässiger.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- SCHIFFEVERSENKEN -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">04</span>
+        <h2 class="dhbw-slide__title">Im Schiffe-Versenken-Spiel</h2>
+      </div>
+
+      <p>f-Strings machen das Spielfeld und die Statusanzeige im Spiel deutlich lesbarer:</p>
+
+      <div class="game-box">
+        <div class="game-box__header">
+          <span class="game-box__icon">🚢</span>
+          <div>
+            <h3 class="game-box__title">Schiffe Versenken – Spielfeld ausgeben</h3>
+            <p class="game-box__subtitle">f-Strings für Zeilenköpfe und Statusmeldungen</p>
+          </div>
+        </div>
+        <div class="dhbw-code"><span class="cmt"># Spaltenköpfe mit f-String und Ausrichtung</span>
+<span class="fn">print</span>(<span class="fsl">f</span><span class="str">"   <span class="fsl">{'A':<2}</span><span class="fsl">{'B':<2}</span><span class="fsl">{'C':<2}</span><span class="fsl">{'D':<2}</span><span class="fsl">{'E':<2}</span>"</span>)
+
+<span class="cmt"># Zeilennummern sauber ausgeben</span>
+<span class="kw">for</span> <span class="var">i</span>, <span class="var">zeile</span> <span class="kw">in</span> <span class="fn">enumerate</span>(<span class="var">spielfeld</span>):
+    <span class="fn">print</span>(<span class="fsl">f</span><span class="str">"<span class="fsl">{i+1}</span>  "</span>, <span class="var">zeile</span>)
+
+<span class="cmt"># Treffer-/Wassermeldung mit Koordinate</span>
+<span class="var">spalte_name</span> = <span class="str">"ABCDE"</span>[<span class="var">spalte</span>]
+<span class="fn">print</span>(<span class="fsl">f</span><span class="str">"Schuss auf <span class="fsl">{spalte_name}{zeile+1}</span>: Treffer! 💥"</span>)
+<span class="fn">print</span>(<span class="fsl">f</span><span class="str">"Schuss auf <span class="fsl">{spalte_name}{zeile+1}</span>: Wasser. 🌊"</span>)</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUICK-REFERENCE -->
+  <section class="dhbw-slide page-break">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">05</span>
+        <h2 class="dhbw-slide__title">Quick-Reference</h2>
+      </div>
+
+      <table class="quick-ref">
+        <thead>
+          <tr>
+            <th style="width:22%">Format-Angabe</th>
+            <th style="width:35%">Beispiel</th>
+            <th>Ergebnis / Bedeutung</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><code>f"{var}"</code></td><td><code>f"T={temp}"</code></td><td>Wert direkt einsetzen</td></tr>
+          <tr><td><code>f"{var:.2f}"</code></td><td><code>f"{23.5678:.2f}"</code></td><td><code>23.57</code> – 2 Nachkommastellen</td></tr>
+          <tr><td><code>f"{var:.0f}"</code></td><td><code>f"{23.7:.0f}"</code></td><td><code>24</code> – auf Ganzzahl runden</td></tr>
+          <tr><td><code>f"{var:d}"</code></td><td><code>f"{42:d}"</code></td><td>Ganzzahl (integer)</td></tr>
+          <tr><td><code>f"{var:03d}"</code></td><td><code>f"{7:03d}"</code></td><td><code>007</code> – 3-stellig mit führenden Nullen</td></tr>
+          <tr><td><code>f"{var:&lt;10}"</code></td><td><code>f"{'Temp':&lt;10}"</code></td><td><code>Temp      </code> – 10 Zeichen linksbündig</td></tr>
+          <tr><td><code>f"{var:&gt;10}"</code></td><td><code>f"{1450:&gt;10}"</code></td><td><code>      1450</code> – 10 Zeichen rechtsbündig</td></tr>
+          <tr><td><code>f"{var:^10}"</code></td><td><code>f"{'OK':^10}"</code></td><td><code>    OK    </code> – 10 Zeichen zentriert</td></tr>
+          <tr><td><code>\n</code></td><td><code>print("A\nB")</code></td><td>Zeilenumbruch im String</td></tr>
+          <tr><td><code>\t</code></td><td><code>print("A\tB")</code></td><td>Tabulator (Abstandszeichen)</td></tr>
+        </tbody>
+      </table>
+
+      <div class="dhbw-callout dhbw-callout--praxis mt-6">
+        <span class="dhbw-callout__label">Praxis-Tipp: Messbericht ausgeben</span>
+        <div class="dhbw-code mt-4"><span class="var">sensoren</span> = [(<span class="str">"Temperatur"</span>, <span class="num">23.567</span>, <span class="str">"°C"</span>),
+             (<span class="str">"Drehzahl"</span>,   <span class="num">1450</span>,   <span class="str">"RPM"</span>),
+             (<span class="str">"Druck"</span>,      <span class="num">1.0133</span>, <span class="str">"bar"</span>)]
+
+<span class="fn">print</span>(<span class="fsl">f</span><span class="str">"<span class="fsl">{'Sensor':<12}</span> <span class="fsl">{'Wert':>10}</span>  Einheit"</span>)
+<span class="fn">print</span>(<span class="str">"-" * 32</span>)
+<span class="kw">for</span> <span class="var">name</span>, <span class="var">wert</span>, <span class="var">einheit</span> <span class="kw">in</span> <span class="var">sensoren</span>:
+    <span class="fn">print</span>(<span class="fsl">f</span><span class="str">"<span class="fsl">{name:<12}</span> <span class="fsl">{wert:>10.3f}</span>  <span class="fsl">{einheit}</span>"</span>)</div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="dhbw-footer">
+    DHBW Stuttgart · Maschinenbau · Informatik-Grundlagen · WS 2025/26 · Python Praxis Nachschlagewerk
+  </footer>
+
+</body>
+</html>

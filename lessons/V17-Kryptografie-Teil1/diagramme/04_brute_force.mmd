@@ -1,9 +1,0 @@
-flowchart TD
-    S(["Start: Geheimtext"]) --> K["k = 1"]
-    K --> D["Mit Schluessel k entschluesseln"]
-    D --> P["Ergebnis ausgeben"]
-    P --> C{"k < 25?"}
-    C -- "ja" --> I["k = k + 1"]
-    I --> D
-    C -- "nein" --> L["Mensch waehlt lesbaren Text"]
-    L --> E(["Ende"])

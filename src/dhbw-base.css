@@ -1,0 +1,516 @@
+/* =============================================================
+   DHBW Stuttgart – Basis-Stylesheet für Vorlesungsseiten
+   Maschinenbau · Informatik-Grundlagen · WS 2025/26
+   DIN A4 PDF-fähig via @media print
+   ============================================================= */
+
+/* ── 1. Google Font ─────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap');
+
+/* ── 2. Design Tokens ───────────────────────────────────────── */
+:root {
+  /* Typografie */
+  --dhbw-font:        "Source Sans 3", "Arial", "Helvetica Neue", sans-serif;
+  --dhbw-font-mono:   "Fira Code", "Cascadia Code", "Consolas", monospace;
+  --dhbw-fw-regular:  400;
+  --dhbw-fw-semi:     600;
+  --dhbw-fw-bold:     700;
+
+  /* Schriftgrößen */
+  --fs-xs:   0.75rem;
+  --fs-sm:   0.875rem;
+  --fs-base: 1rem;
+  --fs-md:   1.125rem;
+  --fs-lg:   1.5rem;
+  --fs-xl:   2rem;
+  --fs-2xl:  2.5rem;
+
+  /* Zeilenhöhen */
+  --lh-body:    1.65;
+  --lh-heading: 1.25;
+  --lh-code:    1.6;
+
+  /* DHBW Farben */
+  --red:          #E2001A;
+  --red-dark:     #B50016;
+  --red-tint:     #FAE5E8;
+  --red-mid:      #F0B3BB;
+
+  /* Neutrale Farben */
+  --text:         #1A1A1A;
+  --text-sec:     #6B7280;
+  --border:       #D1D5DB;
+  --canvas:       #F5F5F5;
+  --surface:      #FFFFFF;
+
+  /* Code */
+  --code-bg:      #1E2936;
+  --code-bg-in:   #E8F0F7;
+  --code-text:    #E8EFF5;
+  --code-comment: #7A9CB3;
+  --code-kw:      #F97316;
+  --code-str:     #22C55E;
+  --code-num:     #A78BFA;
+  --code-fn:      #60A5FA;
+  --code-type:    #34D399;
+
+  /* Abstände */
+  --sp-1:  4px;
+  --sp-2:  8px;
+  --sp-3:  12px;
+  --sp-4:  16px;
+  --sp-5:  24px;
+  --sp-6:  32px;
+  --sp-7:  48px;
+
+  /* Radien & Schatten */
+  --r-sm:   4px;
+  --r-base: 6px;
+  --r-card: 8px;
+  --shadow-card:   0 2px 8px rgba(0,0,0,0.08);
+  --shadow-raised: 0 4px 16px rgba(0,0,0,0.12);
+
+  /* Layout */
+  --max-w:      1200px;
+  --slide-w:    900px;
+  --gutter:     clamp(16px, 4vw, 48px);
+}
+
+/* ── 3. Reset ───────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family:  var(--dhbw-font);
+  font-size:    var(--fs-base);
+  line-height:  var(--lh-body);
+  color:        var(--text);
+  background:   var(--canvas);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5 {
+  line-height: var(--lh-heading);
+  color: var(--text);
+}
+h1 { font-size: var(--fs-xl);   font-weight: var(--dhbw-fw-bold); }
+h2 { font-size: var(--fs-lg);   font-weight: var(--dhbw-fw-semi); }
+h3 { font-size: var(--fs-md);   font-weight: var(--dhbw-fw-semi); }
+h4 { font-size: var(--fs-base); font-weight: var(--dhbw-fw-semi); }
+
+p  { line-height: var(--lh-body); }
+p + p { margin-top: var(--sp-4); }
+
+ul, ol { padding-left: var(--sp-5); }
+li + li { margin-top: var(--sp-2); }
+li      { line-height: var(--lh-body); }
+
+strong  { font-weight: var(--dhbw-fw-semi); }
+a       { color: var(--red); }
+a:hover { color: var(--red-dark); text-decoration: underline; }
+
+sup, sub { font-size: 0.75em; }
+
+/* ── 4. Page Header ─────────────────────────────────────────── */
+.dhbw-header {
+  background:    var(--surface);
+  border-bottom: 3px solid var(--red);
+  position:      sticky;
+  top:           0;
+  z-index:       100;
+  box-shadow:    var(--shadow-card);
+}
+.dhbw-header__inner {
+  max-width:  var(--max-w);
+  margin:     0 auto;
+  padding:    var(--sp-3) var(--gutter);
+  display:    flex;
+  align-items: center;
+  gap:        var(--sp-6);
+}
+.dhbw-header__logo {
+  display:     flex;
+  align-items: center;
+  gap:         var(--sp-2);
+  text-decoration: none;
+  flex-shrink: 0;
+}
+.dhbw-header__logo-text {
+  font-size:   var(--fs-md);
+  font-weight: var(--dhbw-fw-bold);
+  color:       var(--red);
+  letter-spacing: -0.01em;
+}
+.dhbw-header__nav {
+  display:     flex;
+  gap:         var(--sp-5);
+  margin-left: auto;
+}
+.dhbw-header__nav-link {
+  font-size:   var(--fs-base);
+  font-weight: var(--dhbw-fw-semi);
+  color:       var(--text);
+  text-decoration: none;
+  padding-bottom: var(--sp-1);
+  border-bottom:  2px solid transparent;
+  transition:  color 0.15s, border-color 0.15s;
+}
+.dhbw-header__nav-link:hover,
+.dhbw-header__nav-link--active {
+  color:              var(--red);
+  border-bottom-color: var(--red);
+}
+
+/* ── 5. Hero / Titelfolie ───────────────────────────────────── */
+.dhbw-hero {
+  background: var(--red);
+  color:      #fff;
+  padding:    var(--sp-7) var(--gutter);
+}
+.dhbw-hero__inner {
+  max-width: var(--slide-w);
+  margin:    0 auto;
+}
+.dhbw-hero__label {
+  font-size:      var(--fs-sm);
+  font-weight:    var(--dhbw-fw-semi);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity:        0.85;
+  margin-bottom:  var(--sp-3);
+}
+.dhbw-hero__title {
+  font-size:     var(--fs-2xl);
+  font-weight:   var(--dhbw-fw-bold);
+  line-height:   1.15;
+  margin-bottom: var(--sp-3);
+  color:         #fff;
+}
+.dhbw-hero__subtitle {
+  font-size:     var(--fs-lg);
+  font-weight:   var(--dhbw-fw-regular);
+  opacity:       0.9;
+  margin-bottom: var(--sp-5);
+}
+.dhbw-hero__meta {
+  font-size: var(--fs-sm);
+  opacity:   0.75;
+}
+
+/* ── 6. Content Slide / Section ─────────────────────────────── */
+.dhbw-slide {
+  background: var(--surface);
+  padding:    var(--sp-7) var(--gutter);
+}
+.dhbw-slide + .dhbw-slide {
+  border-top: 1px solid var(--border);
+}
+.dhbw-slide--alt {
+  background: var(--canvas);
+}
+.dhbw-slide__inner {
+  max-width: var(--slide-w);
+  margin:    0 auto;
+}
+.dhbw-slide__header {
+  display:      flex;
+  align-items:  baseline;
+  gap:          var(--sp-4);
+  border-left:  4px solid var(--red);
+  padding-left: var(--sp-4);
+  margin-bottom: var(--sp-6);
+}
+.dhbw-slide__number {
+  font-size:   var(--fs-2xl);
+  font-weight: var(--dhbw-fw-bold);
+  color:       var(--red);
+  line-height: 1;
+  min-width:   2.5ch;
+  flex-shrink: 0;
+}
+.dhbw-slide__title {
+  font-size:   var(--fs-xl);
+  font-weight: var(--dhbw-fw-bold);
+  color:       var(--text);
+}
+
+/* Subsection heading within a slide */
+.dhbw-section-title {
+  font-size:    var(--fs-lg);
+  font-weight:  var(--dhbw-fw-semi);
+  color:        var(--text);
+  margin-top:   var(--sp-7);
+  margin-bottom: var(--sp-4);
+  padding-bottom: var(--sp-2);
+  border-bottom: 2px solid var(--red-tint);
+}
+
+/* ── 7. Callout-Boxen ───────────────────────────────────────── */
+.dhbw-callout {
+  background:    var(--red-tint);
+  border-left:   4px solid var(--red);
+  border-radius: 0 var(--r-base) var(--r-base) 0;
+  padding:       var(--sp-4) var(--sp-5);
+  margin:        var(--sp-5) 0;
+}
+.dhbw-callout__label {
+  display:        block;
+  font-size:      var(--fs-sm);
+  font-weight:    var(--dhbw-fw-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color:          var(--red);
+  margin-bottom:  var(--sp-2);
+}
+.dhbw-callout p  { margin: 0; }
+.dhbw-callout p + p { margin-top: var(--sp-2); }
+.dhbw-callout ul { margin-top: var(--sp-2); }
+
+.dhbw-callout--tip {
+  background:   #ECFDF5;
+  border-color: #059669;
+}
+.dhbw-callout--tip .dhbw-callout__label { color: #065F46; }
+
+.dhbw-callout--example {
+  background:   #EFF6FF;
+  border-color: #3B82F6;
+}
+.dhbw-callout--example .dhbw-callout__label { color: #1D4ED8; }
+
+.dhbw-callout--praxis {
+  background:   #FFF7ED;
+  border-color: #F97316;
+}
+.dhbw-callout--praxis .dhbw-callout__label { color: #C2410C; }
+
+.dhbw-callout--merksatz {
+  background:   var(--red-tint);
+  border-color: var(--red-dark);
+  border-left-width: 6px;
+}
+.dhbw-callout--merksatz .dhbw-callout__label { color: var(--red-dark); }
+
+/* ── 8. Karten / Cards ──────────────────────────────────────── */
+.dhbw-card {
+  background:    var(--surface);
+  border-radius: 0;
+  box-shadow:    var(--shadow-card);
+  padding:       var(--sp-5);
+}
+.dhbw-card__title {
+  font-size:     var(--fs-md);
+  font-weight:   var(--dhbw-fw-semi);
+  color:         var(--red);
+  margin-bottom: var(--sp-3);
+}
+
+/* ── 9. Zweispalten-Layout ──────────────────────────────────── */
+.dhbw-columns {
+  display:               grid;
+  grid-template-columns: 1fr 1fr;
+  gap:                   var(--sp-6);
+  margin-top:            var(--sp-5);
+}
+@media (max-width: 640px) {
+  .dhbw-columns { grid-template-columns: 1fr; }
+}
+.dhbw-columns__item {
+  background:    var(--canvas);
+  border-radius: 0;
+  padding:       var(--sp-5);
+}
+/* Auf grauem Slide-Hintergrund weiße Karten, auf weißem graue */
+.dhbw-slide--alt .dhbw-columns__item {
+  background: var(--surface);
+}
+.dhbw-columns__item h3 {
+  color:         var(--red);
+  margin-bottom: var(--sp-3);
+  font-size:     var(--fs-md);
+}
+
+/* ── 10. Code-Block ─────────────────────────────────────────── */
+.dhbw-code {
+  background:   var(--code-bg);
+  color:        var(--code-text);
+  font-family:  var(--dhbw-font-mono);
+  font-size:    var(--fs-sm);
+  line-height:  var(--lh-code);
+  padding:      var(--sp-5);
+  border-radius: var(--r-base);
+  overflow-x:   auto;
+  margin:       var(--sp-5) 0;
+  border-left:  4px solid var(--red);
+  tab-size:     4;
+  white-space:  pre;
+}
+.dhbw-code code { display: block; }
+
+/* Syntax-Highlighting */
+.dhbw-code .kw { color: var(--code-kw);      font-weight: var(--dhbw-fw-semi); }
+.dhbw-code .fn { color: var(--code-fn); }
+.dhbw-code .tp { color: var(--code-type); }
+.dhbw-code .st { color: var(--code-str); }
+.dhbw-code .nm { color: var(--code-num); }
+.dhbw-code .cm { color: var(--code-comment); font-style: italic; }
+.dhbw-code .bi { color: #F9A8D4; }
+
+code.dhbw-inline {
+  background:    var(--code-bg-in);
+  color:         var(--red-dark);
+  font-family:   var(--dhbw-font-mono);
+  font-size:     0.875em;
+  padding:       0.1em 0.4em;
+  border-radius: var(--r-sm);
+}
+
+/* ── 11. Tabellen ───────────────────────────────────────────── */
+.dhbw-table-wrap { overflow-x: auto; margin: var(--sp-5) 0; }
+.dhbw-table {
+  width:           100%;
+  border-collapse: collapse;
+  font-size:       var(--fs-base);
+}
+.dhbw-table thead tr {
+  background: var(--red);
+  color:      #fff;
+}
+.dhbw-table th {
+  padding:        var(--sp-3) var(--sp-4);
+  text-align:     left;
+  font-weight:    var(--dhbw-fw-semi);
+  font-size:      var(--fs-sm);
+  letter-spacing: 0.03em;
+}
+.dhbw-table td {
+  padding:     var(--sp-3) var(--sp-4);
+  border-bottom: 1px solid var(--border);
+}
+.dhbw-table tbody tr:last-child td { border-bottom: none; }
+.dhbw-table tbody tr:nth-child(even) { background: var(--canvas); }
+.dhbw-table tbody tr:hover { background: var(--red-tint); }
+
+/* ── 12. Badge / Tag ────────────────────────────────────────── */
+.dhbw-badge {
+  display:        inline-block;
+  background:     var(--red-tint);
+  color:          var(--red-dark);
+  font-size:      var(--fs-xs);
+  font-weight:    var(--dhbw-fw-semi);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding:        2px 8px;
+  border-radius:  var(--r-sm);
+}
+
+/* ── 13. Lernziele-Block ────────────────────────────────────── */
+.dhbw-goals {
+  background:    var(--canvas);
+  border:        2px solid var(--red-mid);
+  border-radius: var(--r-card);
+  padding:       var(--sp-5) var(--sp-6);
+  margin:        var(--sp-6) 0;
+}
+.dhbw-goals__title {
+  font-size:     var(--fs-md);
+  font-weight:   var(--dhbw-fw-bold);
+  color:         var(--red);
+  margin-bottom: var(--sp-4);
+  display:       flex;
+  align-items:   center;
+  gap:           var(--sp-2);
+}
+.dhbw-goals ul  { padding-left: var(--sp-5); }
+.dhbw-goals li  { line-height: var(--lh-body); margin-bottom: var(--sp-2); }
+
+/* ── 14. Footer ─────────────────────────────────────────────── */
+.dhbw-footer {
+  background:  var(--text);
+  color:       rgba(255,255,255,0.75);
+  padding:     var(--sp-6) var(--gutter);
+  font-size:   var(--fs-sm);
+  margin-top:  var(--sp-7);
+}
+.dhbw-footer__inner {
+  max-width:  var(--slide-w);
+  margin:     0 auto;
+  display:    flex;
+  justify-content: space-between;
+  align-items: center;
+  gap:        var(--sp-4);
+  flex-wrap:  wrap;
+}
+.dhbw-footer__brand {
+  font-weight: var(--dhbw-fw-semi);
+  color:       var(--red);
+}
+
+/* ── 15. Utility ────────────────────────────────────────────── */
+.mt-4  { margin-top: var(--sp-4); }
+.mt-5  { margin-top: var(--sp-5); }
+.mt-6  { margin-top: var(--sp-6); }
+.mt-7  { margin-top: var(--sp-7); }
+.mb-5  { margin-bottom: var(--sp-5); }
+.text-red  { color: var(--red); }
+.text-sec  { color: var(--text-sec); }
+.font-semi { font-weight: var(--dhbw-fw-semi); }
+.font-mono { font-family: var(--dhbw-font-mono); }
+
+/* ── 16. Print / DIN A4 PDF ─────────────────────────────────── */
+@media print {
+  @page {
+    size:   A4 portrait;
+    margin: 1.5cm 2cm;
+  }
+
+  /* Stickyness aufheben */
+  .dhbw-header { position: static; box-shadow: none; }
+
+  /* Farben für Druck anpassen (Tinte sparen) */
+  body       { background: #fff; font-size: 10.5pt; }
+  .dhbw-hero { background: var(--red) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  /* Keine Seitenumbrüche mitten in Blöcken */
+  .dhbw-slide,
+  .dhbw-callout,
+  .dhbw-card,
+  .dhbw-goals  { break-inside: avoid; }
+
+  /* Neue Seite vor jeder Hauptsektion */
+  .dhbw-slide  { break-before: auto; }
+  .dhbw-hero   { break-after: page; }
+
+  /* Navigation ausblenden */
+  .dhbw-header__nav { display: none; }
+
+  /* Code-Blöcke Farbe erhalten */
+  .dhbw-code {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    font-size: 8.5pt;
+    border-left-color: var(--red) !important;
+  }
+
+  /* Tabellen-Header Farbe erhalten */
+  .dhbw-table thead tr {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Callouts Farbe erhalten */
+  .dhbw-callout,
+  .dhbw-goals {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Footer leicht verkleinern */
+  .dhbw-footer { padding: var(--sp-4) var(--gutter); }
+
+  /* Links schwarz für Print */
+  a { color: var(--text); text-decoration: none; }
+  a[href]::after { content: none; }
+}

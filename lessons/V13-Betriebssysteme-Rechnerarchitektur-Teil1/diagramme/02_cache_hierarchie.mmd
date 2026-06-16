@@ -1,7 +1,0 @@
-flowchart TD
-    REG["CPU-Register<br/>~1 ns / wenige Byte"] --> L1["L1-Cache<br/>~1 ns / 32-64 KB"]
-    L1 --> L2["L2-Cache<br/>~4 ns / 256 KB - 1 MB"]
-    L2 --> L3["L3-Cache<br/>~10 ns / 4-64 MB"]
-    L3 --> RAM["RAM<br/>~100 ns / 8-32 GB"]
-    RAM --> SSD["SSD<br/>~100 us / 0.5-2 TB"]
-    SSD --> HDD["HDD<br/>~10 ms / 1-4 TB"]

@@ -1,0 +1,334 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>V13 – Rechnerarchitektur Teil 1 | DHBW Stuttgart</title>
+  <link rel="stylesheet" href="../../src/dhbw-base.css">
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════════════════════
+       1. HEADER
+  ══════════════════════════════════════════════════════════ -->
+  <header class="dhbw-header">
+    <div class="dhbw-header__inner">
+      <a href="#" class="dhbw-header__logo">
+        <span class="dhbw-header__logo-text">DHBW Stuttgart</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════════════════════════════
+       2. HERO
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-hero">
+    <div class="dhbw-hero__inner">
+      <p class="dhbw-hero__label">Vorlesung 13 · Informatik-Grundlagen · Maschinenbau</p>
+      <h1 class="dhbw-hero__title">Rechnerarchitektur Teil 1</h1>
+      <p class="dhbw-hero__subtitle">Von-Neumann-Architektur, CPU-Zyklus und Speicherhierarchie – warum ist mein Laptop manchmal langsam?</p>
+      <p class="dhbw-hero__meta">WS 2025/26 &nbsp;·&nbsp; DHBW Stuttgart</p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       3. LERNZIELE
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">01</span>
+        <h2 class="dhbw-slide__title">Lernziele</h2>
+      </div>
+
+      <div class="dhbw-goals">
+        <p class="dhbw-goals__title">📌 Nach dieser Vorlesung kannst du …</p>
+        <ul>
+          <li>die <strong>Von-Neumann-Architektur</strong> und ihre fünf Komponenten benennen und deren Zusammenspiel erklären.</li>
+          <li>den <strong>Fetch-Decode-Execute-Zyklus</strong> als Konzept in eigenen Worten beschreiben.</li>
+          <li>die <strong>Speicherhierarchie</strong> von Register bis Festplatte benennen und deren Bedeutung für die Systemgeschwindigkeit begründen.</li>
+          <li>erklären, warum ein PC langsam wird, wenn zu viele Programme gleichzeitig laufen.</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       4. VON NEUMANN
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">02</span>
+        <h2 class="dhbw-slide__title">Von-Neumann-Architektur</h2>
+      </div>
+
+      <p>Fast alle Computer, die heute gebaut werden, basieren auf einem Konzept, das John von Neumann 1945 beschrieben hat: dem sogenannten <strong>Stored-Program-Konzept</strong>. Die entscheidende Idee: Programm und Daten liegen im selben Speicher – die CPU liest beides zur Laufzeit und führt es aus. Vor diesem Konzept mussten Programme per Hand in Hardware verdrahtet werden (z.&nbsp;B. ENIAC, 1945).</p>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">1 – Eingabe (Input)</p>
+            <p>Tastatur, Maus, Kamera, Sensoren – alles, womit Daten in den Rechner gelangen. Ohne Eingabe gibt es keine Verarbeitung.</p>
+        </div>
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">2 – Ausgabe (Output)</p>
+            <p>Bildschirm, Lautsprecher, Drucker, Aktoren – alles, womit Ergebnisse nach außen gegeben werden.</p>
+        </div>
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">3 – Speicher (Memory)</p>
+            <p>Hier liegen sowohl die zu verarbeitenden Daten als auch das laufende Programm. Das ist der Kern des Stored-Program-Konzepts: Programm und Daten im gleichen Speicher, adressierbar per Adresse.</p>
+        </div>
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">4 – Rechenwerk (ALU)</p>
+            <p>Die <strong>Arithmetic Logic Unit</strong> führt alle arithmetischen Operationen (Addition, Subtraktion) und logischen Verknüpfungen (AND, OR, NOT) aus. Sie ist das eigentliche „Rechnen" im Rechner.</p>
+        </div>
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">5 – Steuerwerk (Control Unit)</p>
+            <p>Das <strong>Steuerwerk</strong> koordiniert alle anderen Komponenten. Es liest Befehle aus dem Speicher, dekodiert sie und steuert die ALU, den Speicher und die Ein-/Ausgabe entsprechend.</p>
+        </div>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--merksatz mt-5">
+        <span class="dhbw-callout__label">Merksatz</span>
+        <p>CPU = Steuerwerk + Rechenwerk. Zusammen mit Speicher, Eingabe und Ausgabe bilden sie die fünf Komponenten der Von-Neumann-Architektur – die Grundlage aller modernen Computer.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       5. FETCH-DECODE-EXECUTE
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">03</span>
+        <h2 class="dhbw-slide__title">Fetch – Decode – Execute: Was die CPU tut</h2>
+      </div>
+
+      <p>Eine CPU führt nicht einfach ein gesamtes Programm auf einmal aus. Sie arbeitet in einem endlosen, extrem schnellen Zyklus, der immer dieselben drei Schritte wiederholt: Befehl holen, Befehl entschlüsseln, Befehl ausführen.</p>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title" style="color: #E2001A;">Schritt 1: Fetch – Holen</p>
+            <p>Das Steuerwerk liest den nächsten Befehl aus dem Arbeitsspeicher. Die Adresse des aktuellen Befehls wird im <strong>Programmzähler</strong> gespeichert, der nach jedem Fetch automatisch weiterrückt.</p>
+        </div>
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title" style="color: #E2001A;">Schritt 2: Decode – Entschlüsseln</p>
+            <p>Das Steuerwerk interpretiert den geholten Befehl: Was soll getan werden? Addieren? Speichern? Springen? Es übersetzt den Maschinencode in konkrete Steuersignale für die nachfolgenden Einheiten.</p>
+        </div>
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title" style="color: #E2001A;">Schritt 3: Execute – Ausführen</p>
+            <p>Die ALU oder eine andere Funktionseinheit führt den Befehl aus. Das Ergebnis wird in ein Register oder zurück in den Arbeitsspeicher geschrieben. Dann beginnt der Zyklus von vorne.</p>
+        </div>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--praxis mt-5">
+        <span class="dhbw-callout__label">Größenordnung</span>
+        <p>Ein moderner Prozessor führt diesen Zyklus mehrere Milliarden Mal pro Sekunde aus. Ein 3-GHz-Prozessor macht theoretisch 3.000.000.000 Takte pro Sekunde. Pro Takt können sogar mehrere Befehle parallel abgearbeitet werden – das nennt sich <strong>Pipelining</strong>.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       6. SPEICHERHIERARCHIE + SVG
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">04</span>
+        <h2 class="dhbw-slide__title">Speicherhierarchie – Warum nicht alles schnell sein kann</h2>
+      </div>
+
+      <p>Schneller Speicher ist teuer und braucht viel Energie. Großer Speicher ist günstig, aber langsam. Deshalb löst kein Computerhersteller das Problem mit einem einzigen Speichertyp – stattdessen gibt es eine <strong>Speicherhierarchie</strong>: Kleine, extrem schnelle Speicher nah an der CPU; große, langsame und günstige Speicher weiter weg.</p>
+
+      <!-- SVG: Speicherpyramide -->
+      <div style="display:flex; justify-content:center; margin-top: 2rem;">
+        <svg viewBox="0 0 640 370" xmlns="http://www.w3.org/2000/svg" style="max-width:600px; width:100%;" aria-label="Speicherpyramide: Register oben, HDD unten">
+
+          <!-- Layer 1: Register -->
+          <polygon points="320,20 260,90 380,90" fill="#E2001A"/>
+          <text x="320" y="65" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13" font-weight="bold">Register</text>
+
+          <!-- Layer 2: Cache -->
+          <polygon points="260,95 190,165 450,165 380,95" fill="#c0001a"/>
+          <text x="320" y="140" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13" font-weight="bold">Cache (L1 / L2 / L3)</text>
+
+          <!-- Layer 3: RAM -->
+          <polygon points="190,170 110,245 530,245 450,170" fill="#a0001a" opacity="0.85"/>
+          <text x="320" y="217" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13" font-weight="bold">RAM (Arbeitsspeicher)</text>
+
+          <!-- Layer 4: SSD / HDD -->
+          <polygon points="110,250 30,330 610,330 530,250" fill="#800018" opacity="0.75"/>
+          <text x="320" y="298" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13" font-weight="bold">SSD / HDD (Massenspeicher)</text>
+
+          <!-- Linke Achse: Geschwindigkeit -->
+          <text x="15" y="55"  text-anchor="middle" fill="#E2001A" font-family="sans-serif" font-size="11">schnell</text>
+          <text x="15" y="90"  text-anchor="middle" fill="#E2001A" font-family="sans-serif" font-size="9">↕</text>
+          <text x="15" y="320" text-anchor="middle" fill="#E2001A" font-family="sans-serif" font-size="11">langsam</text>
+          <line x1="22" y1="65" x2="22" y2="310" stroke="#E2001A" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <text x="15" y="195" text-anchor="middle" fill="#E2001A" font-family="sans-serif" font-size="10" transform="rotate(-90 15 195)">Geschwindigkeit</text>
+
+          <!-- Rechte Achse: Größe -->
+          <text x="625" y="55"  text-anchor="middle" fill="#6B7280" font-family="sans-serif" font-size="11">klein</text>
+          <text x="625" y="320" text-anchor="middle" fill="#6B7280" font-family="sans-serif" font-size="11">groß</text>
+          <line x1="618" y1="65" x2="618" y2="310" stroke="#6B7280" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <text x="635" y="195" text-anchor="middle" fill="#6B7280" font-family="sans-serif" font-size="10" transform="rotate(90 635 195)">Speichergröße</text>
+
+          <!-- Größenangaben rechts -->
+          <text x="460" y="65"  fill="#1A1A1A" font-family="sans-serif" font-size="11">Bytes · &lt; 1 ns</text>
+          <text x="460" y="135" fill="#1A1A1A" font-family="sans-serif" font-size="11">MB · 1–10 ns</text>
+          <text x="460" y="210" fill="#1A1A1A" font-family="sans-serif" font-size="11">GB · 50–100 ns</text>
+          <text x="460" y="295" fill="#1A1A1A" font-family="sans-serif" font-size="11">TB · µs–ms</text>
+        </svg>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--praxis mt-5">
+        <span class="dhbw-callout__label">Praxisbeispiel: Warum friert mein PC ein?</span>
+        <p>Wenn du 20 Browser-Tabs + Zoom + ein Spiel gleichzeitig offen hast, füllt sich der RAM. Das Betriebssystem beginnt dann, Inhalte auf die viel langsamere SSD auszulagern (sogenanntes <strong>Swapping</strong>). Der Zugriff auf die SSD ist hunderte Male langsamer als RAM. Das Ergebnis ist spürbare Verzögerung – der Rechner „friert" aus Nutzersicht ein.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       7. CACHE-HIERARCHIE
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">05</span>
+        <h2 class="dhbw-slide__title">Cache-Hierarchie: L1, L2 und L3</h2>
+      </div>
+
+      <p>Der <strong>Cache</strong> ist ein schneller Zwischenspeicher direkt auf dem Prozessorchip. Da die CPU viel schneller arbeitet als der RAM, würde sie ständig warten, wenn sie jeden Datenwert direkt aus dem RAM holen müsste. Der Cache löst dieses Problem, indem er häufig benötigte Daten in unmittelbarer Nähe der Rechenkerne bereithält.</p>
+
+      <div class="dhbw-table-wrap mt-5">
+        <table class="dhbw-table">
+          <thead>
+            <tr><th>Ebene</th><th>Größe (typisch)</th><th>Zugriffszeit</th><th>Besonderheit</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>L1-Cache</strong></td>
+              <td>32–64 KB pro Kern</td>
+              <td>~1 ns</td>
+              <td>Direkt im CPU-Kern; getrennt für Daten und Befehle; extrem schnell</td>
+            </tr>
+            <tr>
+              <td><strong>L2-Cache</strong></td>
+              <td>256 KB – 1 MB pro Kern</td>
+              <td>~5 ns</td>
+              <td>Im CPU-Chip, aber nicht mehr direkt im Kern; gemeinsame Pufferzone</td>
+            </tr>
+            <tr>
+              <td><strong>L3-Cache</strong></td>
+              <td>8–32 MB, alle Kerne geteilt</td>
+              <td>~20–40 ns</td>
+              <td>Größter On-Chip-Cache; von allen Kernen gemeinsam genutzt</td>
+            </tr>
+            <tr>
+              <td><strong>RAM</strong></td>
+              <td>8–64 GB</td>
+              <td>~60–100 ns</td>
+              <td>Außerhalb des Chips; deutlich langsamer, aber viel größer</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--tip mt-5">
+        <span class="dhbw-callout__label">Cache-Hit vs. Cache-Miss</span>
+        <p>Wenn die CPU einen Datenwert braucht und dieser bereits im Cache liegt, spricht man von einem <strong>Cache-Hit</strong> – der Zugriff ist blitzschnell. Liegt er nicht im Cache (<strong>Cache-Miss</strong>), muss die CPU aus dem langsameren RAM oder noch weiter unten in der Hierarchie holen. Gut strukturierter Code erhöht die Cache-Hit-Rate erheblich.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       8. MEHRKERN & GPU
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">06</span>
+        <h2 class="dhbw-slide__title">Mehrkernprozessoren und GPUs</h2>
+      </div>
+
+      <p>Die Taktfrequenz einer CPU lässt sich physikalisch nicht beliebig steigern – ab einer gewissen Frequenz erzeugen die Transistoren so viel Wärme, dass der Chip beschädigt wird. Die Lösung der Hersteller seit etwa 2005: statt einer schnelleren CPU mehrere <strong>Kerne</strong> auf demselben Chip. Ein 8-Kern-Prozessor kann in der Theorie acht Aufgaben gleichzeitig bearbeiten.</p>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">CPU – wenige starke Kerne</p>
+            <p>Eine moderne CPU hat 4 bis 32 Kerne, die jeweils sehr leistungsstark sind. Sie eignet sich für komplexe, sequenzielle Aufgaben – wie das Ausführen eines Betriebssystems oder komplizierter Berechnungen mit vielen Abhängigkeiten.</p>
+        </div>
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">GPU – tausende einfache Kerne</p>
+            <p>Eine <strong>GPU</strong> (Graphics Processing Unit) enthält tausende einfache, parallele Kerne. Sie wurde ursprünglich für Grafik entwickelt, wo dieselbe Berechnung auf millionen von Pixeln gleichzeitig angewendet werden muss. Heute wird dieselbe Parallelisierung für KI-Training und Simulationen genutzt.</p>
+        </div>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--example mt-5">
+        <span class="dhbw-callout__label">Analogie</span>
+        <p>Eine CPU ist wie ein Team aus 8 hochqualifizierten Spezialisten – jeder kann komplexe Aufgaben selbstständig lösen. Eine GPU ist wie eine Fabrikhalle mit 10.000 einfachen Arbeitern, die alle dieselbe Bewegung gleichzeitig ausführen. Für Fließbandarbeit (Pixel berechnen, Matrix-Multiplikationen für KI) gewinnt die Fabrikhalle haushoch.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       9. ZUSAMMENFASSUNG
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">07</span>
+        <h2 class="dhbw-slide__title">Zusammenfassung: Rechnerarchitektur</h2>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--merksatz">
+        <span class="dhbw-callout__label">Merksatz</span>
+        <p>Die <strong>Von-Neumann-Architektur</strong> beschreibt den Aufbau aller modernen Computer in fünf Komponenten: Eingabe, Ausgabe, Speicher, Rechenwerk und Steuerwerk. Die CPU arbeitet im <strong>Fetch-Decode-Execute-Zyklus</strong> mit Milliarden von Takten pro Sekunde. Die <strong>Speicherhierarchie</strong> von Register bis HDD erklärt, warum Geschwindigkeit und Größe im Widerspruch stehen – und warum zu viele offene Programme den Rechner verlangsamen.</p>
+      </div>
+
+      <div class="dhbw-table-wrap mt-5">
+        <table class="dhbw-table">
+          <thead>
+            <tr><th>Konzept</th><th>Kernaussage</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Von-Neumann-Architektur</strong></td><td>5 Komponenten; Programm und Daten im selben Speicher</td></tr>
+            <tr><td><strong>Fetch-Decode-Execute</strong></td><td>Endloser CPU-Zyklus; milliardenfach pro Sekunde</td></tr>
+            <tr><td><strong>Speicherhierarchie</strong></td><td>Schnell = klein = teuer; langsam = groß = günstig</td></tr>
+            <tr><td><strong>Cache (L1/L2/L3)</strong></td><td>Schneller Zwischenspeicher direkt auf dem Chip</td></tr>
+            <tr><td><strong>CPU vs. GPU</strong></td><td>CPU: wenige starke Kerne; GPU: tausende parallele einfache Kerne</td></tr>
+            <tr><td><strong>Swapping</strong></td><td>RAM voll → Auslagerung auf SSD → starke Verlangsamung</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════════════════════════ -->
+  <footer class="dhbw-footer">
+    <div class="dhbw-footer__inner">
+      <span class="dhbw-footer__brand">DHBW Stuttgart</span>
+      <span>Informatik-Grundlagen für Maschinenbau &nbsp;·&nbsp; WS&nbsp;2025/26</span>
+      <span>V13 – Rechnerarchitektur Teil 1</span>
+    </div>
+  </footer>
+
+</body>
+</html>

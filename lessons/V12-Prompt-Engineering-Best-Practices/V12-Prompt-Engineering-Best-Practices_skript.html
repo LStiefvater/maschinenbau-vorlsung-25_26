@@ -1,0 +1,296 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>V12 – Prompt Engineering Best Practices | DHBW Stuttgart</title>
+  <link rel="stylesheet" href="../../src/dhbw-base.css">
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════════════════════
+       1. HEADER
+  ══════════════════════════════════════════════════════════ -->
+  <header class="dhbw-header">
+    <div class="dhbw-header__inner">
+      <a href="#" class="dhbw-header__logo">
+        <span class="dhbw-header__logo-text">DHBW Stuttgart</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════════════════════════════
+       2. HERO
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-hero">
+    <div class="dhbw-hero__inner">
+      <p class="dhbw-hero__label">Vorlesung 12 · Informatik-Grundlagen · Maschinenbau</p>
+      <h1 class="dhbw-hero__title">Prompt Engineering</h1>
+      <p class="dhbw-hero__subtitle">Wie formuliere ich Anfragen an ChatGPT und Co. so, dass ich wirklich nützliche Antworten erhalte?</p>
+      <p class="dhbw-hero__meta">WS 2025/26 &nbsp;·&nbsp; DHBW Stuttgart</p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       3. LERNZIELE
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">01</span>
+        <h2 class="dhbw-slide__title">Lernziele</h2>
+      </div>
+
+      <div class="dhbw-goals">
+        <p class="dhbw-goals__title">📌 Nach dieser Vorlesung kannst du …</p>
+        <ul>
+          <li>erklären, was ein <strong>Prompt</strong> ist und wie seine Formulierung die Qualität der Antwort unmittelbar beeinflusst.</li>
+          <li>einen Prompt mithilfe der <strong>5 Bausteine</strong> – Rolle, Kontext, Aufgabe, Format, Beispiele – strukturiert aufbauen.</li>
+          <li>die Strategien <strong>Zero-Shot</strong> und <strong>Few-Shot</strong> als Konzepte benennen und gezielt einsetzen.</li>
+          <li>mindestens fünf häufige Fehler beim Prompten benennen und im eigenen Handeln vermeiden.</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       4. WAS IST EIN PROMPT?
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">02</span>
+        <h2 class="dhbw-slide__title">Was ist ein Prompt?</h2>
+      </div>
+
+      <p>Ein <strong>Prompt</strong> ist die Eingabe, die du einem KI-System gibst. Er ist der einzige Kommunikationskanal zwischen dir und dem Modell – er ist gleichzeitig Frage, Anweisung und Kontext. Das klingt einfach, hat aber eine direkte Konsequenz: Die Qualität deiner Ausgabe hängt fast vollständig von der Qualität deines Prompts ab.</p>
+
+      <p class="mt-5">Ein LLM hat keinen gesunden Menschenverstand, keine Intuition und keine Möglichkeit, nachzufragen. Es verarbeitet ausschließlich das, was du hineinschreibst. Vage Eingabe führt zu vager Ausgabe. Präzise Eingabe führt zu präziser, nützlicher Ausgabe.</p>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">Schlechter Prompt</p>
+            <p><em>„Schreib was über Motoren."</em></p>
+            <p class="mt-4">Das Modell weiß nicht: Welcher Motortyp? Für welches Publikum? Wie lang? Welcher Zweck? Es produziert einen generischen Wikipedia-artigen Text, der für keine konkrete Aufgabe wirklich brauchbar ist.</p>
+        </div>
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">Guter Prompt</p>
+            <p><em>„Du bist Dozent für Maschinenbau. Erkläre einem Erstsemester-Studenten in maximal 5 Sätzen, wie ein Viertaktmotor funktioniert. Verwende keine Fachbegriffe ohne Erklärung."</em></p>
+            <p class="mt-4">Das Modell hat eine klare Rolle, Zielgruppe, Längenbeschränkung und Sprachanforderung. Die Ausgabe wird entsprechend präzise und nützlich.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       5. DIE 5 BAUSTEINE
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">03</span>
+        <h2 class="dhbw-slide__title">Die 5 Bausteine eines guten Prompts</h2>
+      </div>
+
+      <p>Ein strukturierter Prompt besteht aus bis zu fünf Elementen. Nicht immer sind alle fünf notwendig, aber je mehr relevante Bausteine enthalten sind, desto zielgenauer und nützlicher ist die Ausgabe.</p>
+
+      <div class="dhbw-table-wrap mt-5">
+        <table class="dhbw-table">
+          <thead>
+            <tr><th>Baustein</th><th>Frage dahinter</th><th>Beispiel</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Rolle</strong></td>
+              <td>Wer soll das Modell sein?</td>
+              <td>„Du bist ein erfahrener Kfz-Mechatroniker …"</td>
+            </tr>
+            <tr>
+              <td><strong>Kontext</strong></td>
+              <td>Was ist die Situation?</td>
+              <td>„… ich schreibe eine Seminararbeit über Elektromotoren …"</td>
+            </tr>
+            <tr>
+              <td><strong>Aufgabe</strong></td>
+              <td>Was soll konkret getan werden?</td>
+              <td>„… erkläre den Unterschied zwischen Synchron- und Asynchronmotor …"</td>
+            </tr>
+            <tr>
+              <td><strong>Format</strong></td>
+              <td>Wie soll die Ausgabe aussehen?</td>
+              <td>„… in einer Tabelle mit zwei Spalten, maximal 5 Zeilen."</td>
+            </tr>
+            <tr>
+              <td><strong>Beispiele</strong></td>
+              <td>Welches Muster zeigt, was du willst?</td>
+              <td>„… Hier ein Muster, wie ich es mir vorstelle: [konkretes Beispiel]"</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--example mt-5">
+        <span class="dhbw-callout__label">Vollständiger Muster-Prompt</span>
+        <p><em>„Du bist ein erfahrener Dozent für Maschinenbau (Rolle). Ich bin Erstsemester-Student und bereite mich auf eine Prüfung vor (Kontext). Erkläre mir das Prinzip der Wärmeausdehnung (Aufgabe) in maximal 4 Sätzen, auf Deutsch, ohne Formeln (Format). Hier ein Beispiel, wie einfach ich es brauche: ‚Metall dehnt sich bei Wärme aus, weil die Atome mehr Energie haben und stärker schwingen.' (Beispiel)"</em></p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       6. ZERO-SHOT & FEW-SHOT
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">04</span>
+        <h2 class="dhbw-slide__title">Zero-Shot und Few-Shot – Prompting-Strategien</h2>
+      </div>
+
+      <p>Neben den 5 Bausteinen gibt es zwei grundlegende Strategien, die bestimmen, wie viel Anleitung man dem Modell im Prompt mitgibt.</p>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">Zero-Shot Prompting</p>
+            <p>Beim <strong>Zero-Shot</strong>-Ansatz gibst du dem Modell keine Beispiele, sondern nur die Aufgabe direkt. Du verlässt dich darauf, dass das Modell die Aufgabe aus dem Training kennt. Für häufige, gut definierte Aufgaben – wie Übersetzen oder Zusammenfassen – funktioniert das gut.</p>
+            <p class="mt-4"><em>Beispiel: „Übersetze folgenden Text ins Englische: …"</em></p>
+        </div>
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">Few-Shot Prompting</p>
+            <p>Beim <strong>Few-Shot</strong>-Ansatz gibst du dem Modell ein oder mehrere Beispiele, bevor du deine eigentliche Anfrage stellst. Das Modell „erkennt" das Muster und wendet es auf den neuen Fall an. Diese Strategie ist besonders nützlich für konsistentes Format oder ungewöhnliche Aufgaben.</p>
+            <p class="mt-4"><em>Beispiel: Du zeigst drei Beispiele einer gewünschten Formatierung, dann verlangst du dieselbe für neuen Input.</em></p>
+        </div>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--tip mt-5">
+        <span class="dhbw-callout__label">Chain-of-Thought – Denken in Schritten</span>
+        <p>Eine weitere Strategie ist <strong>Chain-of-Thought Prompting</strong>: Du bittest das Modell, seinen Gedankengang Schritt für Schritt zu erklären. Bei komplexen Aufgaben wie Rechenaufgaben oder logischen Schlüssen erhöht das die Genauigkeit der Ausgabe erheblich. Einfacher Trick: Füge am Ende des Prompts hinzu – <em>„Denk Schritt für Schritt vor deiner Antwort."</em></p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       7. 5 HÄUFIGE FEHLER
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">05</span>
+        <h2 class="dhbw-slide__title">5 häufige Fehler beim Prompten</h2>
+      </div>
+
+      <p>Wer einen schlechten Prompt schreibt, bekommt eine schlechte Antwort – und gibt dafür oft zu Unrecht dem Modell die Schuld. Die folgenden fünf Fehler sind die häufigsten Ursachen für unbrauchbare Ausgaben.</p>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">Fehler 1: Zu vage</p>
+            <p>„Erkläre Physik." ist kein Prompt, sondern ein Thema. Je vager der Prompt, desto generischer die Ausgabe. Immer konkret spezifizieren: Welches Teilgebiet? Welche Tiefe? Welcher Zweck?</p>
+        </div>
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">Fehler 2: Fehlende Zielgruppe</p>
+            <p>Ein Text für einen Laien und ein Text für einen Ingenieur sind grundlegend verschieden. Wer die Zielgruppe nicht angibt, erhält einen Mittelweg – der meistens für niemanden optimal ist.</p>
+        </div>
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">Fehler 3: Kein Format angegeben</p>
+            <p>Ohne Format-Angabe entscheidet das Modell selbst, ob es Fließtext, Stichpunkte oder Tabellen produziert. Wenn du eine Tabelle brauchst, schreib „als Tabelle". Wenn du 5 Sätze brauchst, schreib „in maximal 5 Sätzen".</p>
+        </div>
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">Fehler 4: Zu viele Aufgaben auf einmal</p>
+            <p>„Erkläre das Thema, fasse es zusammen, erstelle 10 Aufgaben und schreib die Lösungen dazu" – das sind vier separate Prompts in einem. Teile komplexe Anfragen in einzelne, klare Schritte auf, um die Qualität jedes Ergebnisses zu erhöhen.</p>
+        </div>
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">Fehler 5: Ausgabe nicht hinterfragen</p>
+            <p>LLMs halluzinieren – das ist keine Ausnahme, sondern ein strukturelles Merkmal. Wer Fakten, Zahlen oder Quellenangaben aus einem LLM ungeprüft übernimmt, riskiert sachliche Fehler. Das Modell ist Ausgangspunkt, keine finale Quelle.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       8. LLM-GRENZEN
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">06</span>
+        <h2 class="dhbw-slide__title">Grenzen von LLMs – Was Prompting nicht lösen kann</h2>
+      </div>
+
+      <p>Auch der beste Prompt kann strukturelle Eigenschaften eines LLM nicht überwinden. Diese Grenzen sind keine Fehler des Nutzers, sondern technisch bedingte Eigenschaften des Systems.</p>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">Halluzinationen</p>
+            <p>LLMs erzeugen Text, der plausibel klingt – auch wenn er sachlich falsch ist. Sie können nicht zwischen gesichertem Wissen und Vermutung unterscheiden. Besonders bei spezifischen Fakten, Namen und Jahreszahlen ist kritische Überprüfung unerlässlich.</p>
+        </div>
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">Veraltete Daten</p>
+            <p>Die meisten LLMs haben ein sogenanntes <strong>Knowledge Cutoff</strong> – ein Datum, nach dem keine neuen Informationen ins Training eingegangen sind. Aktuelle Ereignisse, neue Gesetze und neueste Forschungsergebnisse sind dem Modell unbekannt.</p>
+        </div>
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">Datenschutz</p>
+            <p>Was du einem öffentlichen LLM eingibst, kann zur Verbesserung des Modells genutzt oder auf Servern des Anbieters gespeichert werden. Vertrauliche Unternehmens- oder Personendaten gehören nicht in öffentliche KI-Systeme.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       9. ZUSAMMENFASSUNG
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">07</span>
+        <h2 class="dhbw-slide__title">Zusammenfassung: Prompt Engineering</h2>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--merksatz">
+        <span class="dhbw-callout__label">Merksatz</span>
+        <p>Die Qualität einer LLM-Antwort hängt fast vollständig von der Qualität des Prompts ab. Ein strukturierter Prompt aus den fünf Bausteinen <strong>Rolle – Kontext – Aufgabe – Format – Beispiele</strong> führt zu präzisen, nützlichen Ausgaben. Few-Shot-Beispiele lenken das Modell zuverlässig ins gewünschte Muster. Chain-of-Thought verbessert logische Schlüsse. Und immer gilt: LLMs halluzinieren, veralten und kennen keine Vertraulichkeit – kritisch bleiben.</p>
+      </div>
+
+      <div class="dhbw-table-wrap mt-5">
+        <table class="dhbw-table">
+          <thead>
+            <tr><th>Konzept</th><th>Kernaussage</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Prompt</strong></td><td>Einziger Kommunikationskanal; vage rein = vage raus</td></tr>
+            <tr><td><strong>5 Bausteine</strong></td><td>Rolle, Kontext, Aufgabe, Format, Beispiele</td></tr>
+            <tr><td><strong>Zero-Shot</strong></td><td>Nur Aufgabe, kein Beispiel – gut für Standardaufgaben</td></tr>
+            <tr><td><strong>Few-Shot</strong></td><td>Mit Beispielen – gut für ungewöhnliche oder formatspezifische Aufgaben</td></tr>
+            <tr><td><strong>Chain-of-Thought</strong></td><td>„Denk Schritt für Schritt" – verbessert logische und rechnerische Ausgaben</td></tr>
+            <tr><td><strong>Grenzen</strong></td><td>Halluzinationen, veraltete Daten, Datenschutzrisiken können nicht wegprompted werden</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════════════════════════ -->
+  <footer class="dhbw-footer">
+    <div class="dhbw-footer__inner">
+      <span class="dhbw-footer__brand">DHBW Stuttgart</span>
+      <span>Informatik-Grundlagen für Maschinenbau &nbsp;·&nbsp; WS&nbsp;2025/26</span>
+      <span>V12 – Prompt Engineering Best Practices</span>
+    </div>
+  </footer>
+
+</body>
+</html>

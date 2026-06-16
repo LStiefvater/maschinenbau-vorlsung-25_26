@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>V05 – Python Praxis: if / elif / else | DHBW Stuttgart</title>
+  <link rel="stylesheet" href="../../src/dhbw-base.css">
+  <style>
+    .concept-grid { display:grid; grid-template-columns:1fr; gap:var(--sp-6); margin-top:var(--sp-5); }
+    .concept-card { background:var(--surface); border:1px solid var(--border); border-top:4px solid var(--red); border-radius:var(--r-card); padding:var(--sp-5) var(--sp-6); box-shadow:var(--shadow-card); }
+    .concept-card__name { font-family:var(--dhbw-font-mono); font-size:var(--fs-lg); font-weight:var(--dhbw-fw-bold); color:var(--red); margin-bottom:var(--sp-2); }
+    .dhbw-code { background:var(--code-bg); color:var(--code-text); font-family:var(--dhbw-font-mono); font-size:0.9rem; line-height:var(--lh-code); padding:var(--sp-4) var(--sp-5); border-radius:var(--r-base); overflow-x:auto; margin:var(--sp-3) 0; white-space:pre; }
+    .kw  { color:#F97316; font-weight:600; }
+    .str { color:#22C55E; }
+    .num { color:#A78BFA; }
+    .cmt { color:#7A9CB3; font-style:italic; }
+    .fn  { color:#60A5FA; }
+    .var { color:#E8EFF5; }
+    .fsl { color:#F0C060; }
+    .syntax-box { background:var(--code-bg-in); border-left:3px solid var(--red); border-radius:0 var(--r-base) var(--r-base) 0; padding:var(--sp-3) var(--sp-4); margin:var(--sp-3) 0; font-family:var(--dhbw-font-mono); font-size:0.92rem; color:var(--text); }
+    .syntax-box strong { color:var(--red); }
+    .game-box { background:#0F1E2B; border:2px solid #2A4A6B; border-radius:var(--r-card); padding:var(--sp-5) var(--sp-6); margin-top:var(--sp-6); }
+    .game-box__header { display:flex; align-items:center; gap:var(--sp-3); margin-bottom:var(--sp-4); }
+    .game-box__icon { font-size:1.5rem; }
+    .game-box__title { font-size:var(--fs-md); font-weight:var(--dhbw-fw-bold); color:#60A5FA; margin:0; }
+    .game-box__subtitle { font-size:var(--fs-sm); color:#7A9CB3; margin-top:var(--sp-1); }
+    .quick-ref { width:100%; border-collapse:collapse; margin-top:var(--sp-4); font-size:var(--fs-sm); }
+    .quick-ref th { background:var(--red); color:#fff; padding:var(--sp-2) var(--sp-4); text-align:left; }
+    .quick-ref td { padding:var(--sp-2) var(--sp-4); border-bottom:1px solid var(--border); vertical-align:top; }
+    .quick-ref tr:nth-child(even) td { background:var(--canvas); }
+    .quick-ref code { font-family:var(--dhbw-font-mono); font-size:0.85rem; background:var(--code-bg-in); padding:1px 5px; border-radius:var(--r-sm); color:var(--red); }
+    .mt-4 { margin-top:var(--sp-4); } .mt-5 { margin-top:var(--sp-5); } .mt-6 { margin-top:var(--sp-6); }
+    .dhbw-footer { background:var(--text); color:#9CA3AF; text-align:center; padding:var(--sp-5) var(--gutter); font-size:var(--fs-sm); }
+    @media print {
+      @page { size:A4; margin:15mm 18mm; }
+      .dhbw-header,.dhbw-footer { display:none; }
+      .dhbw-hero,.dhbw-slide,.dhbw-code,.dhbw-callout,.concept-card,.game-box { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+      .dhbw-hero { padding:12mm 0 10mm; } .dhbw-slide { padding:8mm 0; }
+      .concept-card,.game-box { break-inside:avoid; }
+      .dhbw-code { font-size:0.78rem; }
+      .page-break { page-break-before:always; }
+    }
+  </style>
+</head>
+<body>
+  <header class="dhbw-header">
+    <div class="dhbw-header__inner">
+      <a href="#" class="dhbw-header__logo"><span class="dhbw-header__logo-text">DHBW Stuttgart</span></a>
+      <nav class="dhbw-header__nav">
+        <a href="V05-Programm-Ablauf-Plaene-Teil1_skript.html" class="dhbw-header__nav-link">Theorie</a>
+        <a href="#" class="dhbw-header__nav-link dhbw-header__nav-link--active">Python Praxis</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="dhbw-hero">
+    <div class="dhbw-hero__inner">
+      <p class="dhbw-hero__label">Vorlesung 05 · Python Praxis · Maschinenbau</p>
+      <h1 class="dhbw-hero__title">Verzweigungen: if / elif / else</h1>
+      <p class="dhbw-hero__subtitle">Programme entscheiden lassen – Grenzwerte, Alarme, Spiellogik</p>
+      <p class="dhbw-hero__meta">WS 2025/26 &nbsp;·&nbsp; DHBW Stuttgart &nbsp;·&nbsp; Nachschlagewerk Python-Praxis</p>
+    </div>
+  </section>
+
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">01</span><h2 class="dhbw-slide__title">Das kannst du danach</h2></div>
+      <div class="dhbw-goals">
+        <p class="dhbw-goals__title">📌 Nach dieser Einheit kannst du …</p>
+        <ul>
+          <li>mit <strong>if</strong> einfache Bedingungen prüfen und Code abhängig davon ausführen.</li>
+          <li>mit <strong>elif</strong> mehrere Fälle nacheinander prüfen (z.&nbsp;B. Ampelzustände).</li>
+          <li>mit <strong>else</strong> einen Standardfall definieren, der gilt, wenn nichts anderes zutrifft.</li>
+          <li>Bedingungen verschachteln um komplexe Steuerlogik abzubilden.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- SVG: if/elif/else Entscheidungsbaum -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">02</span><h2 class="dhbw-slide__title">Struktur einer Verzweigung</h2></div>
+
+      <!-- SVG Entscheidungsbaum -->
+      <svg viewBox="0 0 520 260" width="100%" style="max-width:520px; display:block; margin:var(--sp-4) auto;"
+           role="img" aria-label="Entscheidungsbaum: if-Bedingung führt zu Ja-Pfad oder elif, elif zu weiterem Ja-Pfad oder else">
+        <!-- Start -->
+        <rect x="195" y="5" width="130" height="36" rx="18" fill="#E2001A"/>
+        <text x="260" y="27" text-anchor="middle" font-family="'Fira Code', monospace" font-size="14" font-weight="700" fill="#fff">Programm</text>
+        <!-- Pfeil runter -->
+        <line x1="260" y1="41" x2="260" y2="65" stroke="#D1D5DB" stroke-width="2"/>
+        <!-- if-Raute -->
+        <polygon points="260,65 340,100 260,135 180,100" fill="#1E2936" stroke="#E2001A" stroke-width="2"/>
+        <text x="260" y="96" text-anchor="middle" font-family="'Fira Code', monospace" font-size="12" fill="#E2001A" font-weight="700">if</text>
+        <text x="260" y="112" text-anchor="middle" font-family="'Source Sans 3', Arial, sans-serif" font-size="11" fill="#7A9CB3">Bedingung 1?</text>
+        <!-- Ja links -->
+        <line x1="180" y1="100" x2="80" y2="100" stroke="#22C55E" stroke-width="2"/>
+        <text x="130" y="92" text-anchor="middle" font-family="'Source Sans 3', Arial, sans-serif" font-size="11" fill="#22C55E">Ja</text>
+        <rect x="20" y="82" width="60" height="36" rx="4" fill="#1A3B2B" stroke="#22C55E" stroke-width="1.5"/>
+        <text x="50" y="100" text-anchor="middle" font-family="'Source Sans 3', Arial, sans-serif" font-size="11" fill="#22C55E">if-Block</text>
+        <text x="50" y="114" text-anchor="middle" font-family="'Source Sans 3', Arial, sans-serif" font-size="10" fill="#7A9CB3">ausführen</text>
+        <!-- Nein runter zu elif -->
+        <line x1="260" y1="135" x2="260" y2="160" stroke="#D1D5DB" stroke-width="2"/>
+        <text x="272" y="153" font-family="'Source Sans 3', Arial, sans-serif" font-size="11" fill="#F97316">Nein</text>
+        <!-- elif-Raute -->
+        <polygon points="260,160 340,195 260,230 180,195" fill="#1E2936" stroke="#60A5FA" stroke-width="2"/>
+        <text x="260" y="191" text-anchor="middle" font-family="'Fira Code', monospace" font-size="12" fill="#60A5FA" font-weight="700">elif</text>
+        <text x="260" y="207" text-anchor="middle" font-family="'Source Sans 3', Arial, sans-serif" font-size="11" fill="#7A9CB3">Bedingung 2?</text>
+        <!-- Ja links für elif -->
+        <line x1="180" y1="195" x2="80" y2="195" stroke="#22C55E" stroke-width="2"/>
+        <text x="130" y="187" text-anchor="middle" font-family="'Source Sans 3', Arial, sans-serif" font-size="11" fill="#22C55E">Ja</text>
+        <rect x="20" y="177" width="60" height="36" rx="4" fill="#1A3B2B" stroke="#22C55E" stroke-width="1.5"/>
+        <text x="50" y="195" text-anchor="middle" font-family="'Source Sans 3', Arial, sans-serif" font-size="11" fill="#22C55E">elif-Block</text>
+        <text x="50" y="209" text-anchor="middle" font-family="'Source Sans 3', Arial, sans-serif" font-size="10" fill="#7A9CB3">ausführen</text>
+        <!-- Nein rechts zu else -->
+        <line x1="340" y1="195" x2="440" y2="195" stroke="#D1D5DB" stroke-width="2"/>
+        <text x="388" y="187" text-anchor="middle" font-family="'Source Sans 3', Arial, sans-serif" font-size="11" fill="#F97316">Nein</text>
+        <rect x="440" y="177" width="70" height="36" rx="4" fill="#2D1F1F" stroke="#F97316" stroke-width="1.5"/>
+        <text x="475" y="195" text-anchor="middle" font-family="'Source Sans 3', Arial, sans-serif" font-size="11" fill="#F97316">else-Block</text>
+        <text x="475" y="209" text-anchor="middle" font-family="'Source Sans 3', Arial, sans-serif" font-size="10" fill="#7A9CB3">ausführen</text>
+      </svg>
+    </div>
+  </section>
+
+  <!-- KONZEPTKARTEN -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">03</span><h2 class="dhbw-slide__title">Verzweigungen im Detail</h2></div>
+
+      <div class="concept-grid">
+
+        <div class="concept-card">
+          <div class="concept-card__name">if – einfache Bedingung</div>
+          <p>Der <code class="dhbw-inline">if</code>-Block wird nur ausgeführt, wenn die Bedingung <code class="dhbw-inline">True</code> ergibt. Wichtig: der eingerückte Block (4 Leerzeichen oder Tab) gehört zum if.</p>
+          <div class="syntax-box">
+<strong>if</strong> bedingung<strong>:</strong>
+    <span style="color:var(--text-sec);"># dieser Code läuft nur wenn bedingung True ist</span>
+          </div>
+          <div class="dhbw-code"><span class="var">temperatur</span> = <span class="num">95.0</span>
+<span class="var">grenzwert</span>  = <span class="num">80.0</span>
+
+<span class="kw">if</span> <span class="var">temperatur</span> &gt; <span class="var">grenzwert</span>:
+    <span class="fn">print</span>(<span class="str">"⚠ ALARM: Temperatur zu hoch!"</span>)
+    <span class="fn">print</span>(<span class="fsl">f</span><span class="str">"  Aktuell: <span class="fsl">{temperatur}</span> °C (Limit: <span class="fsl">{grenzwert}</span> °C)"</span>)</div>
+        </div>
+
+        <div class="concept-card">
+          <div class="concept-card__name">if / else – zwei Fälle</div>
+          <p>Der <code class="dhbw-inline">else</code>-Block läuft immer dann, wenn die <code class="dhbw-inline">if</code>-Bedingung <code class="dhbw-inline">False</code> ist. So deckt man beide Fälle ab.</p>
+          <div class="dhbw-code"><span class="var">temp</span> = <span class="fn">float</span>(<span class="fn">input</span>(<span class="str">"Temperatur: "</span>))
+
+<span class="kw">if</span> <span class="var">temp</span> &gt; <span class="num">80</span>:
+    <span class="fn">print</span>(<span class="str">"ALARM: Überhitzung!"</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">"Temperatur im Normalbereich."</span>)</div>
+        </div>
+
+        <div class="concept-card">
+          <div class="concept-card__name">if / elif / else – mehrere Fälle</div>
+          <p>Mit <code class="dhbw-inline">elif</code> (else if) kann man beliebig viele Fälle nacheinander prüfen. Python prüft von oben nach unten und führt nur den ersten zutreffenden Block aus.</p>
+          <div class="dhbw-code"><span class="var">temp</span> = <span class="fn">float</span>(<span class="fn">input</span>(<span class="str">"Temperatur: "</span>))
+
+<span class="kw">if</span> <span class="var">temp</span> &gt; <span class="num">100</span>:
+    <span class="fn">print</span>(<span class="str">"KRITISCH: Sofort abschalten!"</span>)
+<span class="kw">elif</span> <span class="var">temp</span> &gt; <span class="num">80</span>:
+    <span class="fn">print</span>(<span class="str">"WARNUNG: Temperatur erhöht."</span>)
+<span class="kw">elif</span> <span class="var">temp</span> &gt; <span class="num">60</span>:
+    <span class="fn">print</span>(<span class="str">"INFO: Betriebstemperatur erreicht."</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">"Aufwärmphase läuft..."</span>)</div>
+
+          <div class="dhbw-callout dhbw-callout--tip mt-4">
+            <span class="dhbw-callout__label">Reihenfolge beachten</span>
+            <p>Python führt immer nur den <strong>ersten</strong> zutreffenden Block aus. Prüfe daher von der engsten zur weitesten Bedingung – hier: zuerst &gt;100, dann &gt;80, dann &gt;60.</p>
+          </div>
+        </div>
+
+        <div class="concept-card">
+          <div class="concept-card__name">Ternary-Operator <span style="font-size:0.8em; color:var(--text-sec);">(optional)</span></div>
+          <p>Eine Kurzschreibweise für einfaches if/else in einer Zeile. Nur sinnvoll bei sehr einfachen Bedingungen.</p>
+          <div class="syntax-box">
+            <strong>wert_wenn_wahr</strong> if bedingung else <strong>wert_wenn_falsch</strong>
+          </div>
+          <div class="dhbw-code"><span class="var">temp</span>   = <span class="num">85</span>
+<span class="var">status</span> = <span class="str">"ALARM"</span> <span class="kw">if</span> <span class="var">temp</span> &gt; <span class="num">80</span> <span class="kw">else</span> <span class="str">"OK"</span>
+<span class="fn">print</span>(<span class="var">status</span>)   <span class="cmt"># → ALARM</span>
+
+<span class="cmt"># Entspricht exakt:</span>
+<span class="kw">if</span> <span class="var">temp</span> &gt; <span class="num">80</span>:
+    <span class="var">status</span> = <span class="str">"ALARM"</span>
+<span class="kw">else</span>:
+    <span class="var">status</span> = <span class="str">"OK"</span></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- SCHIFFEVERSENKEN -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">04</span><h2 class="dhbw-slide__title">Im Schiffe-Versenken-Spiel</h2></div>
+      <p>Die Schuss-Auswertung benötigt drei Fälle: Treffer, Wasser, oder bereits beschossen:</p>
+      <div class="game-box">
+        <div class="game-box__header">
+          <span class="game-box__icon">🚢</span>
+          <div>
+            <h3 class="game-box__title">Schuss-Auswertung mit if/elif/else</h3>
+            <p class="game-box__subtitle">Treffer · Wasser · Schon beschossen</p>
+          </div>
+        </div>
+        <div class="dhbw-code"><span class="var">koordinate</span> = (<span class="var">zeile</span>, <span class="var">spalte</span>)
+<span class="var">feld</span>       = <span class="var">spielfeld</span>[<span class="var">zeile</span>][<span class="var">spalte</span>]
+
+<span class="kw">if</span> <span class="var">feld</span> <span class="kw">in</span> (<span class="str">"X"</span>, <span class="str">"O"</span>):
+    <span class="fn">print</span>(<span class="str">"Dieses Feld wurde bereits beschossen!"</span>)
+<span class="kw">elif</span> <span class="var">koordinate</span> <span class="kw">in</span> <span class="var">schiff</span>:
+    <span class="var">spielfeld</span>[<span class="var">zeile</span>][<span class="var">spalte</span>] = <span class="str">"X"</span>
+    <span class="fn">print</span>(<span class="str">"💥 Treffer!"</span>)
+<span class="kw">else</span>:
+    <span class="var">spielfeld</span>[<span class="var">zeile</span>][<span class="var">spalte</span>] = <span class="str">"O"</span>
+    <span class="fn">print</span>(<span class="str">"🌊 Wasser!"</span>)</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUICK-REFERENCE -->
+  <section class="dhbw-slide page-break">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">05</span><h2 class="dhbw-slide__title">Quick-Reference</h2></div>
+      <table class="quick-ref">
+        <thead><tr><th style="width:30%">Konstrukt</th><th>Bedeutung &amp; Wann einsetzen</th></tr></thead>
+        <tbody>
+          <tr><td><code>if bedingung:</code></td><td>Code nur ausführen wenn Bedingung True ist</td></tr>
+          <tr><td><code>if ... else:</code></td><td>Zwei Fälle: wahr / nicht wahr</td></tr>
+          <tr><td><code>if ... elif ... else:</code></td><td>Mehrere Fälle der Reihe nach prüfen</td></tr>
+          <tr><td>Einrückung (4 Leerzeichen)</td><td>Definiert den zugehörigen Code-Block – Pflicht!</td></tr>
+          <tr><td>Reihenfolge bei elif</td><td>Von eng → weit: zuerst den spezifischsten Fall prüfen</td></tr>
+          <tr><td><code>x if bed else y</code></td><td>Ternary: Kurzform für einfaches if/else in einer Zeile</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer class="dhbw-footer">DHBW Stuttgart · Maschinenbau · Informatik-Grundlagen · WS 2025/26 · Python Praxis Nachschlagewerk</footer>
+</body>
+</html>

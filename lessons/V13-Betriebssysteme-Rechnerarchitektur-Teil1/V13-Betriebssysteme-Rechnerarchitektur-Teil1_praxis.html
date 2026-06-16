@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>V13 – Python Praxis: matplotlib – Diagramme | DHBW Stuttgart</title>
+  <link rel="stylesheet" href="../../src/dhbw-base.css">
+  <style>
+    .concept-grid { display:grid; grid-template-columns:1fr; gap:var(--sp-6); margin-top:var(--sp-5); }
+    .concept-card { background:var(--surface); border:1px solid var(--border); border-top:4px solid var(--red); border-radius:var(--r-card); padding:var(--sp-5) var(--sp-6); box-shadow:var(--shadow-card); }
+    .concept-card__name { font-family:var(--dhbw-font-mono); font-size:var(--fs-lg); font-weight:var(--dhbw-fw-bold); color:var(--red); margin-bottom:var(--sp-2); }
+    .dhbw-code { background:var(--code-bg); color:var(--code-text); font-family:var(--dhbw-font-mono); font-size:0.9rem; line-height:var(--lh-code); padding:var(--sp-4) var(--sp-5); border-radius:var(--r-base); overflow-x:auto; margin:var(--sp-3) 0; white-space:pre; }
+    .kw  { color:#F97316; font-weight:600; }
+    .str { color:#22C55E; }
+    .num { color:#A78BFA; }
+    .cmt { color:#7A9CB3; font-style:italic; }
+    .fn  { color:#60A5FA; }
+    .var { color:#E8EFF5; }
+    .fsl { color:#F0C060; }
+    .quick-ref { width:100%; border-collapse:collapse; margin-top:var(--sp-4); font-size:var(--fs-sm); }
+    .quick-ref th { background:var(--red); color:#fff; padding:var(--sp-2) var(--sp-4); text-align:left; }
+    .quick-ref td { padding:var(--sp-2) var(--sp-4); border-bottom:1px solid var(--border); vertical-align:top; }
+    .quick-ref tr:nth-child(even) td { background:var(--canvas); }
+    .quick-ref code { font-family:var(--dhbw-font-mono); font-size:0.85rem; background:var(--code-bg-in); padding:1px 5px; border-radius:var(--r-sm); color:var(--red); }
+    .chart-types { display:grid; grid-template-columns:repeat(3,1fr); gap:var(--sp-4); margin-top:var(--sp-4); }
+    .chart-card { background:var(--canvas); border:1px solid var(--border); border-radius:var(--r-card); padding:var(--sp-4); text-align:center; }
+    .chart-icon { font-size:2rem; margin-bottom:var(--sp-2); }
+    .mt-4 { margin-top:var(--sp-4); } .mt-5 { margin-top:var(--sp-5); } .mt-6 { margin-top:var(--sp-6); }
+    .dhbw-footer { background:var(--text); color:#9CA3AF; text-align:center; padding:var(--sp-5) var(--gutter); font-size:var(--fs-sm); }
+    @media print {
+      @page { size:A4; margin:15mm 18mm; }
+      .dhbw-header,.dhbw-footer { display:none; }
+      .dhbw-hero,.dhbw-slide,.dhbw-code,.dhbw-callout,.concept-card { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+      .dhbw-hero { padding:12mm 0 10mm; } .dhbw-slide { padding:8mm 0; }
+      .concept-card { break-inside:avoid; }
+      .dhbw-code { font-size:0.78rem; }
+      .page-break { page-break-before:always; }
+    }
+  </style>
+</head>
+<body>
+  <header class="dhbw-header">
+    <div class="dhbw-header__inner">
+      <a href="#" class="dhbw-header__logo"><span class="dhbw-header__logo-text">DHBW Stuttgart</span></a>
+      <nav class="dhbw-header__nav">
+        <a href="V13-Betriebssysteme-Rechnerarchitektur-Teil1_skript.html" class="dhbw-header__nav-link">Theorie</a>
+        <a href="#" class="dhbw-header__nav-link dhbw-header__nav-link--active">Python Praxis</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="dhbw-hero">
+    <div class="dhbw-hero__inner">
+      <p class="dhbw-hero__label">Vorlesung 13 · Python Praxis · Maschinenbau</p>
+      <h1 class="dhbw-hero__title">Diagramme mit matplotlib</h1>
+      <p class="dhbw-hero__subtitle">Messdaten visualisieren: Linien-, Balken- und Streudiagramme</p>
+      <p class="dhbw-hero__meta">WS 2025/26 &nbsp;·&nbsp; DHBW Stuttgart &nbsp;·&nbsp; Nachschlagewerk Python-Praxis</p>
+    </div>
+  </section>
+
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">01</span><h2 class="dhbw-slide__title">Das kannst du danach</h2></div>
+      <div class="dhbw-goals">
+        <p class="dhbw-goals__title">📌 Nach dieser Einheit kannst du …</p>
+        <ul>
+          <li>mit <strong>matplotlib.pyplot</strong> Diagramme aus Python heraus erstellen.</li>
+          <li><strong>Liniendiagramme</strong> für Zeitreihen und Messdatenverläufe zeichnen.</li>
+          <li><strong>Balkendiagramme</strong> für Vergleiche (z.&nbsp;B. Bauteile, Messstationen) erstellen.</li>
+          <li><strong>Streudiagramme</strong> für Korrelationsanalysen einsetzen.</li>
+          <li>Achsen beschriften, Titel setzen, Legende hinzufügen und Diagramme speichern.</li>
+        </ul>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--tip mt-5">
+        <span class="dhbw-callout__label">Installation</span>
+        <p>Falls matplotlib nicht installiert ist: Terminal öffnen und <code class="dhbw-inline">pip install matplotlib</code> ausführen. In Jupyter: <code class="dhbw-inline">!pip install matplotlib</code></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Diagrammtypen -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">02</span><h2 class="dhbw-slide__title">Die drei wichtigsten Diagrammtypen</h2></div>
+
+      <div class="chart-types">
+        <div class="chart-card">
+          <div class="chart-icon">📈</div>
+          <strong style="font-family:var(--dhbw-font-mono); color:var(--red);">plt.plot()</strong>
+          <p style="margin-top:var(--sp-2); font-size:var(--fs-sm);">Liniendiagramm – für Zeitreihen, Temperaturverlauf, kontinuierliche Messdaten</p>
+        </div>
+        <div class="chart-card">
+          <div class="chart-icon">📊</div>
+          <strong style="font-family:var(--dhbw-font-mono); color:var(--red);">plt.bar()</strong>
+          <p style="margin-top:var(--sp-2); font-size:var(--fs-sm);">Balkendiagramm – für Kategorienvergleiche, Produktionsmengen, Ranking</p>
+        </div>
+        <div class="chart-card">
+          <div class="chart-icon">🔵</div>
+          <strong style="font-family:var(--dhbw-font-mono); color:var(--red);">plt.scatter()</strong>
+          <p style="margin-top:var(--sp-2); font-size:var(--fs-sm);">Streudiagramm – für Korrelationen, Messwert-Verteilungen, Ausreißer erkennen</p>
+        </div>
+      </div>
+
+      <div class="dhbw-callout mt-5">
+        <span class="dhbw-callout__label">Bildgenerierungs-Prompt</span>
+        <p>Für eine realistische Visualisierung eines Messdaten-Diagramms: Prompt-Datei <code class="dhbw-inline">V13_grafik_messdaten_diagramm_prompt.md</code></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">03</span><h2 class="dhbw-slide__title">Diagramme im Detail</h2></div>
+
+      <div class="concept-grid">
+
+        <div class="concept-card">
+          <div class="concept-card__name">Grundstruktur jedes Diagramms</div>
+          <p>Jedes matplotlib-Diagramm folgt diesem Schema: importieren → Daten → Diagrammtyp → Beschriftung → anzeigen/speichern.</p>
+          <div class="dhbw-code"><span class="kw">import</span> <span class="fn">matplotlib.pyplot</span> <span class="kw">as</span> <span class="var">plt</span>
+
+<span class="cmt"># 1. Daten</span>
+<span class="var">zeiten</span> = [<span class="num">0</span>, <span class="num">10</span>, <span class="num">20</span>, <span class="num">30</span>, <span class="num">40</span>, <span class="num">50</span>]
+<span class="var">temps</span>  = [<span class="num">20.1</span>, <span class="num">25.3</span>, <span class="num">45.8</span>, <span class="num">72.1</span>, <span class="num">88.4</span>, <span class="num">92.0</span>]
+
+<span class="cmt"># 2. Diagramm zeichnen</span>
+<span class="var">plt</span>.<span class="fn">plot</span>(<span class="var">zeiten</span>, <span class="var">temps</span>)
+
+<span class="cmt"># 3. Beschriftungen</span>
+<span class="var">plt</span>.<span class="fn">xlabel</span>(<span class="str">"Zeit [s]"</span>)
+<span class="var">plt</span>.<span class="fn">ylabel</span>(<span class="str">"Temperatur [°C]"</span>)
+<span class="var">plt</span>.<span class="fn">title</span>(<span class="str">"Aufheizkurve Motor"</span>)
+
+<span class="cmt"># 4. Anzeigen (oder speichern)</span>
+<span class="var">plt</span>.<span class="fn">savefig</span>(<span class="str">"aufheizung.png"</span>)   <span class="cmt"># als Datei speichern</span>
+<span class="var">plt</span>.<span class="fn">show</span>()                       <span class="cmt"># Fenster öffnen</span></div>
+        </div>
+
+        <div class="concept-card">
+          <div class="concept-card__name">plt.plot() – Liniendiagramm erweitert</div>
+          <div class="dhbw-code"><span class="kw">import</span> <span class="fn">matplotlib.pyplot</span> <span class="kw">as</span> <span class="var">plt</span>
+
+<span class="var">t</span>      = [<span class="num">0</span>, <span class="num">5</span>, <span class="num">10</span>, <span class="num">15</span>, <span class="num">20</span>]
+<span class="var">sensor1</span> = [<span class="num">20</span>, <span class="num">35</span>, <span class="num">55</span>, <span class="num">72</span>, <span class="num">88</span>]
+<span class="var">sensor2</span> = [<span class="num">18</span>, <span class="num">30</span>, <span class="num">50</span>, <span class="num">68</span>, <span class="num">84</span>]
+
+<span class="cmt"># Farbe, Linienstil, Beschriftung für Legende</span>
+<span class="var">plt</span>.<span class="fn">plot</span>(<span class="var">t</span>, <span class="var">sensor1</span>, color=<span class="str">"#E2001A"</span>, linewidth=<span class="num">2</span>, label=<span class="str">"Sensor 1"</span>)
+<span class="var">plt</span>.<span class="fn">plot</span>(<span class="var">t</span>, <span class="var">sensor2</span>, color=<span class="str">"#60A5FA"</span>, linestyle=<span class="str">"--"</span>, label=<span class="str">"Sensor 2"</span>)
+
+<span class="cmt"># Grenzlinie (Alarmgrenze)</span>
+<span class="var">plt</span>.<span class="fn">axhline</span>(y=<span class="num">80</span>, color=<span class="str">"orange"</span>, linestyle=<span class="str">":"</span>, label=<span class="str">"Alarmgrenze"</span>)
+
+<span class="var">plt</span>.<span class="fn">xlabel</span>(<span class="str">"Zeit [min]"</span>)
+<span class="var">plt</span>.<span class="fn">ylabel</span>(<span class="str">"Temperatur [°C]"</span>)
+<span class="var">plt</span>.<span class="fn">title</span>(<span class="str">"Temperaturverlauf Bauteil XY"</span>)
+<span class="var">plt</span>.<span class="fn">legend</span>()        <span class="cmt"># Legende anzeigen</span>
+<span class="var">plt</span>.<span class="fn">grid</span>(<span class="kw">True</span>)       <span class="cmt"># Gitternetz</span>
+<span class="var">plt</span>.<span class="fn">show</span>()</div>
+        </div>
+
+        <div class="concept-card">
+          <div class="concept-card__name">plt.bar() – Balkendiagramm</div>
+          <div class="dhbw-code"><span class="kw">import</span> <span class="fn">matplotlib.pyplot</span> <span class="kw">as</span> <span class="var">plt</span>
+
+<span class="var">stationen</span> = [<span class="str">"Station A"</span>, <span class="str">"Station B"</span>, <span class="str">"Station C"</span>, <span class="str">"Station D"</span>]
+<span class="var">produktion</span> = [<span class="num">142</span>, <span class="num">189</span>, <span class="num">97</span>, <span class="num">213</span>]
+
+<span class="var">plt</span>.<span class="fn">bar</span>(<span class="var">stationen</span>, <span class="var">produktion</span>, color=<span class="str">"#E2001A"</span>)
+
+<span class="var">plt</span>.<span class="fn">xlabel</span>(<span class="str">"Fertigungsstation"</span>)
+<span class="var">plt</span>.<span class="fn">ylabel</span>(<span class="str">"Teile pro Schicht"</span>)
+<span class="var">plt</span>.<span class="fn">title</span>(<span class="str">"Produktionsvergleich KW 23"</span>)
+<span class="var">plt</span>.<span class="fn">savefig</span>(<span class="str">"produktion.png"</span>, dpi=<span class="num">150</span>, bbox_inches=<span class="str">"tight"</span>)
+<span class="var">plt</span>.<span class="fn">show</span>()</div>
+        </div>
+
+        <div class="concept-card">
+          <div class="concept-card__name">plt.scatter() – Streudiagramm</div>
+          <div class="dhbw-code"><span class="kw">import</span> <span class="fn">matplotlib.pyplot</span> <span class="kw">as</span> <span class="var">plt</span>
+
+<span class="cmt"># Korrelation: Drehzahl vs. Temperatur</span>
+<span class="var">drehzahl</span>   = [<span class="num">800</span>, <span class="num">1000</span>, <span class="num">1200</span>, <span class="num">1500</span>, <span class="num">1800</span>, <span class="num">2000</span>]
+<span class="var">temperatur</span> = [<span class="num">45</span>,  <span class="num">52</span>,   <span class="num">61</span>,   <span class="num">74</span>,   <span class="num">83</span>,   <span class="num">91</span>  ]
+
+<span class="var">plt</span>.<span class="fn">scatter</span>(<span class="var">drehzahl</span>, <span class="var">temperatur</span>, color=<span class="str">"#E2001A"</span>, s=<span class="num">80</span>)
+
+<span class="var">plt</span>.<span class="fn">xlabel</span>(<span class="str">"Drehzahl [RPM]"</span>)
+<span class="var">plt</span>.<span class="fn">ylabel</span>(<span class="str">"Lagertemperatur [°C]"</span>)
+<span class="var">plt</span>.<span class="fn">title</span>(<span class="str">"Drehzahl vs. Temperatur"</span>)
+<span class="var">plt</span>.<span class="fn">grid</span>(<span class="kw">True</span>, alpha=<span class="num">0.3</span>)
+<span class="var">plt</span>.<span class="fn">show</span>()</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="dhbw-slide page-break">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">04</span><h2 class="dhbw-slide__title">Quick-Reference</h2></div>
+      <table class="quick-ref">
+        <thead><tr><th style="width:28%">Funktion</th><th>Parameter (wichtigste)</th><th>Verwendung</th></tr></thead>
+        <tbody>
+          <tr><td><code>plt.plot(x, y)</code></td><td><code>color, linewidth, linestyle, label</code></td><td>Linie zeichnen</td></tr>
+          <tr><td><code>plt.bar(x, y)</code></td><td><code>color, width</code></td><td>Balkendiagramm</td></tr>
+          <tr><td><code>plt.scatter(x, y)</code></td><td><code>color, s (Größe), alpha</code></td><td>Punktwolke</td></tr>
+          <tr><td><code>plt.axhline(y=)</code></td><td><code>color, linestyle</code></td><td>Horizontale Linie (Grenzwert)</td></tr>
+          <tr><td><code>plt.xlabel("...")</code></td><td>–</td><td>X-Achsen-Beschriftung</td></tr>
+          <tr><td><code>plt.ylabel("...")</code></td><td>–</td><td>Y-Achsen-Beschriftung</td></tr>
+          <tr><td><code>plt.title("...")</code></td><td>–</td><td>Diagrammtitel</td></tr>
+          <tr><td><code>plt.legend()</code></td><td>–</td><td>Legende (braucht label=)</td></tr>
+          <tr><td><code>plt.grid(True)</code></td><td><code>alpha=0.3</code></td><td>Gitternetz</td></tr>
+          <tr><td><code>plt.savefig("f.png")</code></td><td><code>dpi=150</code></td><td>Als Datei speichern</td></tr>
+          <tr><td><code>plt.show()</code></td><td>–</td><td>Diagramm anzeigen</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer class="dhbw-footer">DHBW Stuttgart · Maschinenbau · Informatik-Grundlagen · WS 2025/26 · Python Praxis Nachschlagewerk</footer>
+</body>
+</html>

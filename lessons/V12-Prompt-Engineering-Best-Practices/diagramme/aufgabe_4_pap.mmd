@@ -1,7 +1,0 @@
-flowchart TD
-    S(["Start baue_few_shot_prompt(eigenschaften)"]) --> I["beispiele_text = ''"]
-    I --> L{"fuer jedes e in eigenschaften"}
-    L -- "naechstes Element" --> A["beispiele_text +=<br/>'- ' + e + '\\n'"]
-    A --> L
-    L -- "fertig" --> P["prompt = Kontext + Aufgabe<br/>+ beispiele_text + Format"]
-    P --> E(["Ende: prompt zurueckgeben"])

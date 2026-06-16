@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>V15 – Python Praxis: CSV-Parsing | DHBW Stuttgart</title>
+  <link rel="stylesheet" href="../../src/dhbw-base.css">
+  <style>
+    .concept-grid { display:grid; grid-template-columns:1fr; gap:var(--sp-6); margin-top:var(--sp-5); }
+    .concept-card { background:var(--surface); border:1px solid var(--border); border-top:4px solid var(--red); border-radius:var(--r-card); padding:var(--sp-5) var(--sp-6); box-shadow:var(--shadow-card); }
+    .concept-card__name { font-family:var(--dhbw-font-mono); font-size:var(--fs-lg); font-weight:var(--dhbw-fw-bold); color:var(--red); margin-bottom:var(--sp-2); }
+    .dhbw-code { background:var(--code-bg); color:var(--code-text); font-family:var(--dhbw-font-mono); font-size:0.9rem; line-height:var(--lh-code); padding:var(--sp-4) var(--sp-5); border-radius:var(--r-base); overflow-x:auto; margin:var(--sp-3) 0; white-space:pre; }
+    .kw  { color:#F97316; font-weight:600; }
+    .str { color:#22C55E; }
+    .num { color:#A78BFA; }
+    .cmt { color:#7A9CB3; font-style:italic; }
+    .fn  { color:#60A5FA; }
+    .var { color:#E8EFF5; }
+    .fsl { color:#F0C060; }
+    .game-box { background:#0F1E2B; border:2px solid #2A4A6B; border-radius:var(--r-card); padding:var(--sp-5) var(--sp-6); margin-top:var(--sp-6); }
+    .game-box__header { display:flex; align-items:center; gap:var(--sp-3); margin-bottom:var(--sp-4); }
+    .game-box__icon { font-size:1.5rem; }
+    .game-box__title { font-size:var(--fs-md); font-weight:var(--dhbw-fw-bold); color:#60A5FA; margin:0; }
+    .game-box__subtitle { font-size:var(--fs-sm); color:#7A9CB3; margin-top:var(--sp-1); }
+    .quick-ref { width:100%; border-collapse:collapse; margin-top:var(--sp-4); font-size:var(--fs-sm); }
+    .quick-ref th { background:var(--red); color:#fff; padding:var(--sp-2) var(--sp-4); text-align:left; }
+    .quick-ref td { padding:var(--sp-2) var(--sp-4); border-bottom:1px solid var(--border); vertical-align:top; }
+    .quick-ref tr:nth-child(even) td { background:var(--canvas); }
+    .quick-ref code { font-family:var(--dhbw-font-mono); font-size:0.85rem; background:var(--code-bg-in); padding:1px 5px; border-radius:var(--r-sm); color:var(--red); }
+    .mt-4 { margin-top:var(--sp-4); } .mt-5 { margin-top:var(--sp-5); }
+    .dhbw-footer { background:var(--text); color:#9CA3AF; text-align:center; padding:var(--sp-5) var(--gutter); font-size:var(--fs-sm); }
+    @media print {
+      @page { size:A4; margin:15mm 18mm; }
+      .dhbw-header,.dhbw-footer { display:none; }
+      .dhbw-hero,.dhbw-slide,.dhbw-code,.dhbw-callout,.concept-card,.game-box { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+      .dhbw-hero { padding:12mm 0 10mm; } .dhbw-slide { padding:8mm 0; }
+      .concept-card,.game-box { break-inside:avoid; }
+      .dhbw-code { font-size:0.78rem; }
+      .page-break { page-break-before:always; }
+    }
+  </style>
+</head>
+<body>
+  <header class="dhbw-header">
+    <div class="dhbw-header__inner">
+      <a href="#" class="dhbw-header__logo"><span class="dhbw-header__logo-text">DHBW Stuttgart</span></a>
+      <nav class="dhbw-header__nav">
+        <a href="V15-Netzwerktechnik-Grundlagen-Protokolle-Teil1_skript.html" class="dhbw-header__nav-link">Theorie</a>
+        <a href="#" class="dhbw-header__nav-link dhbw-header__nav-link--active">Python Praxis</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="dhbw-hero">
+    <div class="dhbw-hero__inner">
+      <p class="dhbw-hero__label">Vorlesung 15 · Python Praxis · Maschinenbau</p>
+      <h1 class="dhbw-hero__title">CSV-Dateien verarbeiten</h1>
+      <p class="dhbw-hero__subtitle">Messdaten aus CSV lesen, verarbeiten und auswerten</p>
+      <p class="dhbw-hero__meta">WS 2025/26 &nbsp;·&nbsp; DHBW Stuttgart &nbsp;·&nbsp; Nachschlagewerk Python-Praxis</p>
+    </div>
+  </section>
+
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">01</span><h2 class="dhbw-slide__title">Das kannst du danach</h2></div>
+      <div class="dhbw-goals">
+        <p class="dhbw-goals__title">📌 Nach dieser Einheit kannst du …</p>
+        <ul>
+          <li>CSV-Dateien mit dem <strong>csv-Modul</strong> lesen und schreiben.</li>
+          <li>CSV-Dateien manuell mit <strong>split()</strong> parsen.</li>
+          <li>JSON-Dateien mit dem <strong>json-Modul</strong> lesen (Grundlagen).</li>
+          <li>Funktionen zur Datenverarbeitung schreiben und wiederverwenden.</li>
+        </ul>
+      </div>
+
+      <div class="dhbw-callout mt-5">
+        <span class="dhbw-callout__label">Was ist CSV?</span>
+        <p><strong>CSV</strong> (Comma-Separated Values) ist das universelle Format für Tabellendaten. Jede Zeile ist ein Datensatz, Spalten sind durch Kommas getrennt. Excel, MATLAB, Messtechnik-Software – alle können CSV lesen.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">02</span><h2 class="dhbw-slide__title">CSV-Format</h2></div>
+
+      <p>Eine typische CSV-Datei aus einer Messung könnte so aussehen:</p>
+      <div class="dhbw-code" style="font-size:0.85rem;"><span class="cmt"># messung.csv</span>
+<span class="str">zeitpunkt,temperatur,drehzahl,status</span>
+<span class="str">0,22.1,800,OK</span>
+<span class="str">10,35.4,1200,OK</span>
+<span class="str">20,61.2,1500,OK</span>
+<span class="str">30,87.3,1800,ALARM</span>
+<span class="str">40,91.0,1800,ALARM</span></div>
+
+      <p class="mt-4">Die erste Zeile ist der <strong>Header</strong> (Spaltenbezeichnungen). Alle weiteren Zeilen sind Datensätze.</p>
+    </div>
+  </section>
+
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">03</span><h2 class="dhbw-slide__title">CSV verarbeiten</h2></div>
+
+      <div class="concept-grid">
+
+        <div class="concept-card">
+          <div class="concept-card__name">csv.reader – CSV lesen</div>
+          <p>Das <code class="dhbw-inline">csv</code>-Modul ist Teil der Python-Standardbibliothek – kein pip install nötig. Es behandelt Sonderfälle automatisch (Anführungszeichen, Kommas in Texten).</p>
+          <div class="dhbw-code"><span class="kw">import</span> <span class="fn">csv</span>
+
+<span class="kw">with</span> <span class="fn">open</span>(<span class="str">"messung.csv"</span>, <span class="str">"r"</span>, encoding=<span class="str">"utf-8"</span>) <span class="kw">as</span> <span class="var">datei</span>:
+    <span class="var">leser</span> = <span class="fn">csv.reader</span>(<span class="var">datei</span>)
+    <span class="var">header</span> = <span class="fn">next</span>(<span class="var">leser</span>)   <span class="cmt"># erste Zeile = Header überspringen</span>
+    <span class="fn">print</span>(<span class="str">"Spalten:"</span>, <span class="var">header</span>)
+
+    <span class="kw">for</span> <span class="var">zeile</span> <span class="kw">in</span> <span class="var">leser</span>:
+        <span class="var">t</span>       = <span class="fn">int</span>(<span class="var">zeile</span>[<span class="num">0</span>])
+        <span class="var">temp</span>    = <span class="fn">float</span>(<span class="var">zeile</span>[<span class="num">1</span>])
+        <span class="var">rpm</span>     = <span class="fn">int</span>(<span class="var">zeile</span>[<span class="num">2</span>])
+        <span class="var">status</span>  = <span class="var">zeile</span>[<span class="num">3</span>]
+        <span class="fn">print</span>(<span class="fsl">f</span><span class="str">"t=<span class="fsl">{t}</span>s  <span class="fsl">{temp:.1f}</span>°C  <span class="fsl">{rpm}</span>RPM  [{<span class="var">status</span>}]"</span>)</div>
+        </div>
+
+        <div class="concept-card">
+          <div class="concept-card__name">csv.DictReader – CSV mit Spaltennamen</div>
+          <p><code class="dhbw-inline">DictReader</code> liefert jede Zeile als Dictionary – du kannst die Spalten beim Namen ansprechen statt per Index. Deutlich lesbarer.</p>
+          <div class="dhbw-code"><span class="kw">import</span> <span class="fn">csv</span>
+
+<span class="var">temperaturen</span> = []
+
+<span class="kw">with</span> <span class="fn">open</span>(<span class="str">"messung.csv"</span>, <span class="str">"r"</span>, encoding=<span class="str">"utf-8"</span>) <span class="kw">as</span> <span class="var">datei</span>:
+    <span class="var">leser</span> = <span class="fn">csv.DictReader</span>(<span class="var">datei</span>)   <span class="cmt"># Header automatisch</span>
+    <span class="kw">for</span> <span class="var">zeile</span> <span class="kw">in</span> <span class="var">leser</span>:
+        <span class="var">temp</span> = <span class="fn">float</span>(<span class="var">zeile</span>[<span class="str">"temperatur"</span>])   <span class="cmt"># per Name!</span>
+        <span class="var">temperaturen</span>.<span class="fn">append</span>(<span class="var">temp</span>)
+
+<span class="fn">print</span>(<span class="fsl">f</span><span class="str">"Max: <span class="fsl">{max(temperaturen):.1f}</span> °C"</span>)
+<span class="fn">print</span>(<span class="fsl">f</span><span class="str">"Ø:   <span class="fsl">{sum(temperaturen)/len(temperaturen):.1f}</span> °C"</span>)</div>
+        </div>
+
+        <div class="concept-card">
+          <div class="concept-card__name">CSV schreiben · JSON-Grundlage</div>
+          <div class="dhbw-code"><span class="kw">import</span> <span class="fn">csv</span>, <span class="fn">json</span>
+
+<span class="cmt"># CSV schreiben</span>
+<span class="var">daten</span> = [[<span class="num">0</span>, <span class="num">22.1</span>], [<span class="num">10</span>, <span class="num">35.4</span>], [<span class="num">20</span>, <span class="num">61.2</span>]]
+<span class="kw">with</span> <span class="fn">open</span>(<span class="str">"ausgabe.csv"</span>, <span class="str">"w"</span>, newline=<span class="str">""</span>, encoding=<span class="str">"utf-8"</span>) <span class="kw">as</span> <span class="var">f</span>:
+    <span class="var">schreiber</span> = <span class="fn">csv.writer</span>(<span class="var">f</span>)
+    <span class="var">schreiber</span>.<span class="fn">writerow</span>([<span class="str">"zeit"</span>, <span class="str">"temperatur"</span>])  <span class="cmt"># Header</span>
+    <span class="var">schreiber</span>.<span class="fn">writerows</span>(<span class="var">daten</span>)                   <span class="cmt"># Alle Zeilen</span>
+
+<span class="cmt"># JSON lesen (z.B. Konfigurationsdatei)</span>
+<span class="kw">with</span> <span class="fn">open</span>(<span class="str">"config.json"</span>, <span class="str">"r"</span>) <span class="kw">as</span> <span class="var">f</span>:
+    <span class="var">config</span> = <span class="fn">json.load</span>(<span class="var">f</span>)
+<span class="fn">print</span>(<span class="var">config</span>[<span class="str">"alarm_limit"</span>])   <span class="cmt"># Zugriff wie Dictionary</span></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">04</span><h2 class="dhbw-slide__title">Im Schiffe-Versenken-Spiel</h2></div>
+      <div class="game-box">
+        <div class="game-box__header">
+          <span class="game-box__icon">🚢</span>
+          <div>
+            <h3 class="game-box__title">noten.csv / spielstand.csv einlesen</h3>
+            <p class="game-box__subtitle">csv.DictReader für strukturierte Daten</p>
+          </div>
+        </div>
+        <div class="dhbw-code"><span class="kw">import</span> <span class="fn">csv</span>
+
+<span class="kw">def</span> <span class="fn">lade_highscores</span>(<span class="var">dateiname</span>=<span class="str">"spielstand.csv"</span>):
+    <span class="var">eintraege</span> = []
+    <span class="kw">with</span> <span class="fn">open</span>(<span class="var">dateiname</span>, <span class="str">"r"</span>, encoding=<span class="str">"utf-8"</span>) <span class="kw">as</span> <span class="var">f</span>:
+        <span class="kw">for</span> <span class="var">zeile</span> <span class="kw">in</span> <span class="fn">csv.DictReader</span>(<span class="var">f</span>):
+            <span class="var">eintraege</span>.<span class="fn">append</span>({
+                <span class="str">"schuesse"</span>: <span class="fn">int</span>(<span class="var">zeile</span>[<span class="str">"schuesse"</span>]),
+                <span class="str">"treffer"</span>:  <span class="fn">int</span>(<span class="var">zeile</span>[<span class="str">"treffer"</span>])
+            })
+    <span class="kw">return</span> <span class="var">eintraege</span>
+
+<span class="var">scores</span> = <span class="fn">lade_highscores</span>()
+<span class="kw">for</span> <span class="var">s</span> <span class="kw">in</span> <span class="var">scores</span>:
+    <span class="fn">print</span>(<span class="fsl">f</span><span class="str">"Schüsse: <span class="fsl">{s['schuesse']}</span>  Treffer: <span class="fsl">{s['treffer']}</span>"</span>)</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="dhbw-slide page-break">
+    <div class="dhbw-slide__inner">
+      <div class="dhbw-slide__header"><span class="dhbw-slide__number">05</span><h2 class="dhbw-slide__title">Quick-Reference</h2></div>
+      <table class="quick-ref">
+        <thead><tr><th style="width:32%">Syntax</th><th>Bedeutung</th></tr></thead>
+        <tbody>
+          <tr><td><code>import csv</code></td><td>CSV-Modul laden (kein Install nötig)</td></tr>
+          <tr><td><code>csv.reader(datei)</code></td><td>CSV zeilenweise als Liste lesen</td></tr>
+          <tr><td><code>csv.DictReader(datei)</code></td><td>CSV zeilenweise als Dictionary (mit Header)</td></tr>
+          <tr><td><code>next(leser)</code></td><td>Erste Zeile überspringen (Header)</td></tr>
+          <tr><td><code>csv.writer(datei)</code></td><td>CSV-Schreiber erstellen</td></tr>
+          <tr><td><code>schreiber.writerow([...])</code></td><td>Eine Zeile schreiben</td></tr>
+          <tr><td><code>schreiber.writerows([...])</code></td><td>Mehrere Zeilen auf einmal schreiben</td></tr>
+          <tr><td><code>import json</code></td><td>JSON-Modul laden</td></tr>
+          <tr><td><code>json.load(datei)</code></td><td>JSON-Datei in Dictionary/Liste laden</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer class="dhbw-footer">DHBW Stuttgart · Maschinenbau · Informatik-Grundlagen · WS 2025/26 · Python Praxis Nachschlagewerk</footer>
+</body>
+</html>

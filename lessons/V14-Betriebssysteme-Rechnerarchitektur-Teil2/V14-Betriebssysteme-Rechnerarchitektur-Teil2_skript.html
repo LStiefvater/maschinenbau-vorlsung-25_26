@@ -1,0 +1,293 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>V14 – Betriebssysteme Teil 2 | DHBW Stuttgart</title>
+  <link rel="stylesheet" href="../../src/dhbw-base.css">
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════════════════════
+       1. HEADER
+  ══════════════════════════════════════════════════════════ -->
+  <header class="dhbw-header">
+    <div class="dhbw-header__inner">
+      <a href="#" class="dhbw-header__logo">
+        <span class="dhbw-header__logo-text">DHBW Stuttgart</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════════════════════════════
+       2. HERO
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-hero">
+    <div class="dhbw-hero__inner">
+      <p class="dhbw-hero__label">Vorlesung 14 · Informatik-Grundlagen · Maschinenbau</p>
+      <h1 class="dhbw-hero__title">Betriebssysteme</h1>
+      <p class="dhbw-hero__subtitle">Prozesse, Scheduling und virtueller Speicher – wie verwaltet ein Betriebssystem Hardware und Programme?</p>
+      <p class="dhbw-hero__meta">WS 2025/26 &nbsp;·&nbsp; DHBW Stuttgart</p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       3. LERNZIELE
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">01</span>
+        <h2 class="dhbw-slide__title">Lernziele</h2>
+      </div>
+
+      <div class="dhbw-goals">
+        <p class="dhbw-goals__title">📌 Nach dieser Vorlesung kannst du …</p>
+        <ul>
+          <li>erklären, was ein <strong>Betriebssystem</strong> ist und warum wir es brauchen.</li>
+          <li>den Unterschied zwischen einem <strong>Programm</strong> und einem <strong>Prozess</strong> in eigenen Worten beschreiben.</li>
+          <li>das Konzept des <strong>Schedulers</strong> am Beispiel Round-Robin verstehen und erklären.</li>
+          <li><strong>Virtuellen Speicher</strong> als Konzept kennen und in einem Satz beschreiben.</li>
+          <li>den Aufbau eines <strong>Dateisystems</strong> als Baumstruktur verstehen.</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       4. WAS IST EIN BETRIEBSSYSTEM?
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">02</span>
+        <h2 class="dhbw-slide__title">Was ist ein Betriebssystem?</h2>
+      </div>
+
+      <p>Ein <strong>Betriebssystem</strong> (engl. Operating System, OS) ist eine Software-Schicht, die zwischen der Hardware eines Computers und den Anwendungsprogrammen vermittelt. Es abstrahiert die Hardware: Anwendungen müssen nicht wissen, welcher konkrete Prozessor oder welche Festplatte verbaut ist – das Betriebssystem stellt standardisierte Schnittstellen bereit.</p>
+
+      <p class="mt-5">Ohne Betriebssystem müsste jedes Programm selbst herausfinden, wie es auf den Speicher zugreift, wie es auf den Bildschirm zeichnet und wie es die CPU mit anderen Programmen teilt. Das wäre nicht nur extrem aufwendig, sondern auch gefährlich: Ein fehlerhaftes Programm könnte den gesamten Rechner zum Absturz bringen.</p>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">Kernaufgaben eines Betriebssystems</p>
+            <p>Das BS verwaltet Prozesse (welches Programm bekommt die CPU), Speicher (welcher Bereich gehört welchem Programm), Dateisystem (wie werden Daten gespeichert und strukturiert) und Ein-/Ausgabegeräte (Kommunikation mit Tastatur, Bildschirm, Netzwerk).</p>
+        </div>
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">Bekannte Betriebssysteme</p>
+            <p>Windows und macOS sind die verbreitetsten Desktop-Betriebssysteme. Linux dominiert bei Servern, eingebetteten Systemen und Industriesteuerungen. Android und iOS sind spezialisierte Betriebssysteme für mobile Geräte – beide basieren auf Linux- bzw. Unix-Kerneln.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       5. PROZESS VS. PROGRAMM + SVG LIFECYCLE
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">03</span>
+        <h2 class="dhbw-slide__title">Prozess vs. Programm – der Unterschied</h2>
+      </div>
+
+      <p>Ein <strong>Programm</strong> ist eine passive Datei auf der Festplatte – eine Folge von Befehlen, die wartet, ausgeführt zu werden. Ein <strong>Prozess</strong> ist dasselbe Programm im <em>laufenden</em> Zustand: mit eigenem Speicherbereich, eigenem Zustand und eigener Position im Programmablauf. Wenn du Chrome dreimal öffnest, gibt es eine Programmdatei, aber drei separate Prozesse.</p>
+
+      <!-- SVG: Prozess-Lifecycle -->
+      <div style="display:flex; justify-content:center; margin-top: 2rem;">
+        <svg viewBox="0 0 680 180" xmlns="http://www.w3.org/2000/svg" style="max-width:660px; width:100%;" aria-label="Prozess-Lifecycle: Neu → Bereit → Laufend → Wartend → Beendet">
+
+          <!-- Boxen -->
+          <!-- Neu -->
+          <rect x="10"  y="65" width="100" height="50" rx="8" fill="#E2001A"/>
+          <text x="60"  y="95" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13" font-weight="bold">Neu</text>
+
+          <!-- Bereit -->
+          <rect x="155" y="65" width="100" height="50" rx="8" fill="#c0001a"/>
+          <text x="205" y="95" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13" font-weight="bold">Bereit</text>
+
+          <!-- Laufend -->
+          <rect x="300" y="65" width="100" height="50" rx="8" fill="#a0001a"/>
+          <text x="350" y="95" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13" font-weight="bold">Laufend</text>
+
+          <!-- Wartend -->
+          <rect x="300" y="145" width="100" height="30" rx="8" fill="#7a1230" opacity="0.85"/>
+          <text x="350" y="165" text-anchor="middle" fill="white" font-family="sans-serif" font-size="11" font-weight="bold">Wartend</text>
+
+          <!-- Beendet -->
+          <rect x="570" y="65" width="100" height="50" rx="8" fill="#4a4a4a"/>
+          <text x="620" y="95" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13" font-weight="bold">Beendet</text>
+
+          <!-- Pfeile -->
+          <!-- Neu → Bereit -->
+          <line x1="110" y1="90" x2="150" y2="90" stroke="#E2001A" stroke-width="2"/>
+          <polygon points="150,86 158,90 150,94" fill="#E2001A"/>
+          <text x="130" y="84" text-anchor="middle" fill="#6B7280" font-family="sans-serif" font-size="9">erzeugt</text>
+
+          <!-- Bereit → Laufend -->
+          <line x1="255" y1="90" x2="296" y2="90" stroke="#E2001A" stroke-width="2"/>
+          <polygon points="296,86 304,90 296,94" fill="#E2001A"/>
+          <text x="275" y="84" text-anchor="middle" fill="#6B7280" font-family="sans-serif" font-size="9">Scheduler</text>
+
+          <!-- Laufend → Bereit (Zeitscheibe abgelaufen) -->
+          <path d="M 350 65 Q 280 30 205 65" fill="none" stroke="#6B7280" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <polygon points="205,65 209,57 213,66" fill="#6B7280"/>
+          <text x="278" y="28" text-anchor="middle" fill="#6B7280" font-family="sans-serif" font-size="9">Zeitscheibe ab</text>
+
+          <!-- Laufend → Wartend -->
+          <line x1="350" y1="115" x2="350" y2="142" stroke="#E2001A" stroke-width="2"/>
+          <polygon points="346,142 350,150 354,142" fill="#E2001A"/>
+          <text x="370" y="133" fill="#6B7280" font-family="sans-serif" font-size="9">wartet auf I/O</text>
+
+          <!-- Wartend → Bereit -->
+          <path d="M 300 160 Q 200 185 205 118" fill="none" stroke="#6B7280" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <polygon points="205,118 201,110 209,112" fill="#6B7280"/>
+          <text x="225" y="185" text-anchor="middle" fill="#6B7280" font-family="sans-serif" font-size="9">I/O fertig</text>
+
+          <!-- Laufend → Beendet -->
+          <line x1="400" y1="90" x2="566" y2="90" stroke="#4a4a4a" stroke-width="2"/>
+          <polygon points="566,86 574,90 566,94" fill="#4a4a4a"/>
+          <text x="483" y="84" text-anchor="middle" fill="#6B7280" font-family="sans-serif" font-size="9">Programm fertig</text>
+
+        </svg>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--praxis mt-5">
+        <span class="dhbw-callout__label">Praxisbeispiel: Browser mit 20 Tabs</span>
+        <p>Ein Browser mit 20 Tabs kann 20 oder mehr separate Prozesse erzeugen – je nach Architektur. Diese Prozesse wechseln ständig zwischen den Zuständen „Bereit" und „Laufend" (wenn der Scheduler ihnen CPU-Zeit gibt) und „Wartend" (wenn sie auf Netzwerkdaten oder Nutzer-Eingaben warten). Das Betriebssystem koordiniert dieses Wechselspiel so schnell, dass es wie gleichzeitige Ausführung wirkt.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       6. SCHEDULING / ROUND-ROBIN
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">04</span>
+        <h2 class="dhbw-slide__title">Scheduling – Wer bekommt die CPU?</h2>
+      </div>
+
+      <p>Da eine CPU immer nur einen Befehlsstrom gleichzeitig ausführen kann (pro Kern), muss das Betriebssystem entscheiden, welcher der wartenden Prozesse als nächstes CPU-Zeit bekommt. Diese Aufgabe übernimmt der <strong>Scheduler</strong>.</p>
+
+      <p class="mt-5">Das einfachste und weit verbreitete Scheduling-Verfahren ist <strong>Round-Robin</strong>: Jeder Prozess bekommt der Reihe nach eine feste Zeitscheibe (z.&nbsp;B. 10 Millisekunden) CPU-Zeit zugeteilt. Ist die Zeitscheibe abgelaufen, wird der Prozess unterbrochen und an das Ende der Warteschlange gestellt – der nächste Prozess ist dran.</p>
+
+      <div class="dhbw-callout dhbw-callout--example mt-5">
+        <span class="dhbw-callout__label">Round-Robin in der Praxis</span>
+        <p>Stell dir vor, drei Prozesse (Musik-Player, Browser, Chatprogramm) teilen sich eine CPU. Round-Robin gibt jedem 10 ms: Musik → Browser → Chat → Musik → Browser → Chat → … Jeder Prozess bekommt 10 ms, dann ist der nächste dran. Da 10 Millisekunden für menschliche Wahrnehmung unsichtbar schnell sind, entsteht der Eindruck, alle drei Anwendungen laufen gleichzeitig – dabei wechseln sie nur extrem schnell ab.</p>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--tip mt-5">
+        <span class="dhbw-callout__label">Zeitscheibengröße als Kompromiss</span>
+        <p>Eine zu kleine Zeitscheibe erzeugt zu viele Kontextwechsel (overhead). Eine zu große Zeitscheibe macht das System für interaktive Anwendungen träge. Das Betriebssystem wählt die Zeitscheibengröße als technischen Kompromiss zwischen Reaktionsschnelligkeit und Effizienz.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       7. VIRTUELLER SPEICHER
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">05</span>
+        <h2 class="dhbw-slide__title">Virtueller Speicher – jeder hat scheinbar alles</h2>
+      </div>
+
+      <p>Wenn viele Prozesse gleichzeitig laufen, müssen sie sich den physischen RAM teilen. Das bringt ein Problem: Wie kann ein Prozess sicher sein, dass er nicht versehentlich den Speicher eines anderen Prozesses überschreibt? Die Lösung heißt <strong>Virtueller Speicher</strong>.</p>
+
+      <p class="mt-5">Das Konzept ist einfach: Jedes Programm glaubt, es habe den gesamten Arbeitsspeicher für sich alleine. Es arbeitet mit <em>virtuellen Adressen</em>, die das Betriebssystem im Hintergrund auf reale physische Speicheradressen übersetzt. Zwei Prozesse können beide auf die „gleiche" virtuelle Adresse zugreifen – und landen dennoch an völlig verschiedenen Stellen im physischen RAM. Kein Prozess kann den Speicher eines anderen sehen oder überschreiben.</p>
+
+      <div class="dhbw-callout dhbw-callout--merksatz mt-5">
+        <span class="dhbw-callout__label">Kernaussage</span>
+        <p>Virtueller Speicher gibt jedem Prozess die Illusion, er besitze den gesamten Adressraum. Das Betriebssystem übersetzt leise im Hintergrund virtuelle Adressen in physische – und sorgt so für Isolation und Sicherheit zwischen Prozessen.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       8. DATEISYSTEM
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide dhbw-slide--alt">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">06</span>
+        <h2 class="dhbw-slide__title">Dateisystem – Struktur und Pfade</h2>
+      </div>
+
+      <p>Ein <strong>Dateisystem</strong> ist das Schema, nach dem ein Betriebssystem Dateien auf einer Festplatte organisiert. Das verbreitete Prinzip ist die <strong>Baumstruktur</strong>: Es gibt genau ein Wurzelverzeichnis, darunter Unterverzeichnisse, darunter wieder Unterverzeichnisse und schließlich Dateien als Blätter des Baums.</p>
+
+      <div class="dhbw-columns mt-5">
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">Windows-Pfad</p>
+            <p>Unter Windows beginnt jedes Laufwerk mit einem Buchstaben: <code>C:\Users\Mustermann\Dokumente\Bericht.pdf</code></p>
+            <p class="mt-4">Das Laufwerk <code>C:</code> ist die Wurzel. Jeder Backslash trennt eine Verzeichnisebene.</p>
+        </div>
+        <div class="dhbw-columns__item">
+            <p class="dhbw-card__title">Linux / macOS-Pfad</p>
+            <p>Unter Linux gibt es nur eine Wurzel – den Schrägstrich: <code>/home/mustermann/dokumente/bericht.pdf</code></p>
+            <p class="mt-4">Alle Laufwerke werden in den Baum eingehängt (gemountet). Es gibt nur eine einzige Baumwurzel.</p>
+        </div>
+      </div>
+
+      <div class="dhbw-table-wrap mt-5">
+        <table class="dhbw-table">
+          <thead>
+            <tr><th>Begriff</th><th>Bedeutung</th><th>Beispiel</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Wurzelverzeichnis</strong></td><td>Oberste Ebene des Dateibaums</td><td><code>C:\</code> / <code>/</code></td></tr>
+            <tr><td><strong>Verzeichnis</strong></td><td>Ordner, der weitere Dateien oder Verzeichnisse enthält</td><td><code>Dokumente</code></td></tr>
+            <tr><td><strong>Absoluter Pfad</strong></td><td>Vollständiger Pfad ab der Wurzel</td><td><code>C:\Users\Max\Bericht.pdf</code></td></tr>
+            <tr><td><strong>Relativer Pfad</strong></td><td>Pfad ausgehend vom aktuellen Verzeichnis</td><td><code>.\Bericht.pdf</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       9. ZUSAMMENFASSUNG
+  ══════════════════════════════════════════════════════════ -->
+  <section class="dhbw-slide">
+    <div class="dhbw-slide__inner">
+
+      <div class="dhbw-slide__header">
+        <span class="dhbw-slide__number">07</span>
+        <h2 class="dhbw-slide__title">Zusammenfassung: Betriebssysteme</h2>
+      </div>
+
+      <div class="dhbw-callout dhbw-callout--merksatz">
+        <span class="dhbw-callout__label">Merksatz</span>
+        <p>Das <strong>Betriebssystem</strong> vermittelt zwischen Hardware und Anwendungen. Ein <strong>Programm</strong> ist eine passive Datei; ein <strong>Prozess</strong> ist das laufende Programm mit eigenem Zustand. Der <strong>Scheduler</strong> verteilt CPU-Zeit (Round-Robin: jeder bekommt der Reihe nach eine Zeitscheibe). <strong>Virtueller Speicher</strong> gibt jedem Prozess die Illusion, alleine im RAM zu sein. Das <strong>Dateisystem</strong> organisiert Daten als Baumstruktur mit Verzeichnissen und Pfaden.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════════════════════════ -->
+  <footer class="dhbw-footer">
+    <div class="dhbw-footer__inner">
+      <span class="dhbw-footer__brand">DHBW Stuttgart</span>
+      <span>Informatik-Grundlagen für Maschinenbau &nbsp;·&nbsp; WS&nbsp;2025/26</span>
+      <span>V14 – Betriebssysteme</span>
+    </div>
+  </footer>
+
+</body>
+</html>

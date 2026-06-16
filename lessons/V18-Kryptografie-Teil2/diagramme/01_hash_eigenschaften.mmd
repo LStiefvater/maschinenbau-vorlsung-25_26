@@ -1,6 +1,0 @@
-flowchart TD
-    A["Beliebige Eingabe<br/>(String, Datei, GB-gross)"] --> B{{"Hash-Funktion<br/>(z.B. SHA-256)"}}
-    B --> C["Fester Output<br/>256 Bit = 64 Hex-Zeichen"]
-    C --> D["Deterministisch:<br/>gleiche Eingabe &rarr; gleicher Hash"]
-    C --> E["Einweg:<br/>Hash &rarr; Eingabe nicht moeglich"]
-    C --> F["Lawineneffekt:<br/>1 Bit Aenderung &rarr; komplett anderer Hash"]
