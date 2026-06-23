@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Probeklausur – Grundlagen der Informatik</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --red: #E2001A;
+      --ink: #1A1A1A;
+      --gray: #6B7280;
+      --border: #D1D5DB;
+      --canvas: #F5F5F5;
+      --code-bg: #F5F5F5;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { font-size: 16px; }
+
+    body {
+      font-family: "Source Sans 3", "Arial", "Helvetica Neue", sans-serif;
+      color: var(--ink);
+      line-height: 1.55;
+      margin: 0;
+      background: #FFFFFF;
+    }
+
+    .sheet {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    h1 {
+      font-size: 1.7rem;
+      font-weight: 700;
+      margin: 0 0 4px 0;
+      line-height: 1.2;
+    }
+
+    h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin: 0 0 12px 0;
+      padding-bottom: 6px;
+      border-bottom: 2px solid var(--red);
+    }
+
+    h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    p { margin: 0 0 8px 0; }
+
+    .subtitle {
+      font-size: 1rem;
+      color: var(--gray);
+      margin: 0 0 16px 0;
+    }
+
+    /* ---- Header / Kopfbereich ---- */
+    .exam-head {
+      border-top: 4px solid var(--red);
+      padding-top: 16px;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 32px;
+      font-size: 0.95rem;
+      margin: 12px 0 16px 0;
+    }
+    .meta span { white-space: nowrap; }
+    .meta strong { font-weight: 600; }
+
+    .fields {
+      display: flex;
+      gap: 24px;
+      margin: 16px 0;
+      flex-wrap: wrap;
+    }
+    .field {
+      flex: 1 1 220px;
+      font-size: 0.95rem;
+    }
+    .field .line {
+      border-bottom: 1px solid var(--ink);
+      height: 26px;
+      margin-top: 2px;
+    }
+
+    /* ---- Punktetabelle ---- */
+    table.points {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      margin: 12px 0 4px 0;
+    }
+    table.points th, table.points td {
+      border: 1px solid var(--border);
+      padding: 5px 8px;
+      text-align: center;
+    }
+    table.points th {
+      background: var(--red);
+      color: #FFFFFF;
+      font-weight: 600;
+    }
+    table.points td:first-child,
+    table.points th:first-child { text-align: left; }
+    table.points tr.sum td {
+      font-weight: 700;
+      background: var(--canvas);
+    }
+
+    /* ---- Hinweise ---- */
+    .notes {
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--red);
+      padding: 12px 16px;
+      font-size: 0.92rem;
+      margin: 16px 0;
+    }
+    .notes ul { margin: 6px 0 0 0; padding-left: 20px; }
+    .notes li { margin-bottom: 3px; }
+
+    /* ---- Aufgaben ---- */
+    .part { margin-top: 28px; }
+    .part-info {
+      font-size: 0.92rem;
+      color: var(--gray);
+      margin: -6px 0 14px 0;
+    }
+
+    .task {
+      margin: 0 0 18px 0;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+    .task-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+      border-left: 3px solid var(--red);
+      padding-left: 10px;
+      margin-bottom: 6px;
+    }
+    .task-head h3 { font-size: 1.02rem; }
+    .pts {
+      font-weight: 600;
+      font-size: 0.9rem;
+      white-space: nowrap;
+      color: var(--ink);
+    }
+    .task-body { padding-left: 13px; }
+    .task-body ol { margin: 4px 0 0 0; padding-left: 22px; }
+    .task-body ol > li { margin-bottom: 6px; }
+    .task-body ol.alpha { list-style-type: lower-alpha; }
+    .subpts { color: var(--gray); font-size: 0.85rem; }
+
+    /* ---- Codeblöcke (druckfreundlich, hell) ---- */
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 10px 12px;
+      font-family: "Consolas", "Courier New", monospace;
+      font-size: 0.85rem;
+      line-height: 1.45;
+      overflow-x: auto;
+      margin: 8px 0;
+      white-space: pre;
+    }
+    code {
+      font-family: "Consolas", "Courier New", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 1px 4px;
+      border-radius: 3px;
+    }
+
+    /* ---- kleine Wahrheitstabellen ---- */
+    table.tt {
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      margin: 6px 0;
+    }
+    table.tt th, table.tt td {
+      border: 1px solid var(--border);
+      padding: 3px 10px;
+      text-align: center;
+    }
+    table.tt th { background: var(--canvas); font-weight: 600; }
+
+    .footer {
+      margin-top: 28px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      color: var(--gray);
+      text-align: center;
+    }
+
+    /* ---- Druck / DIN A4 ---- */
+    @page {
+      size: A4;
+      margin: 18mm 16mm;
+    }
+
+    @media print {
+      html { font-size: 11pt; }
+      .sheet { max-width: none; margin: 0; padding: 0; }
+      body { background: #FFFFFF; }
+      pre, code, table.tt th { background: #FFFFFF !important; }
+      table.points td:first-child { background: #FFFFFF; }
+      table.points tr.sum td { background: #FFFFFF !important; }
+      .task { page-break-inside: avoid; }
+      .part { page-break-inside: auto; }
+      .page-break { page-break-before: always; }
+      a { color: inherit; text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+<div class="sheet">
+
+  <!-- ===================== KOPF ===================== -->
+  <header class="exam-head">
+    <h1>Probeklausur</h1>
+    <p class="subtitle">Grundlagen der Informatik &middot; Maschinenbau &middot; Studienjahr 2025/26</p>
+
+    <div class="meta">
+      <span><strong>Bearbeitungszeit:</strong> 90 Minuten</span>
+      <span><strong>Erreichbare Punkte:</strong> 90</span>
+      <span><strong>Hilfsmittel:</strong> keine</span>
+      <span><strong>Zeitempfehlung:</strong> Teil A 35 Min &middot; Teil B 55 Min</span>
+    </div>
+
+    <div class="fields">
+      <div class="field">Name, Vorname<div class="line"></div></div>
+      <div class="field">Matrikelnummer<div class="line"></div></div>
+      <div class="field">Datum<div class="line"></div></div>
+    </div>
+
+    <table class="points">
+      <thead>
+        <tr>
+          <th>Aufgabe</th>
+          <th>A1</th><th>A2</th><th>A3</th><th>A4</th>
+          <th>B1</th><th>B2</th><th>B3</th><th>B4</th><th>B5</th>
+          <th>&Sigma;</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>max. Punkte</td>
+          <td>9</td><td>12</td><td>8</td><td>6</td>
+          <td>12</td><td>10</td><td>11</td><td>8</td><td>14</td>
+          <td>90</td>
+        </tr>
+        <tr class="sum">
+          <td>erreicht</td>
+          <td></td><td></td><td></td><td></td>
+          <td></td><td></td><td></td><td></td><td></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="notes">
+      <strong>Hinweise</strong>
+      <ul>
+        <li>Bearbeiten Sie alle Aufgaben. Die Punkte je Aufgabe stehen rechts neben der Aufgabenüberschrift.</li>
+        <li>Schreiben Sie leserlich. Bei Programmieraufgaben genügt gut lesbarer, eingerückter Python-Code &ndash; auf Tippfehler kommt es nicht an.</li>
+        <li>Es ist <strong>kein</strong> ausführbarer Code gefordert, der länger als <strong>5 Zeilen</strong> ist.</li>
+        <li>Verwenden Sie für eigene Lösungen das beigelegte Schreibpapier und kennzeichnen Sie jede Antwort mit der Aufgabennummer.</li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- ===================== TEIL A – THEORIE ===================== -->
+  <section class="part">
+    <h2>Teil A &ndash; Theorie</h2>
+    <p class="part-info">35 Punkte &middot; empfohlene Bearbeitungszeit 35 Minuten</p>
+
+    <!-- A1 -->
+    <div class="task">
+      <div class="task-head">
+        <h3>A1 &middot; Binäres Zahlensystem</h3>
+        <span class="pts">9 Punkte</span>
+      </div>
+      <div class="task-body">
+        <ol class="alpha">
+          <li>Wandeln Sie die Binärzahl <code>1011010</code><sub>2</sub> in eine Dezimalzahl um. Geben Sie den Rechenweg an. <span class="subpts">(3 P.)</span></li>
+          <li>Wandeln Sie die Dezimalzahl <code>89</code> in eine Binärzahl um. Geben Sie den Rechenweg an. <span class="subpts">(3 P.)</span></li>
+          <li>Berechnen Sie die folgende Addition <em>im Binärsystem</em> (Ergebnis binär): <code>1011</code><sub>2</sub> + <code>0110</code><sub>2</sub>. <span class="subpts">(3 P.)</span></li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- A2 -->
+    <div class="task">
+      <div class="task-head">
+        <h3>A2 &middot; Boolesche Algebra</h3>
+        <span class="pts">12 Punkte</span>
+      </div>
+      <div class="task-body">
+        <ol class="alpha">
+          <li>Stellen Sie die vollständige Wahrheitstabelle für den folgenden Ausdruck auf:
+            <br><code>Y = (A &and; &not;B) &or; C</code> <span class="subpts">(5 P.)</span></li>
+          <li>Wenden Sie die De-Morgan-Gesetze an und formen Sie den Ausdruck <code>&not;(A &or; &not;B)</code> so um, dass die Negation nur noch direkt an den einzelnen Variablen steht. <span class="subpts">(4 P.)</span></li>
+          <li>Bestimmen Sie für jede der beiden Wahrheitstabellen, welches Logikgatter dargestellt wird (NAND, NOR oder XOR): <span class="subpts">(3 P.)</span>
+            <div style="display:flex; gap:24px; flex-wrap:wrap; margin-top:6px;">
+              <table class="tt">
+                <tr><th>A</th><th>B</th><th>Y</th></tr>
+                <tr><td>0</td><td>0</td><td>1</td></tr>
+                <tr><td>0</td><td>1</td><td>1</td></tr>
+                <tr><td>1</td><td>0</td><td>1</td></tr>
+                <tr><td>1</td><td>1</td><td>0</td></tr>
+              </table>
+              <table class="tt">
+                <tr><th>A</th><th>B</th><th>Y</th></tr>
+                <tr><td>0</td><td>0</td><td>0</td></tr>
+                <tr><td>0</td><td>1</td><td>1</td></tr>
+                <tr><td>1</td><td>0</td><td>1</td></tr>
+                <tr><td>1</td><td>1</td><td>0</td></tr>
+              </table>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- A3 -->
+    <div class="task">
+      <div class="task-head">
+        <h3>A3 &middot; Kryptografie</h3>
+        <span class="pts">8 Punkte</span>
+      </div>
+      <div class="task-body">
+        <ol class="alpha">
+          <li>Nennen Sie die drei Schutzziele der <em>CIA-Triade</em> und erläutern Sie jedes mit einem kurzen Satz. <span class="subpts">(2 P.)</span></li>
+          <li>Verschlüsseln Sie das Wort <code>HALLO</code> mit der Caesar-Chiffre und der Verschiebung <code>+3</code>. <span class="subpts">(3 P.)</span></li>
+          <li>Erklären Sie den Unterschied zwischen symmetrischer und asymmetrischer Verschlüsselung und nennen Sie je einen Vorteil. <span class="subpts">(2 P.)</span></li>
+          <li>Wozu dient ein <em>Salt</em> beim Hashen von Passwörtern? <span class="subpts">(1 P.)</span></li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- A4 -->
+    <div class="task">
+      <div class="task-head">
+        <h3>A4 &middot; KI &amp; Prompt Engineering</h3>
+        <span class="pts">6 Punkte</span>
+      </div>
+      <div class="task-body">
+        <ol class="alpha">
+          <li>Erklären Sie die Begriffe <em>Halluzination</em> und <em>Bias</em> im Zusammenhang mit großen Sprachmodellen (LLMs). <span class="subpts">(2 P.)</span></li>
+          <li>Nennen Sie drei Bausteine, die einen guten Prompt ausmachen. <span class="subpts">(3 P.)</span></li>
+          <li>Worin unterscheidet sich <em>Zero-Shot-</em> von <em>Few-Shot-Prompting</em>? <span class="subpts">(1 P.)</span></li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== TEIL B – PRAXIS ===================== -->
+  <section class="part page-break">
+    <h2>Teil B &ndash; Programmierung (Python)</h2>
+    <p class="part-info">55 Punkte &middot; empfohlene Bearbeitungszeit 55 Minuten</p>
+
+    <!-- B1 -->
+    <div class="task">
+      <div class="task-head">
+        <h3>B1 &middot; Python in einen Programmablaufplan (PAP) übertragen</h3>
+        <span class="pts">12 Punkte</span>
+      </div>
+      <div class="task-body">
+        <p>Zeichnen Sie zum folgenden Python-Programm einen vollständigen Programmablaufplan (PAP) nach DIN 66001. Achten Sie auf die korrekten Symbole für Start/Ende, Ein-/Ausgabe, Verarbeitung und Verzweigung sowie auf die richtige Behandlung der Schleife mit Abbruchbedingung (Sentinel) und der inneren Verzweigung.</p>
+<pre>gerade = 0
+ungerade = 0
+zahl = int(input("Zahl (0 = Ende): "))
+while zahl != 0:
+    if zahl % 2 == 0:
+        gerade = gerade + 1
+    else:
+        ungerade = ungerade + 1
+    zahl = int(input("Zahl (0 = Ende): "))
+print(gerade, ungerade)</pre>
+      </div>
+    </div>
+
+    <!-- B2 -->
+    <div class="task">
+      <div class="task-head">
+        <h3>B2 &middot; Programmausgabe bestimmen</h3>
+        <span class="pts">10 Punkte</span>
+      </div>
+      <div class="task-body">
+        <p>Geben Sie für jedes der folgenden Programme <em>genau</em> an, was auf dem Bildschirm ausgegeben wird (jede Zeile der Ausgabe).</p>
+        <p><strong>a)</strong> <span class="subpts">(4 P.)</span></p>
+<pre>zahlen = [4, 7, 2, 9, 5]
+ergebnis = []
+for i in range(len(zahlen)):
+    if i % 2 == 0:
+        ergebnis.append(zahlen[i] * 2)
+print(ergebnis)</pre>
+        <p><strong>b)</strong> <span class="subpts">(3 P.)</span></p>
+<pre>wort = "banane"
+haeufigkeit = {}
+for buchstabe in wort:
+    if buchstabe in haeufigkeit:
+        haeufigkeit[buchstabe] = haeufigkeit[buchstabe] + 1
+    else:
+        haeufigkeit[buchstabe] = 1
+print(haeufigkeit)</pre>
+        <p><strong>c)</strong> <span class="subpts">(3 P.)</span></p>
+<pre>text = "Informatik"
+print(text[2:7])
+print(text[::-1])
+print(text[-3:])</pre>
+      </div>
+    </div>
+
+    <!-- B3 -->
+    <div class="task">
+      <div class="task-head">
+        <h3>B3 &middot; Logikfehler finden und korrigieren</h3>
+        <span class="pts">11 Punkte</span>
+      </div>
+      <div class="task-body">
+        <p>In den folgenden Programmen ist jeweils ein <em>Logikfehler</em> enthalten (der Code lässt sich fehlerfrei ausführen, liefert aber nicht immer das gewünschte Ergebnis). Benennen Sie den Fehler, erklären Sie kurz, <em>warum</em> das Ergebnis falsch ist, und geben Sie die korrigierte Zeile an.</p>
+        <p><strong>a)</strong> Die Funktion soll den <em>größten</em> Wert der Liste zurückgeben. Für welche Eingaben liefert sie ein falsches Ergebnis? <span class="subpts">(6 P.)</span></p>
+<pre>def groesster_wert(zahlen):
+    groesster = 0
+    for z in zahlen:
+        if z &gt; groesster:
+            groesster = z
+    return groesster</pre>
+        <p><strong>b)</strong> Die Funktion soll <code>True</code> liefern, wenn die Liste mindestens einen <em>doppelten</em> Wert enthält. <span class="subpts">(5 P.)</span></p>
+<pre>def enthaelt_doppelte(liste):
+    for i in range(len(liste)):
+        for j in range(len(liste)):
+            if liste[i] == liste[j]:
+                return True
+    return False</pre>
+      </div>
+    </div>
+
+    <!-- B4 -->
+    <div class="task">
+      <div class="task-head">
+        <h3>B4 &middot; Programmierprinzipien (KISS, DRY, SRP)</h3>
+        <span class="pts">8 Punkte</span>
+      </div>
+      <div class="task-body">
+        <p>Geben Sie für jeden Code-Ausschnitt an, gegen welches Prinzip (KISS, DRY oder SRP) verstoßen wird. Begründen Sie Ihre Wahl und beschreiben Sie in Worten, wie Sie den Code umbauen würden (kein vollständiger Code nötig).</p>
+        <p><strong>a)</strong> <span class="subpts">(4 P.)</span></p>
+<pre>def ist_treffer(feld, zeile, spalte):
+    if feld[zeile][spalte] == "S":
+        ergebnis = True
+    else:
+        ergebnis = False
+    if ergebnis == True:
+        return True
+    else:
+        return False</pre>
+        <p><strong>b)</strong> <span class="subpts">(4 P.)</span></p>
+<pre>def verarbeite_spieler(name):
+    daten = lade_datei(name)
+    punkte = berechne_punkte(daten)
+    speichere_datei(name, punkte)
+    sende_email(name, punkte)
+    erstelle_pdf_report(name, punkte)
+    print("Fertig!")</pre>
+      </div>
+    </div>
+
+    <!-- B5 -->
+    <div class="task">
+      <div class="task-head">
+        <h3>B5 &middot; Kurze Programmieraufgaben</h3>
+        <span class="pts">14 Punkte</span>
+      </div>
+      <div class="task-body">
+        <p>Schreiben Sie für jede Teilaufgabe ein kurzes Python-Programm. <strong>Jede Lösung darf höchstens 5 Zeilen Code umfassen.</strong></p>
+        <ol class="alpha">
+          <li>Schreiben Sie eine Funktion <code>ist_treffer(feld, zeile, spalte)</code>, die <code>True</code> zurückgibt, wenn im Spielfeld (eine 2D-Liste) an der Stelle <code>feld[zeile][spalte]</code> der Wert <code>"S"</code> steht, sonst <code>False</code>. <span class="subpts">(5 P.)</span></li>
+          <li>Gegeben ist eine Liste <code>preise</code> mit Zahlen. Berechnen Sie mit einer Schleife die Summe aller Preise und geben Sie sie aus (ohne die Funktion <code>sum()</code> zu verwenden). <span class="subpts">(5 P.)</span></li>
+          <li>Lesen Sie mit <code>input()</code> eine Zahl ein und wandeln Sie sie mit <code>int()</code> um. Geben Sie bei einer ungültigen Eingabe den Text <code>Ungültig</code> aus (Fehlerbehandlung mit <code>try</code>/<code>except</code>). <span class="subpts">(4 P.)</span></li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <div class="footer">
+    Probeklausur Grundlagen der Informatik &middot; Viel Erfolg! &middot; Summe: 90 Punkte / 90 Minuten
+  </div>
+
+</div>
+</body>
+</html>

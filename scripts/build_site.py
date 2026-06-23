@@ -14,6 +14,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 LESSONS_DIR = ROOT / "lessons"
+EXAMS_DIR = ROOT / "klausur"
 SRC_DIR = ROOT / "src"
 SITE_DIR = ROOT / "_site"
 
@@ -41,7 +42,7 @@ def extract_lesson_number(folder_name: str) -> str:
     return m.group(1) if m else "??"
 
 
-def inject_back_nav(html: str) -> str:
+def inject_back_nav(html: str, href: str = "../../index.html") -> str:
     """
     Inject a '← Zur Übersicht' link into the DHBW header.
 
@@ -49,7 +50,7 @@ def inject_back_nav(html: str) -> str:
       as the first child (before Theorie/Praxis links).
     - If no nav exists, insert a new <nav> after the logo </a>.
     """
-    back_link = '<a href="../../index.html" class="dhbw-header__nav-link">&#8592; Zur Übersicht</a>'
+    back_link = f'<a href="{href}" class="dhbw-header__nav-link">&#8592; Zur Übersicht</a>'
 
     # Case 1: existing nav block
     existing_nav = re.search(r'(<nav\s+class="dhbw-header__nav">)', html)
@@ -86,6 +87,15 @@ def inject_back_nav(html: str) -> str:
         )
         replacement = inner_close.group(1) + nav_block + inner_close.group(2)
         return html[: inner_close.start()] + replacement + html[inner_close.end() :]
+
+    # Case 4: generic fallback for pages without DHBW header
+    body_open = re.search(r"<body[^>]*>", html)
+    if body_open:
+        fallback_nav = (
+            "\n  <div style=\"max-width: 900px; margin: 0 auto; padding: 16px 24px 0;\">"
+            f"{back_link}</div>"
+        )
+        return html[: body_open.end()] + fallback_nav + html[body_open.end() :]
 
     return html  # unchanged if no pattern matched
 
@@ -163,8 +173,35 @@ def lesson_card(lesson: dict) -> str:
       </article>"""
 
 
+def exam_card(number: str, title: str, href: str) -> str:
+    return f"""
+      <article class="lesson-card">
+        <div class="lesson-card__number">{number}</div>
+        <div class="lesson-card__body">
+          <h2 class="lesson-card__title">{title}</h2>
+          <div class="lesson-card__links">
+            <a href="{href}" class="dhbw-btn">Öffnen</a>
+          </div>
+        </div>
+      </article>"""
+
+
 def generate_index(lessons: list[dict]) -> str:
     cards = "\n".join(lesson_card(l) for l in lessons)
+    exam_cards = "\n".join(
+        [
+            exam_card(
+                "K1",
+                "Probeklausur Grundlagen Informatik",
+                "klausur/Probeklausur-Grundlagen-Informatik.html",
+            ),
+        exam_card(
+                "K2",
+                "Probeklausur Grundlagen Informatik - Variante B",
+                "klausur/Probeklausur-Grundlagen-Informatik-Variante-B.html",
+            ),
+        ]
+    )
     return f"""<!DOCTYPE html>
 <html lang="de">
 <head>
@@ -286,6 +323,16 @@ def generate_index(lessons: list[dict]) -> str:
     <div class="lessons-grid">
 {cards}
     </div>
+
+    <section class="dhbw-section" aria-labelledby="probeklausuren">
+      <div class="dhbw-section__inner">
+        <h2 class="dhbw-section__title" id="probeklausuren">Probeklausuren</h2>
+      </div>
+    </section>
+
+    <div class="lessons-grid">
+{exam_cards}
+    </div>
   </main>
 
 </body>
@@ -303,13 +350,13 @@ def build():
 
     # 2. Copy src/
     shutil.copytree(SRC_DIR, SITE_DIR / "src")
-    print(f"Copied src/ → _site/src/")
+    print("Copied src/ → _site/src/")
 
     # 3. Discover lessons
     lessons = discover_lessons()
     print(f"Found {len(lessons)} lesson folders")
 
-    # 4. Process each HTML file
+    # 4. Process each lesson HTML file
     for lesson in lessons:
         folder_name = lesson["folder"].name
         dest_folder = SITE_DIR / "lessons" / folder_name
@@ -331,13 +378,35 @@ def build():
                 dest.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(asset, dest)
 
-    # 5. Generate index.html
+    # 5. Copy exam pages and assets
+    exams_found = 0
+    if EXAMS_DIR.exists() and EXAMS_DIR.is_dir():
+        for source in EXAMS_DIR.rglob("*"):
+            if not source.is_file():
+                continue
+
+            rel = source.relative_to(EXAMS_DIR)
+            dest = SITE_DIR / "klausur" / rel
+            dest.parent.mkdir(parents=True, exist_ok=True)
+
+            if source.suffix.lower() == ".html":
+                src_text = source.read_text(encoding="utf-8")
+                out_text = inject_back_nav(src_text, href="../index.html")
+                dest.write_text(out_text, encoding="utf-8")
+                injected = "✓" if out_text != src_text else "–"
+                print(f"  [{injected}] klausur/{rel.as_posix()}")
+                exams_found += 1
+            else:
+                shutil.copy2(source, dest)
+
+    # 6. Generate index.html
     index_html = generate_index(lessons)
     (SITE_DIR / "index.html").write_text(index_html, encoding="utf-8")
-    print(f"Generated _site/index.html ({len(lessons)} lessons)")
+    print(f"Generated _site/index.html ({len(lessons)} lessons, {exams_found} exams)")
 
     print(f"\nBuild complete → {SITE_DIR}")
 
 
 if __name__ == "__main__":
     build()
+
